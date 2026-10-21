@@ -182,6 +182,15 @@ POC exit criteria:
 - A fresh machine goes from clone to solving the first exercise in the browser in **15 minutes or less** (excluding the image download).
 - A second `build` makes **zero** TTS/render calls.
 
+### 8.0 Week 1 complete (2026-10-21)
+
+Week 1 is complete: Day 1 (§1.1–1.2), Day 2 (§1.3), Day 3 (§1.4.1–1.4.7) and the Lab day (HW0 in words and in Lean, plus review and practice).
+
+- **Content:** 4 narrated explainers and 2 interactive widgets.
+- **Narration cost:** about $0.27 in total, each line paid once.
+- **Reference solutions:** all of them compile; they are kept outside the repo until the private solutions repo exists (D6).
+- **Hosting:** the course runs on linux-dev at `http://192.168.50.205:28080` (`compose.hosted.yaml`).
+
 ### 8.1 POC status (2026-10-21)
 
 **Built and verified in a browser against the Docker image:**
