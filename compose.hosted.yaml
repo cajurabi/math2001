@@ -16,9 +16,7 @@ services:
     environment:
       COURSE_PASSWORD: "${COURSE_PASSWORD:?set COURSE_PASSWORD in .env}"
       MAX_LEAN_SESSIONS: "${MAX_LEAN_SESSIONS:-8}"
-    read_only: true
-    tmpfs:
-      - /tmp
+    # not read_only: lake rewrites .lake/lakefile.olean.trace whenever it starts a server
     cap_drop: [ALL]
     security_opt:
       - no-new-privileges:true
