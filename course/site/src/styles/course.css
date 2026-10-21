@@ -212,3 +212,32 @@
   .infoview-dock { right: 0.5rem; left: 0.5rem; width: auto; bottom: 0.5rem; }
   .infoview-dock lean-infoview { height: 30vh; }
 }
+
+/* ---------- Homework ---------- */
+
+.homework-problem .homework-label { font-weight: 700; margin-bottom: 0.25rem; }
+
+.written-answer { margin: 1rem 0; }
+.written-answer-label { display: block; font-weight: 700; margin-bottom: 0.35rem; }
+.written-answer textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 8px;
+  background: var(--sl-color-bg);
+  color: var(--sl-color-white);
+  font: inherit;
+  line-height: 1.6;
+  resize: vertical;
+}
+.written-answer-bar { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-top: 0.35rem; font-size: var(--sl-text-sm); }
+.written-answer-status { color: var(--sl-color-gray-3); }
+.written-answer-bar button {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  padding: 0.2rem 0.7rem;
+  cursor: pointer;
+}

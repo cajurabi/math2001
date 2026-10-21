@@ -1,0 +1,149 @@
+---
+title: "Day 3 · Proving inequalities"
+description: "Week 1, Day 3: chains of inequalities and the rel tactic (§1.4.1–1.4.7)."
+---
+
+import Book from '../../../components/Book.astro'
+import CourseNote from '../../../components/CourseNote.astro'
+import LeanExercise from '../../../components/LeanExercise.astro'
+import Explainer from '../../../components/Explainer.astro'
+import SubstitutionDirection from '../../../components/SubstitutionDirection.astro'
+
+export const CH1 = '01_Proofs_by_Calculation'
+export const LEAN14 = '01_Proofs_by_Calculation/04_Proving_Inequalities.lean'
+
+<CourseNote kind="guide" title="Today's plan (about 55 minutes)">
+Proofs by calculation work for inequalities too, with one new danger: **substituting can push the value the wrong way.** Today you'll learn to spot that, and two new Lean tools: `rel` for substituting into inequalities, and `extra` for "adding something non-negative makes it bigger".
+
+- You'll read §1.4.1–1.4.7 (the rest of §1.4 is next week) and complete five editors.
+- **You're done** when they all say **Proof complete ✓**. Then you have every tool you need for Homework 0.
+</CourseNote>
+
+## 1.4 Proving inequalities
+
+<Book file={CH1} section="proving-inequalities" parts={["id33"]} />
+
+<CourseNote kind="algebra" title="Algebra refresher: which way does an inequality go?">
+Three rules cover almost everything in this section:
+
+- **Adding or subtracting** the same number from both sides keeps the direction: $a \le b$ gives $a + 5 \le b + 5$.
+- **Multiplying by a positive** number keeps the direction: $a \le b$ gives $3a \le 3b$.
+- **Multiplying by a negative** number **flips** it: $a \le b$ gives $-2a \ge -2b$.
+
+That last rule is why the step "$9 - 2(x+3) \ge 9 - 2 \cdot 2$" uses $\ge$, even though the fact is $x + 3 \le 2$. Drag $x$ below and watch the two dots move in opposite directions:
+
+<SubstitutionDirection />
+</CourseNote>
+
+<LeanExercise file={LEAN14} example="1.4.1" title="Example 1.4.1 (already solved: click each line and read the goal in the Infoview)" />
+
+<Explainer id="w01d3/inequality-chains" title="Which way does a substitution push?" />
+
+<Book file={CH1} section="proving-inequalities" parts={["id35"]} />
+
+<LeanExercise file={LEAN14} example="1.4.2">
+<CourseNote kind="hints" title="Hints for Example 1.4.2">
+<details>
+<summary>Hint 1</summary>
+
+Two lines are pure algebra. One line substitutes inequalities. Which is which?
+
+</details>
+<details>
+<summary>Hint 2</summary>
+
+`rel` takes a list, like `rw` does: `rel [h1, h2]` substitutes using both facts in one step.
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<Book file={CH1} section="proving-inequalities" parts={["id37"]} />
+
+<LeanExercise file={LEAN14} example="1.4.3">
+<CourseNote kind="hints" title="Hints for Example 1.4.3">
+<details>
+<summary>Hint 1</summary>
+
+Copy the four lines of the paper proof into a `calc` block. In Lean, each line's relation goes where the `=` went before: `_ ≤ …` or `_ < …`.
+
+</details>
+<details>
+<summary>Hint 2</summary>
+
+Substitution steps use `rel [h1]` or `rel [h2]`. Rearranging uses `ring`. The last step is pure arithmetic between numbers: `numbers`.
+
+</details>
+<details>
+<summary>Hint 3 (worked first step)</summary>
+
+```lean
+  calc
+    x + y ≤ x + (x + 5) := by rel [h1]
+```
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<Book file={CH1} section="proving-inequalities" parts={["shorthand"]} />
+
+<LeanExercise file={LEAN14} example="1.4.4">
+<CourseNote kind="hints" title="Hints for Example 1.4.4">
+<details>
+<summary>Hint 1</summary>
+
+Every line except the last is a substitution with `rel`. For each line, compare it with the line above and ask: **which variable changed, and which fact says it's allowed?**
+
+</details>
+<details>
+<summary>Hint 2</summary>
+
+The first line replaces `y` and `x` by `B`: `rel [h4, h5]`. The second replaces `u` and `v` by `A`, using the facts with `<`. Multiplying an inequality is only safe by something non-negative. The book's text above explains how `rel` takes care of those side conditions for you.
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<Book file={CH1} section="proving-inequalities" parts={["id41"]} />
+
+<CourseNote kind="lean" title="Look closely: the Lean version says − 17">
+The book's text uses $t^2 - 3t + 17$, but the Lean exercise below has `t ^ 2 - 3 * t - 17`. The same steps work for both. The last line just compares different numbers: $7 \cdot 10 - 17 = 53$, which is still at least $5$.
+</CourseNote>
+
+<LeanExercise file={LEAN14} example="1.4.5">
+<CourseNote kind="hints" title="Hints for Example 1.4.5">
+<details>
+<summary>Hint 1</summary>
+
+The pattern is: `ring`, `rel [ht]`, `ring`, `rel [ht]`, then a final step comparing two numbers.
+
+</details>
+<details>
+<summary>Hint 2</summary>
+
+Comparing two plain numbers, like `7 * 10 - 17 ≥ 5`, is a job for `numbers`.
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<Book file={CH1} section="proving-inequalities" parts={["id42"]} />
+
+<CourseNote kind="guide" title="Read 1.4.6 now. Write it in Lean on Lab day.">
+Example 1.4.6 is your **Homework 0**. Don't do it in Lean yet: as the book says, the last step needs a tool from the very next example. Read on.
+</CourseNote>
+
+<Book file={CH1} section="proving-inequalities" parts={["sq-nonneg"]} />
+
+<LeanExercise file={LEAN14} example="1.4.7" title="Example 1.4.7 (already solved: see what extra does)" />
+
+<CourseNote kind="stop" title="Stopping point">
+That's Day 3, and the last lesson of Week 1. Before you stop, check:
+
+- [ ] Examples 1.4.2, 1.4.3, 1.4.4 and 1.4.5 all say **Proof complete ✓**.
+- [ ] You can say why $n^2 \ge 5^2 > 2 \cdot 5 + 11 \le 2n + 11$ is **not** a proof: the signs don't all point the same way.
+- [ ] You know what `extra` is for: the last step of Example 1.4.6.
+
+Next: [Lab day · Homework 0](/week-01/lab/).
+</CourseNote>

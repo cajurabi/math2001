@@ -1,0 +1,70 @@
+---
+// Interactive: why substituting x + 3 ≤ 2 into 9 − 2(x + 3) gives "≥" (Example 1.4.1).
+// Drag x (always with x + 3 ≤ 2); the expression's value never drops below the bound 9 − 2·2 = 5.
+---
+
+<div class="widget not-content" data-substitution-direction>
+  <div class="jxgbox" id="substitution-direction-board" style="aspect-ratio: 16 / 7; max-width: 40rem;" role="img"
+    aria-label="Number line showing x plus 3 at most 2, and 9 minus 2 times (x plus 3) at least 5"></div>
+  <div class="widget-controls">
+    <label>x = <input type="range" min="-6" max="-1" step="0.1" value="-3" data-x /><output data-x-out>-3.0</output></label>
+  </div>
+  <p class="widget-readout" data-readout></p>
+</div>
+
+<script>
+  import JXG from 'jsxgraph'
+
+  const root = document.querySelector<HTMLElement>('[data-substitution-direction]')!
+  const xInput = root.querySelector<HTMLInputElement>('[data-x]')!
+  const xOut = root.querySelector('[data-x-out]')!
+  const readout = root.querySelector('[data-readout]')!
+  let x = Number(xInput.value)
+
+  const board = JXG.JSXGraph.initBoard('substitution-direction-board', {
+    boundingbox: [-4.5, 3.2, 20.5, -3.2],
+    axis: false,
+    showCopyright: false,
+    showNavigation: false,
+    pan: { enabled: false },
+    zoom: { wheel: false, pinchHorizontal: false, pinchVertical: false },
+  })
+
+  const INPUT = '#3b82c4'
+  const OUTPUT = '#e9a23b'
+  const BOUND = '#2a9d8f'
+  const label = { fixed: true, highlight: false, fontSize: 14, strokeColor: '#9aa3b2', cssStyle: 'font-weight: 600' }
+
+  // two number lines: x + 3 on top, 9 − 2(x + 3) below
+  for (const [y, text] of [[1.6, 'x + 3'], [-1.4, '9 − 2(x + 3)']] as const) {
+    board.create('line', [[-3, y], [20, y]], { straightFirst: false, straightLast: false, strokeColor: '#6b7280', strokeWidth: 1.5, fixed: true, highlight: false })
+    board.create('text', [-4.3, y + 0.55, text], label)
+    for (let t = -2; t <= 19; t += 3) {
+      board.create('segment', [[t, y - 0.12], [t, y + 0.12]], { strokeColor: '#6b7280', fixed: true, highlight: false })
+      board.create('text', [t, y - 0.45, String(t)], { ...label, anchorX: 'middle', fontSize: 11, cssStyle: '' })
+    }
+  }
+
+  // the facts: x + 3 ≤ 2 (shade left of 2 on top), so 9 − 2(x + 3) ≥ 5 (shade right of 5 below)
+  board.create('segment', [[-3, 1.6], [2, 1.6]], { strokeColor: INPUT, strokeWidth: 6, strokeOpacity: 0.3, fixed: true, highlight: false })
+  board.create('segment', [[5, -1.4], [20, -1.4]], { strokeColor: BOUND, strokeWidth: 6, strokeOpacity: 0.3, fixed: true, highlight: false })
+  board.create('point', [2, 1.6], { name: '2', size: 3, color: INPUT, fixed: true, label: { offset: [0, 14], strokeColor: INPUT } })
+  board.create('point', [5, -1.4], { name: 'bound: 9 − 2·2 = 5', size: 3, color: BOUND, fixed: true, label: { offset: [-30, -16], strokeColor: BOUND } })
+
+  const top = board.create('point', [() => x + 3, 1.6], { name: '', size: 5, color: INPUT, fixed: true })
+  const bottom = board.create('point', [() => 9 - 2 * (x + 3), -1.4], { name: '', size: 5, color: OUTPUT, fixed: true })
+  board.create('arrow', [top, bottom], { strokeColor: '#9aa3b2', strokeWidth: 1.5, dash: 2, fixed: true, highlight: false })
+
+  function update() {
+    x = Number(xInput.value)
+    xOut.textContent = x.toFixed(1)
+    const value = 9 - 2 * (x + 3)
+    readout.textContent =
+      `x + 3 = ${(x + 3).toFixed(1)} ≤ 2,  so  9 − 2(x + 3) = ${value.toFixed(1)} ≥ 5.  ` +
+      `Smaller x + 3 → bigger 9 − 2(x + 3): the −2 flips the direction.`
+    board.update()
+  }
+
+  xInput.addEventListener('input', update)
+  update()
+</script>

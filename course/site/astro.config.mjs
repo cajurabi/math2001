@@ -29,7 +29,12 @@ export default defineConfig({
         },
         {
           label: 'Week 1 · Proofs by calculation',
-          items: [{ label: 'Day 1 · Proving equalities', slug: 'week-01/day-1' }],
+          items: [
+            { label: 'Day 1 · Proving equalities', slug: 'week-01/day-1' },
+            { label: 'Day 2 · Tips and tricks', slug: 'week-01/day-2' },
+            { label: 'Day 3 · Proving inequalities', slug: 'week-01/day-3' },
+            { label: 'Lab · Homework 0', slug: 'week-01/lab' },
+          ],
         },
       ],
     }),

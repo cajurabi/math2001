@@ -1,14 +1,25 @@
 ---
-// A live Lean editor holding one example from the book's Lean file.
-import { leanExample } from '../lib/lean'
+// A live Lean editor holding a worked example, an exercise or a homework problem from the
+// book's Lean files, or Lean written for this course.
+import { leanExample, leanExercise, leanHomework, type LeanExample } from '../lib/lean'
 import LeanSupport from './LeanSupport.astro'
 
 type Props = { title?: string } & (
   | {
       /** path under Math2001/, e.g. "01_Proofs_by_Calculation/02_Proving_Equalities_in_Lean.lean" */
       file: string
-      /** example number, e.g. "1.2.2" */
+      /** worked example number, e.g. "1.2.2" */
       example: string
+    }
+  | {
+      file: string
+      /** n-th exercise (1-based) after the file's "Exercises" heading */
+      exercise: number
+    }
+  | {
+      /** homework set number (Math2001/Homework/hw<N>.lean) */
+      homework: number
+      problem: number
     }
   | {
       /** Lean written for this course; the standard math2001 header is added in front */
@@ -20,22 +31,38 @@ type Props = { title?: string } & (
 
 const HEADER = ['import Mathlib.Data.Real.Basic', 'import Library.Basic', '', 'math2001_init']
 
-const { title } = Astro.props
-const { code, preludeLines } = 'code' in Astro.props
-  ? { code: [...HEADER, Astro.props.code.trim()].join('\n') + '\n', preludeLines: HEADER.length }
-  : leanExample(Astro.props.file, Astro.props.example)
-const name = 'code' in Astro.props ? Astro.props.name : `Example_${Astro.props.example.replaceAll('.', '_')}`
+const props = Astro.props
+let source: LeanExample
+let name: string
+let heading: string
+if ('code' in props) {
+  source = { code: [...HEADER, props.code.trim()].join('\n') + '\n', preludeLines: HEADER.length }
+  name = props.name
+  heading = 'Try it in Lean'
+} else if ('homework' in props) {
+  source = leanHomework(props.homework, props.problem)
+  name = `HW${props.homework}_Problem${props.problem}`
+  heading = `Homework ${props.homework}, problem ${props.problem} in Lean`
+} else if ('exercise' in props) {
+  source = leanExercise(props.file, props.exercise)
+  name = `Exercise_${props.file.replace(/\W+/g, '_')}_${props.exercise}`
+  heading = `Exercise ${props.exercise}`
+} else {
+  source = leanExample(props.file, props.example)
+  name = `Example_${props.example.replaceAll('.', '_')}`
+  heading = `Try it in Lean: Example ${props.example}`
+}
+
 // one Lean file per exercise and page, inside the math2001 project so lakefile options apply
 const page = Astro.url.pathname.replace(/^\/|\/$/g, '').replace(/[^A-Za-z0-9]+/g, '_') || 'index'
 const editorFile = `Math2001/Course/${page}/${name}.lean`
-const heading = title ?? ('example' in Astro.props ? `Try it in Lean: Example ${Astro.props.example}` : 'Try it in Lean')
 ---
 
 <LeanSupport />
 <div class="lean-exercise">
-  <div class="lean-exercise-title">{heading}</div>
-  <lean-editor class="not-content" file={editorFile} prelude-lines={preludeLines}>
-    <template>{code}</template>
+  <div class="lean-exercise-title">{props.title ?? heading}</div>
+  <lean-editor class="not-content" file={editorFile} prelude-lines={source.preludeLines}>
+    <template>{source.code}</template>
   </lean-editor>
   <slot />
 </div>

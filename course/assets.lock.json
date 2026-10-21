@@ -60,5 +60,69 @@
         "check": "4e7faed5e1fdd8291be80853cf7477ce7ca44143cb743952aca465b55ca06c98"
       }
     }
+  },
+  "w01d2/create-hypothesis": {
+    "title": "Making the facts appear",
+    "key": "6a4a9130516220c5e34562ed2882d533815422fc643f683689c2c4e687bdc5ce",
+    "files": {
+      "video": "6a4a9130516220c5e34562ed2882d533815422fc643f683689c2c4e687bdc5ce.mp4",
+      "captions": "6a4a9130516220c5e34562ed2882d533815422fc643f683689c2c4e687bdc5ce.vtt",
+      "poster": "6a4a9130516220c5e34562ed2882d533815422fc643f683689c2c4e687bdc5ce.jpg"
+    },
+    "durationSeconds": 60.7,
+    "transcript": [
+      "Here's the fact: x plus four equals two. And here's the goal: show that x equals negative two. The trouble is, the fact talks about x plus four, but the goal only has x.",
+      "So we make x plus four appear. Add four, and take away four. That's adding zero, so it's still just x.",
+      "Now x plus four sits right inside our expression. Swap it for two, because that's what the fact says it equals.",
+      "And two minus four is negative two. Done.",
+      "The same trick works with two facts at once. To get x from these two, add them up. The y's cancel, leaving x plus one.",
+      "So x is the first fact, plus the second, minus one. Swap in four and two, and x is five.",
+      "Every proof in this section asks the same question: how can I rearrange the goal, so that the facts appear inside it?"
+    ],
+    "narration": {
+      "model": "elevenlabs/eleven-v4",
+      "voice": "george",
+      "audio": {
+        "goal": "73137055d4185781913be7bd9ec6d971e21d12d9279dc8a3964ecb084a2d9c3e",
+        "create": "06a359b5de19baeedeb4393563de4f3149a5afb9db7226e2ed9ed0f910c65823",
+        "swap": "5a9beecf0d029cff7ec781510fa9285d9de63791c188f6bd2557eb2aba9f1c3c",
+        "finish": "218406597f6b33f1381514179501bd306308e3980f1aea960fc299585ad4f0bb",
+        "system": "60dda4473264db560500abd93e2eaee4b7cc7ea8efa507fa51913e9113914c58",
+        "system2": "8bd857ae6793ab88aac7c9a4841ddba76b82ede1e1fec87754bedbbb384b7fc2",
+        "outro": "4f0bf3635e131679bd54c48f07bc0d3f02cb8195d96b9e985ddeb048e40de9b4"
+      }
+    }
+  },
+  "w01d3/inequality-chains": {
+    "title": "Which way does a substitution push?",
+    "key": "94c69b86cadb942fe09214f1c50aab437ee28c3d037410bdfcb00c781960dbaa",
+    "files": {
+      "video": "94c69b86cadb942fe09214f1c50aab437ee28c3d037410bdfcb00c781960dbaa.mp4",
+      "captions": "94c69b86cadb942fe09214f1c50aab437ee28c3d037410bdfcb00c781960dbaa.vtt",
+      "poster": "94c69b86cadb942fe09214f1c50aab437ee28c3d037410bdfcb00c781960dbaa.jpg"
+    },
+    "durationSeconds": 84.2,
+    "transcript": [
+      "Here are our facts: x plus three is at most two, and y plus two x is at least three. We want to show that y is bigger than three.",
+      "We build a chain, just like with equalities. But now each link can be equals, at least, or bigger than.",
+      "First, y equals y plus two x, minus two x. Then substitute: y plus two x is at least three, so the whole thing is at least three minus two x.",
+      "Next we want x plus three to appear. Three minus two x is the same as nine, minus two times x plus three. Now, careful. x plus three is at most two, but it's multiplied by negative two. Making it smaller makes the whole expression bigger. So this link is at least, not at most.",
+      "Nine minus four is five, which is bigger than three. Every link points the same way, so y is bigger than three.",
+      "Here's what goes wrong when the links disagree. n squared is at least twenty five, which is bigger than twenty one, which is at most two n plus eleven. Up, up, then down. That tells us nothing at all.",
+      "In Lean, rel makes each substitution and checks its direction for you. Push the wrong way, and it refuses."
+    ],
+    "narration": {
+      "model": "elevenlabs/eleven-v4",
+      "voice": "george",
+      "audio": {
+        "facts": "c9ede47894fc4a497955ab8cebe81ccc675aa4501cb3726794d7f19fa80b7970",
+        "chain": "d753e55eb663a7975f76df95f1d9447a61d39803523d9961e4aa29cba165fc3a",
+        "first": "f26a2286a6c7e1ca805eaf8cd2e2b7d0ae4b25684f89d5cd5701d59d244fa8fb",
+        "flip": "f8dfbf966e0aef06962706d88e0a01c0a784fb5b2c3bbb4ed67332c8de59276b",
+        "end": "a91499a19cbe1f7fcdf94c13b2cfe4b05ca6e06a2ed4b098020f390afdcd3796",
+        "mixed": "83d25901c288791ecc45227cd0c7effb007b92b9960590e1a10cc9866de274ac",
+        "outro": "9255cee59c1c2069c4dea6c84e019d9c9820f4a98668ae11082f52c52ca50fe6"
+      }
+    }
   }
 }

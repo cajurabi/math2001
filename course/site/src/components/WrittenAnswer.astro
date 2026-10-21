@@ -1,0 +1,54 @@
+---
+// The "in words" half of a homework problem: a text box saved in this browser, with a download
+// so the student can hand it in.
+interface Props {
+  /** stable id, e.g. "hw0-p1" */
+  id: string
+  placeholder?: string
+}
+
+const { id, placeholder = 'Write your proof here, one step per line, the way the book writes its solutions.' } = Astro.props
+---
+
+<div class="written-answer not-content" data-written-answer={id}>
+  <label class="written-answer-label" for={`written-${id}`}>Your proof in words</label>
+  <textarea id={`written-${id}`} rows="8" placeholder={placeholder} spellcheck="true"></textarea>
+  <div class="written-answer-bar">
+    <span class="written-answer-status" aria-live="polite"></span>
+    <button type="button" data-download>Download as text</button>
+  </div>
+</div>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-written-answer]')) {
+    const id = root.dataset.writtenAnswer!
+    const key = `written-answer:${id}`
+    const box = root.querySelector('textarea')!
+    const status = root.querySelector('.written-answer-status')!
+    try {
+      box.value = localStorage.getItem(key) ?? ''
+    } catch {
+      // storage unavailable: the box still works, it just won't be remembered
+    }
+    let timer: number | undefined
+    box.addEventListener('input', () => {
+      window.clearTimeout(timer)
+      timer = window.setTimeout(() => {
+        try {
+          localStorage.setItem(key, box.value)
+          status.textContent = 'Saved in this browser'
+        } catch {
+          status.textContent = 'Not saved (browser storage is off): download before leaving'
+        }
+      }, 400)
+    })
+    root.querySelector('[data-download]')!.addEventListener('click', () => {
+      const blob = new Blob([box.value], { type: 'text/plain' })
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.download = `${id}-written.txt`
+      link.click()
+      URL.revokeObjectURL(link.href)
+    })
+  }
+</script>

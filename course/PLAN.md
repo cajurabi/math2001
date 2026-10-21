@@ -50,8 +50,8 @@ Each week has **3 lesson days** and a **Lab day** (homework, plus a checkpoint i
 
 | Wk | Day 1 | Day 2 | Day 3 | Lab day |
 |----|-------|-------|-------|---------|
-| 1 | **Setup + 1.1 Proving equalities + 1.2 …in Lean** | 1.3 Tips and tricks | 1.4 Proving inequalities (part 1) | **HW0** (1 problem, system check) |
-| 2 | 1.4 Proving inequalities (part 2) | 1.5 A shortcut + 2.1 Intermediate steps | 2.2 Invoking lemmas | **HW1** (1.1–2.1) |
+| 1 | **Setup + 1.1 Proving equalities + 1.2 …in Lean** | 1.3 Tips and tricks | 1.4 Proving inequalities (1.4.1–1.4.7) | **HW0** (1 problem: Example 1.4.6, needs `extra` from 1.4.7) |
+| 2 | 1.4 Proving inequalities (1.4.8–1.4.11) | 1.5 A shortcut + 2.1 Intermediate steps | 2.2 Invoking lemmas | **HW1** (1.1–2.1) |
 | 3 | 2.3 "Or" and proof by cases | 2.4 "And" | 2.5 Existence proofs | **HW2** (2.1–2.3) |
 | 4 | 3.1 Definitions; parity | 3.2 Divisibility | 3.3 Modular arithmetic: theory | **HW3** (2.3–3.1) |
 | 5 | 3.4 Modular arithmetic: calculations | 4.1 "For all" and implication | **Checkpoint 1** (Ch 1–3) | **HW4** (3.1–3.3) |
@@ -66,7 +66,9 @@ Each week has **3 lesson days** and a **Lab day** (homework, plus a checkpoint i
 
 **Optional enrichment** (not scheduled; shipped as bonus lessons): 3.5 Bézout · 4.3 Unique existence · 6.5 Pascal's triangle · 6.6 Division algorithm · 6.7 Euclidean algorithm · Ch 7 Number theory (primes, √2) · 10.2 Equivalence relations.
 
-**Stopping-point rule:** a lesson ends on a completed idea plus a finished exercise, never mid-example. Where a section is split (1.4), the split falls at a subsection boundary. The exact boundaries are chosen when we author each week.
+**Stopping-point rule:** a lesson ends on a completed idea plus a finished exercise, never mid-example. Where a section is split (1.4), the split falls at a subsection boundary. The exact boundaries are chosen when we author each week. Week 1: §1.4 splits after 1.4.7, because HW0 is Example 1.4.6, whose last step needs the `extra` tactic from 1.4.7.
+
+**Homework overlap:** some end-of-section exercises *are* homework problems (e.g. §1.3 exercises 6 and 12 are HW1 #1 and #2). Lessons flag these and never use them as practice.
 
 ## 5. Homework
 
@@ -198,6 +200,8 @@ POC exit criteria:
 
 ```bash
 docker compose up                          # students: http://localhost:8080
+# home server (linux-dev, 192.168.50.205): password-protected, students just open http://192.168.50.205:28080
+docker compose -f compose.yaml -f compose.hosted.yaml up -d --build   # needs .env (see compose.hosted.yaml)
 course/media/build.sh --dry-run            # authors: what narration/video is missing, and its cost
 course/media/build.sh                      # authors: generate into ~/.cache/math2001-course, update assets.lock.json
 cd course/lean-editor && npx vite build    # authors: rebuild the editor bundle into the site
@@ -214,7 +218,7 @@ cd course/site && npm run dev              # authors: live site at :4321 (needs 
 **Open items:**
 - The infoview's own header shows the real file line (e.g. `:11:21`), while the editor gutter numbers from the first visible line.
 - There is no per-viewer "progress" yet: badges are per browser, through `localStorage`.
-- Publish a prebuilt multi-arch image so students don't build locally.
+- Publish a prebuilt multi-arch image (with explainer media baked in) so students who run Docker themselves don't build locally and still get the videos. Media is not in git by design, so a fresh `git clone` + `docker compose up` shows explainer placeholders.
 - Pick a narrator voice after an A/B listen (currently `george`).
 
 ## 9. Risks and open questions

@@ -1,0 +1,94 @@
+---
+title: "Lab day · Homework 0"
+description: "Week 1 lab: Homework 0 (in words and in Lean), a Week 1 review, and optional practice."
+---
+
+import CourseNote from '../../../components/CourseNote.astro'
+import HomeworkProblem from '../../../components/HomeworkProblem.astro'
+import LeanExercise from '../../../components/LeanExercise.astro'
+import WrittenAnswer from '../../../components/WrittenAnswer.astro'
+
+export const LEAN13 = '01_Proofs_by_Calculation/03_Tips_and_Tricks.lean'
+
+<CourseNote kind="guide" title="What a lab day is (about 45 minutes)">
+Every week ends with a lab day. There are no new lessons; you work on that week's homework. Each homework problem is handed in **twice**: once written **in words**, the way the book writes its solutions, and once **in Lean**.
+
+Homework 0 has just one problem, and you've already read its solution (Example 1.4.6). It isn't graded. It's a practice run of the whole hand-in process before Homework 1 next week.
+</CourseNote>
+
+## Homework 0
+
+<HomeworkProblem homework={0} problem={1}>
+Let $n \geq 5$ be an integer. Show that $n^2 > 2n + 11$.
+</HomeworkProblem>
+
+### Part A: in words
+
+<WrittenAnswer id="hw0-p1" />
+
+<CourseNote kind="hints" title="Hints for writing it in words">
+<details>
+<summary>Hint 1</summary>
+
+Write it as a chain, starting with $n^2$ at the top left and ending with $2n + 11$ at the bottom right. Every sign in the chain must be $=$, $\geq$ or $>$. Never mix in a $\leq$.
+
+</details>
+<details>
+<summary>Hint 2</summary>
+
+Look back at the correct solution in [Example 1.4.6](/week-01/day-3/#id42). Don't just copy it: make sure you can say why each line follows from the one before.
+
+</details>
+</CourseNote>
+
+### Part B: in Lean
+
+<LeanExercise homework={0} problem={1}>
+<CourseNote kind="hints" title="Hints for the Lean version">
+<details>
+<summary>Hint 1</summary>
+
+Write the same chain as Part A in a `calc` block. Rearranging uses `ring`, and substituting `n ≥ 5` uses `rel [hn]`.
+
+</details>
+<details>
+<summary>Hint 2</summary>
+
+The last step, from `2 * n + 11 + 4` to `2 * n + 11`, says that adding something positive makes a number bigger. That's exactly what `extra` does (Example 1.4.7).
+
+</details>
+<details>
+<summary>Hint 3 (worked first step)</summary>
+
+```lean
+  calc
+    n ^ 2 = n * n := by ring
+    _ ≥ 5 * n := by rel [hn]
+```
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<CourseNote kind="guide" title="Handing it in">
+When the Lean badge says **Proof complete ✓**, hand in both parts the way your teacher asks. Click **Download as text** under Part A to save your written proof as a file. For the Lean part, copy everything in the editor.
+</CourseNote>
+
+## Week 1 review
+
+<CourseNote kind="stop" title="Before Week 2, check that you can…">
+- [ ] read a proof by calculation and say what justifies each line (*algebra* or *substitution*);
+- [ ] **find** one: rearrange the goal so that one side of a fact appears, then substitute (§1.3);
+- [ ] use `ring`, `rw [h]`, `numbers`, `rel [h]` and `extra` in a `calc` block;
+- [ ] explain why a chain with mixed signs, like $\ge, >, \le$, proves nothing (§1.4.6).
+
+If any of these feels shaky, re-watch that day's explainer or try the practice below.
+</CourseNote>
+
+## Extra practice (optional)
+
+More exercises from §1.3. These aren't on any homework.
+
+<LeanExercise file={LEAN13} exercise={4} title="Practice: §1.3 exercise 4" />
+<LeanExercise file={LEAN13} exercise={5} title="Practice: §1.3 exercise 5" />
+<LeanExercise file={LEAN13} exercise={10} title="Practice: §1.3 exercise 10" />

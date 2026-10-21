@@ -1,0 +1,209 @@
+---
+title: "Day 2 · Tips and tricks"
+description: "Week 1, Day 2: how to come up with a proof by calculation (§1.3)."
+---
+
+import Book from '../../../components/Book.astro'
+import CourseNote from '../../../components/CourseNote.astro'
+import LeanExercise from '../../../components/LeanExercise.astro'
+import Explainer from '../../../components/Explainer.astro'
+
+export const CH1 = '01_Proofs_by_Calculation'
+export const LEAN13 = '01_Proofs_by_Calculation/03_Tips_and_Tricks.lean'
+
+<CourseNote kind="guide" title="Today's plan (about 50 minutes)">
+Yesterday you checked proofs that were already written. Today you learn how to **come up with** one. Section 1.3 is ten short examples of one trick, used in more and more clever ways.
+
+- Read each example. Six of them have a Lean editor: write the proof from the book in Lean, the way you did Example 1.2.4.
+- **You're done** when the six editors say **Proof complete ✓** and you reach the *Stopping point* box. The practice exercises after it are optional.
+</CourseNote>
+
+## 1.3 Tips and tricks
+
+<Book file={CH1} section="tips-and-tricks" parts={["id20"]} />
+
+<LeanExercise file={LEAN13} example="1.3.1">
+<CourseNote kind="hints" title="Hints for Example 1.3.1">
+<details>
+<summary>Hint 1</summary>
+
+Replace `sorry` with a `calc` block that copies the paper solution line by line, as you did for Example 1.2.4.
+
+</details>
+<details>
+<summary>Hint 2</summary>
+
+Every step here is a substitution except the last, which is arithmetic. Substitutions use `rw [h1]` or `rw [h2]`; arithmetic uses `ring`.
+
+</details>
+<details>
+<summary>Hint 3 (worked first step)</summary>
+
+```lean
+  calc
+    a = 2 * b + 5 := by rw [h1]
+```
+
+Now add a line that substitutes `b = 3`, and a last line that works out the arithmetic.
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<Book file={CH1} section="tips-and-tricks" parts={["easy-eq"]} />
+
+<CourseNote kind="algebra" title="Why is x = (x + 4) − 4 allowed?">
+Adding 4 and then subtracting 4 adds zero, so $x = (x+4) - 4$ is true for **every** number $x$. That makes it a purely algebraic step (`ring`), and it doesn't use the fact $x + 4 = 2$ at all.
+
+The trick is choosing which zero to add. We add $4 - 4$ because it makes $x + 4$, the left-hand side of our fact, appear inside the expression. Then we can substitute.
+</CourseNote>
+
+<LeanExercise file={LEAN13} example="1.3.2">
+<CourseNote kind="hints" title="Hints for Example 1.3.2">
+<details>
+<summary>Hint 1</summary>
+
+The paper solution has three lines: rearrange, substitute, simplify. Which justification goes with each one?
+
+</details>
+<details>
+<summary>Hint 2 (worked first step)</summary>
+
+```lean
+  calc
+    x = (x + 4) - 4 := by ring
+```
+
+The parentheses matter: they make `x + 4` appear exactly as it's written in `h1`, so `rw [h1]` can find it on the next line.
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<Explainer id="w01d2/create-hypothesis" title="Making the facts appear" />
+
+<Book file={CH1} section="tips-and-tricks" parts={["id22", "eq-with-div"]} />
+
+<LeanExercise file={LEAN13} example="1.3.4">
+<CourseNote kind="hints" title="Hints for Example 1.3.4">
+<details>
+<summary>Hint 1</summary>
+
+Here `w` is a rational number (`ℚ`), so Lean is happy to divide. Copy the three lines of the paper solution.
+
+</details>
+<details>
+<summary>Hint 2 (worked first step)</summary>
+
+```lean
+  calc
+    w = (3 * w + 1) / 3 - 1 / 3 := by ring
+```
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<Book file={CH1} section="tips-and-tricks" parts={["id25"]} />
+
+<CourseNote kind="guide" title="Same moves as Algebra I, written as one chain">
+In Algebra I you solved $2x + 3 = x$ by changing **both sides** of the equation, line after line. The chain above does the same arithmetic, but every line stays a statement about $x$ itself, so the whole thing reads as one proof: $x = \ldots = -3$. Lean only accepts this second style, which is why the book trains it.
+</CourseNote>
+
+<Book file={CH1} section="tips-and-tricks" parts={["simultaneous"]} />
+
+<LeanExercise file={LEAN13} example="1.3.6">
+<CourseNote kind="hints" title="Hints for Example 1.3.6">
+<details>
+<summary>Hint 1</summary>
+
+The first line is the clever one. Check that $(2x - y) + (y - x + 1) - 1$ really equals $x$: the $y$'s cancel.
+
+</details>
+<details>
+<summary>Hint 2</summary>
+
+`rw [h1, h2]` substitutes both facts in one step.
+
+</details>
+<details>
+<summary>Hint 3 (worked first step)</summary>
+
+```lean
+  calc
+    x = (2 * x - y) + (y - x + 1) - 1 := by ring
+```
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<Book file={CH1} section="tips-and-tricks" parts={["id27", "id28"]} />
+
+<CourseNote kind="algebra" title="How do you find the right combination?">
+To get $x$ from $x + y = 4$ and $5x - 3y = 4$, you need multiples of the two equations whose $y$'s cancel: $3(x + y) + 1(5x - 3y) = 8x$. So $x = \frac{3(x+y) + (5x-3y)}{8}$.
+
+On scratch paper, ask: **"What do I multiply each fact by so the variable I don't want disappears?"** Then divide by whatever is left in front of $x$.
+</CourseNote>
+
+<Book file={CH1} section="tips-and-tricks" parts={["id29"]} />
+
+<LeanExercise file={LEAN13} example="1.3.9">
+<CourseNote kind="hints" title="Hints for Example 1.3.9">
+<details>
+<summary>Hint 1</summary>
+
+You don't need all six lines of the paper proof. `ring` can check a big rearrangement in one step. You only need to stop when `a - 3` appears, so you can substitute.
+
+</details>
+<details>
+<summary>Hint 2 (worked first step)</summary>
+
+```lean
+  calc
+    a ^ 2 - a + 3 = (a - 3) ^ 2 + 5 * (a - 3) + 9 := by ring
+```
+
+Then substitute `h1`, and finish with `ring`.
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<Book file={CH1} section="tips-and-tricks" parts={["id30"]} />
+
+<LeanExercise file={LEAN13} example="1.3.10">
+<CourseNote kind="hints" title="Hints for Example 1.3.10">
+<details>
+<summary>Hint 1</summary>
+
+Three lines: the "slick" factoring (`ring`), substitute `z ^ 2 - 2 = 0` (`rw`), then simplify (`ring`).
+
+</details>
+<details>
+<summary>Hint 2</summary>
+
+For `rw [h1]` to work, the second line must contain `z ^ 2 - 2` exactly as written in `h1`.
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<CourseNote kind="stop" title="Stopping point">
+That's Day 2. You've written six proofs by calculation from scratch. Before you stop, check:
+
+- [ ] All six editors above say **Proof complete ✓**.
+- [ ] You can explain the trick in one sentence: *rearrange the goal so that one side of a fact appears in it, then substitute.*
+
+The book's exercises are below. Three of them have editors if you want more practice, but they're optional.
+</CourseNote>
+
+<Book file={CH1} section="tips-and-tricks" parts={["id31"]} />
+
+<CourseNote kind="guide" title="Save two of these for homework">
+Exercises 6 ($p + 4q = 1$) and 12 ($a + 2b = 4$) are problems on **Homework 1**, due at the end of next week. Skip them for now.
+</CourseNote>
+
+<LeanExercise file={LEAN13} exercise={1} title="Practice: exercise 1 (optional)" />
+<LeanExercise file={LEAN13} exercise={9} title="Practice: exercise 9 (optional)" />
+<LeanExercise file={LEAN13} exercise={13} title="Practice: exercise 13 (optional)" />
