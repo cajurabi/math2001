@@ -129,6 +129,44 @@
       }
     }
   },
+  "w01d2/long-division": {
+    "title": "Polynomial long division",
+    "key": "1bf9d572bf8cdc8177a58cb56f270b503c6242a80c30a2e8298433ff8b5d5fb6",
+    "files": {
+      "video": "1bf9d572bf8cdc8177a58cb56f270b503c6242a80c30a2e8298433ff8b5d5fb6.mp4",
+      "captions": "1bf9d572bf8cdc8177a58cb56f270b503c6242a80c30a2e8298433ff8b5d5fb6.vtt",
+      "poster": "1bf9d572bf8cdc8177a58cb56f270b503c6242a80c30a2e8298433ff8b5d5fb6.jpg"
+    },
+    "durationSeconds": 127.9,
+    "transcript": [
+      "In Example 1.3.10, the first line looks almost like magic. Where did z squared minus z plus one come from? The book's author found it with polynomial long division. Let's see how it works.",
+      "Start with plain numbers: thirteen seventy one, divided by twelve. Twelve goes into thirteen once, leaving one. Bring down the seven. Twelve goes into seventeen once, leaving five. Bring down the one. Twelve goes into fifty one four times, leaving three.",
+      "So thirteen seventy one equals twelve times one hundred fourteen, plus a remainder of three. Polynomials work exactly the same way.",
+      "Divide z to the fourth, minus z cubed, minus z squared, plus two z, plus one, by z squared minus two. Line up the terms by their power of z, like digits in columns.",
+      "How many times does z squared go into z to the fourth? z squared times. Multiply it back: z squared times the divisor is z to the fourth, minus two z squared. Subtract, and the leading term disappears.",
+      "Next, z squared goes into negative z cubed, negative z times. Multiply back: negative z cubed, plus two z. Subtract again.",
+      "Last, z squared goes into z squared once. Multiply back, subtract, and three is left over. Three has no z squared in it, so it's the remainder.",
+      "So the polynomial equals the divisor, times z squared minus z plus one, plus three. That's exactly the book's first line.",
+      "And our fact says z squared minus two is zero. That wipes out the whole first part, so the answer is just the remainder: three.",
+      "In the proof, you don't show any of this. It's scratch work for finding the identity, and ring checks it in one step. Try the same trick on exercise fourteen."
+    ],
+    "narration": {
+      "model": "elevenlabs/eleven-v4",
+      "voice": "george",
+      "audio": {
+        "slick": "fd74bb2c8347e6c651ab4bf36b7af8426ac82f10a2596cb785d200c9699d77ee",
+        "numbers": "49a876f66abcb10251c250e7f5490c7ee1fcacd0010e1d6dfe067b8964bb42b5",
+        "numbers2": "10387ca62566f2d54cb0fe24e6d5b9c55f0d808e64d499a9008480a5a1d06b10",
+        "setup": "8a88bd82d507ca85fabc73afaef1d434908e6fe0aa0ae0b50269cdba5e758068",
+        "step1": "7656a9b9d03725046c023e16a822abbab355276fd99b189774ea0da8cae1cb5d",
+        "step2": "be5380cddb03361923d184c5b1d6d5b1b6436c56c419444fba9916ca35f3ed89",
+        "step3": "92b15ffbc82ac305d0cdbefaec271d86745b2d0687842a7b9fc0a47ae35a0e62",
+        "result": "6fb62aa6105201819a981eddd2bda252643640abcfcd77a9053b41dd3a332177",
+        "payoff": "3f0478751a3925d01fad99974fe4f9430b16ae66fa61c9ef5661d98e24fe8395",
+        "outro": "c98bddfe5e50838e6a83b24f48106f22f2212c28c450b37a099303c7641334ed"
+      }
+    }
+  },
   "w01d3/inequality-chains": {
     "title": "Which way does a substitution push?",
     "key": "94c69b86cadb942fe09214f1c50aab437ee28c3d037410bdfcb00c781960dbaa",
