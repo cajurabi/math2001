@@ -1,0 +1,27 @@
+# Host the course for other machines on your network (e.g. a home server), instead of each
+# student running Docker:
+#
+#   1. create .env next to this file (chmod 600) with:
+#        COURSE_BIND=0.0.0.0
+#        COURSE_PORT=28080
+#        COURSE_PASSWORD=<a long random password>
+#   2. docker compose -f compose.yaml -f compose.hosted.yaml up -d --build
+#   3. students open http://<server>:28080 and sign in (any username, that password)
+#
+# Lean can run programs (#eval), so a hosted course is protected by a password and runs in a
+# locked-down container. Keep it on a private network: Basic auth over plain HTTP is not safe
+# on the open internet without a TLS reverse proxy in front.
+services:
+  course:
+    environment:
+      COURSE_PASSWORD: "${COURSE_PASSWORD:?set COURSE_PASSWORD in .env}"
+      MAX_LEAN_SESSIONS: "${MAX_LEAN_SESSIONS:-8}"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 1024
+    mem_limit: 24g
+    cpus: 8

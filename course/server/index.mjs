@@ -2,6 +2,7 @@
 // (lean4monaco, over a websocket) to its own `lake serve` process in the math2001 project.
 
 import * as cp from 'node:child_process'
+import * as crypto from 'node:crypto'
 import * as path from 'node:path'
 import express from 'express'
 import { WebSocketServer } from 'ws'
@@ -13,15 +14,33 @@ const PROJECT_DIR = path.resolve(process.env.LEAN_PROJECT_DIR ?? '/home/node/mat
 const STATIC_DIR = process.env.STATIC_DIR ? path.resolve(process.env.STATIC_DIR) : null
 const MAX_SESSIONS = Number(process.env.MAX_LEAN_SESSIONS ?? 4)
 const LOG_RPC = process.env.LOG_RPC === '1'
+// hosted mode: when set, every page and the Lean socket require HTTP Basic auth (any username)
+const PASSWORD = process.env.COURSE_PASSWORD || null
 
 const log = (...args) => console.log(`[${new Date().toISOString()}]`, ...args)
 
+function authorized(req) {
+  if (!PASSWORD) return true
+  const [scheme, encoded] = (req.headers.authorization ?? '').split(' ')
+  if (scheme !== 'Basic' || !encoded) return false
+  const supplied = Buffer.from(encoded, 'base64').toString('utf8').split(':').slice(1).join(':')
+  const a = crypto.createHash('sha256').update(supplied).digest()
+  const b = crypto.createHash('sha256').update(PASSWORD).digest()
+  return crypto.timingSafeEqual(a, b)
+}
+
 const app = express()
 app.get('/healthz', (_req, res) => res.json({ ok: true, sessions: activeSessions }))
+app.use((req, res, next) => {
+  if (authorized(req)) return next()
+  res.set('WWW-Authenticate', 'Basic realm="Mechanics of Proof course", charset="UTF-8"')
+  res.status(401).send('Sign in to use the course.')
+})
 if (STATIC_DIR) app.use(express.static(STATIC_DIR, { extensions: ['html'] }))
 
 const server = app.listen(PORT, () => {
-  log(`Listening on :${PORT}; Lean project ${PROJECT_DIR}; static ${STATIC_DIR ?? '(none)'}`)
+  log(`Listening on :${PORT}; Lean project ${PROJECT_DIR}; static ${STATIC_DIR ?? '(none)'}; ` +
+    `${PASSWORD ? 'password required' : 'no password (local mode)'}`)
 })
 
 // Clients address files as `file:///Math2001/...`; the Lean server sees absolute paths.
@@ -60,9 +79,15 @@ const wss = new WebSocketServer({
   server,
   path: '/lean',
   verifyClient: (info, done) => {
-    const ok = sameOrigin(info)
-    if (!ok) log(`Rejecting Lean session from origin ${info.origin ?? '(none)'}`)
-    done(ok, 403, 'Forbidden origin')
+    if (!sameOrigin(info)) {
+      log(`Rejecting Lean session from origin ${info.origin ?? '(none)'}`)
+      return done(false, 403, 'Forbidden origin')
+    }
+    if (!authorized(info.req)) {
+      log('Rejecting unauthenticated Lean session')
+      return done(false, 401, 'Sign in first')
+    }
+    done(true)
   },
 })
 

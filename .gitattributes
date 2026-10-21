@@ -1,0 +1,14 @@
+# Check everything out with LF line endings, on Windows too: the course image is Linux, and
+# CRLF breaks it (e.g. the Dockerfile reads lean-toolchain as "v4.3.0\r").
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.mp3 binary
+*.mp4 binary
+*.olean binary

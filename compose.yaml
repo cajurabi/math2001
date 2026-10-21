@@ -10,7 +10,8 @@ services:
     ports:
       # localhost only: Lean can run programs (#eval), so the editor socket must not be
       # reachable from other machines on the network
-      - "127.0.0.1:${COURSE_PORT:-8080}:8080"
+      # (hosting for other machines: see compose.hosted.yaml, which sets COURSE_BIND)
+      - "${COURSE_BIND:-127.0.0.1}:${COURSE_PORT:-8080}:8080"
     environment:
       # each open lesson tab runs its own Lean server (~1–2 GB RAM)
       MAX_LEAN_SESSIONS: "${MAX_LEAN_SESSIONS:-4}"
