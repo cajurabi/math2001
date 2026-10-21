@@ -10,7 +10,8 @@ An explainer scene subclasses NarratedScene and wraps its animations in beats:
 build.py synthesizes and aligns every beat before rendering, and passes this scene a manifest
 (beat id → audio file, duration, word timings) through $MEDIA_NARRATION_MANIFEST. The scene
 writes back when each beat actually started ($MEDIA_TIMELINE_OUT), which build.py uses to
-place captions.
+place captions. It also reports anything left past the frame edge at the end of a beat
+("offscreen"), which build.py prints, so clipped labels are caught before review.
 """
 
 import json
@@ -18,7 +19,9 @@ import os
 from contextlib import contextmanager
 from dataclasses import dataclass
 
-from manim import Scene
+from manim import Scene, config
+
+EDGE_SLACK = 0.02  # scene units a mobject may overhang the frame before it is reported
 
 
 @dataclass
@@ -60,6 +63,7 @@ class NarratedScene(Scene):
             raise RuntimeError("NarratedScene must be rendered by pipeline.build (no narration manifest)")
         self._narration = json.loads(open(manifest_path, encoding="utf-8").read())
         self._timeline: list[dict] = []
+        self._offscreen: list[dict] = []
 
     @contextmanager
     def beat(self, beat_id: str):
@@ -69,11 +73,30 @@ class NarratedScene(Scene):
         self.add_sound(current.audio)
         self._timeline.append({"beat": beat_id, "start": round(current.start, 3)})
         yield current
+        self._check_frame(beat_id)
         if current.remaining() > 0.01:
             self.wait(current.remaining())
+
+    def _check_frame(self, beat_id: str):
+        """Record each text (or other top-level mobject) on screen that reaches past the frame."""
+        half_w, half_h = config.frame_width / 2, config.frame_height / 2
+        seen = set()
+        for top in self.mobjects:
+            labelled = [m for m in top.get_family() if hasattr(m, "tex_string") or hasattr(m, "text")]
+            for m in labelled or [top]:
+                if id(m) in seen or m.has_no_points() and not m.submobjects:
+                    continue
+                seen.add(id(m))
+                left, right = m.get_left()[0], m.get_right()[0]
+                bottom, top_y = m.get_bottom()[1], m.get_top()[1]
+                over = max(-half_w - left, right - half_w, -half_h - bottom, top_y - half_h)
+                if over > EDGE_SLACK:
+                    label = getattr(m, "text", None) or getattr(m, "tex_string", None) or type(m).__name__
+                    self._offscreen.append({"beat": beat_id, "what": str(label)[:60], "over": round(float(over), 2)})
 
     def tear_down(self):
         out = os.environ.get("MEDIA_TIMELINE_OUT")
         if out:
             with open(out, "w", encoding="utf-8") as f:
-                json.dump({"timeline": self._timeline, "total": round(self.renderer.time, 3)}, f)
+                json.dump({"timeline": self._timeline, "total": round(self.renderer.time, 3),
+                           "offscreen": self._offscreen}, f)

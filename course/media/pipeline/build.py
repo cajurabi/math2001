@@ -160,6 +160,8 @@ def main(argv=None):
             duration = meta["inputs"].get("duration", 0)
         else:
             video, timeline, work = render(path, module, beats, args.quality)
+            for item in timeline.get("offscreen", []):
+                print(f"  off-screen: beat {item['beat']!r}: {item['what']!r} is {item['over']} units past the frame edge")
             inputs = {"explainer": info["id"], "quality": args.quality, "duration": timeline["total"]}
             cache.store_file(key, "mp4", video, RENDER_GENERATOR, inputs)
             cache.store(key, "vtt", captions.build_vtt(timeline["timeline"], beats).encode(), RENDER_GENERATOR, inputs)

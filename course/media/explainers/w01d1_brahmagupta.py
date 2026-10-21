@@ -548,7 +548,7 @@ class Brahmagupta(NarratedScene):
             [["b^2m^2", "-2a^2m^2"], ["-2b^2n^2", "+4a^2n^2"]],
             [2.8, 2.8], [0.95, 0.95], [[C, D], [E, A]], scale=0.58)
         pb = VGroup(pb_frame, pb_first, pb_then).move_to(UP * 0.7)
-        sign = Text("negative × negative = positive", font_size=22, color=A).next_to(pb_frame[0][3], RIGHT, buff=0.3)
+        sign = Text("negative × negative = positive", font_size=22, color=A).next_to(pb_frame[0][3], DOWN, buff=0.2)
         r2 = chain([(1, [("(m^2-2n^2)(b^2-2a^2)", WHITE), ("=", WHITE), ("b^2m^2", C), ("-", WHITE), ("2a^2m^2", D),
                          ("-", WHITE), ("2b^2n^2", E), ("+", WHITE), ("4a^2n^2", A)])], scale=0.78).move_to(DOWN * 1.6)
 
