@@ -1,0 +1,64 @@
+{
+  "w01d1/calc-chain": {
+    "title": "What is a proof by calculation?",
+    "key": "eddd2a2bd741f38a7b05da4b9e143ba9bdeb6539b48fda77f3415cb8b9ef5c8b",
+    "files": {
+      "video": "eddd2a2bd741f38a7b05da4b9e143ba9bdeb6539b48fda77f3415cb8b9ef5c8b.mp4",
+      "captions": "eddd2a2bd741f38a7b05da4b9e143ba9bdeb6539b48fda77f3415cb8b9ef5c8b.vtt",
+      "poster": "eddd2a2bd741f38a7b05da4b9e143ba9bdeb6539b48fda77f3415cb8b9ef5c8b.jpg"
+    },
+    "durationSeconds": 71.2,
+    "transcript": [
+      "Here's a puzzle. We have two numbers, a and b. We know that a minus b equals four, and a times b equals one. What is a plus b, all squared?",
+      "You could try to solve for a and b first. But there's a shortcut: rewrite what you want in terms of what you know.",
+      "Step one is pure algebra. a plus b, squared, always equals a minus b, squared, plus four times a b. No facts needed: expand both sides, and they match.",
+      "Step two is substitution. Our facts say a minus b is four, and a b is one. So we swap them in.",
+      "Step three is arithmetic. Four squared, plus four times one, is twenty.",
+      "Now read the whole chain, from the top left to the bottom right: a plus b, squared, equals twenty. And every link in the chain is either algebra, or substitution.",
+      "That's a proof by calculation. In Lean, you'll write exactly this chain, and justify each link the same way."
+    ],
+    "narration": {
+      "model": "elevenlabs/eleven-v4",
+      "voice": "george",
+      "audio": {
+        "puzzle": "dee75784d5e347ab8008bc1aef04fc9682dd86f96e656307da848b5b4d0f9712",
+        "shortcut": "18e0afee703dc3a8ae499cd0e988388adc461c7d814cbf04c8febb6b786e9c8b",
+        "algebra": "e771cb04ee658011cfaa03123508730aaf9c1f132fab12727337ba77db92e7d0",
+        "substitute": "b6c668dfc64f43c2d740a8f9fe0802a8ba791638adfbfd8aa9a10b2a740096ea",
+        "arithmetic": "b4cfb1fef421be66cc498fd1b8b3d571955528c36a3c71c87bd1e64cfada6272",
+        "chain": "4d024b8689fac6c7aea4646ff3e8036dd30b1b41b210c3872b94dbcce715ad07",
+        "outro": "f4eaf8c7330d6632c73fce47bf83d00e45ffe58dfe92486beedef0ad93cc1323"
+      }
+    }
+  },
+  "w01d1/reading-calc": {
+    "title": "Reading a Lean calc block",
+    "key": "079d769bdbd3b7910ee12b568f34a0cafb1c9712aa8f42a50cf90c9e813374f1",
+    "files": {
+      "video": "079d769bdbd3b7910ee12b568f34a0cafb1c9712aa8f42a50cf90c9e813374f1.mp4",
+      "captions": "079d769bdbd3b7910ee12b568f34a0cafb1c9712aa8f42a50cf90c9e813374f1.vtt",
+      "poster": "079d769bdbd3b7910ee12b568f34a0cafb1c9712aa8f42a50cf90c9e813374f1.jpg"
+    },
+    "durationSeconds": 57.8,
+    "transcript": [
+      "Here's the same proof, written in Lean. It looks different, but it's the same three steps.",
+      "The first two lines say what we're proving. h one and h two are names for the facts we were given: a minus b equals four, and a times b equals one. After them comes the goal.",
+      "The word calc starts a chain of equalities. Each underscore means: the expression we ended with, on the line before.",
+      "After each step comes its justification. By ring means: this step is pure algebra, so Lean checks it by expanding both sides.",
+      "By r w means rewrite, which is substitution. Rewriting with h one and h two swaps in the two facts, exactly like on paper.",
+      "If a justification is wrong, Lean underlines it in red. When every link checks out, the proof is complete."
+    ],
+    "narration": {
+      "model": "elevenlabs/eleven-v4",
+      "voice": "george",
+      "audio": {
+        "same": "1481a1b4bbd4439bd40436eeae20325437717be1381e3373f4e70ccf891d4efb",
+        "statement": "d309ca98d1560b4ea0b0458a43b6b1665b50dad3dc80a5f2d2dfabb5dd1ee436",
+        "calc": "acf6b607abf22320b3dce35a9ea85c7fee244377d86a48cc5fe9a7930212af11",
+        "ring": "0b7cf0401516c308821f933ae61c7e5039754b2ad38dbe5a42f310246fefda8c",
+        "rw": "dbb6d87a03e6c498d5a83c134c3cfd7919d6f6227964faddcfbb2156f30edc84",
+        "check": "4e7faed5e1fdd8291be80853cf7477ce7ca44143cb743952aca465b55ca06c98"
+      }
+    }
+  }
+}

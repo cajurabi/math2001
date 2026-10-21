@@ -1,0 +1,12 @@
+.git
+.lake
+**/node_modules
+**/.DS_Store
+course/site/dist
+course/site/.astro
+course/site/public/book
+course/site/public/lean-editor
+course/site/public/infoview
+# local secrets (OpenRouter key etc.) must never reach an image
+.env
+.env.*

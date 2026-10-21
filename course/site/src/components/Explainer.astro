@@ -1,0 +1,53 @@
+---
+// A narrated explainer video produced by course/media, looked up in course/assets.lock.json.
+// The media files themselves live in the asset cache outside the repo and are copied into
+// public/media by scripts/sync-media.mjs.
+import fs from 'node:fs'
+import path from 'node:path'
+import CourseNote from './CourseNote.astro'
+
+interface Props {
+  /** logical asset id, e.g. "w01d1/calc-chain" */
+  id: string
+  title: string
+}
+
+type LockedVideo = {
+  key: string
+  files: { video: string; captions?: string; poster?: string }
+  transcript: string[]
+  durationSeconds?: number
+}
+
+const { id, title } = Astro.props
+const lockPath = path.resolve(process.cwd(), '../assets.lock.json')
+const lock: Record<string, LockedVideo> = fs.existsSync(lockPath)
+  ? JSON.parse(fs.readFileSync(lockPath, 'utf8'))
+  : {}
+const asset = lock[id]
+const available = asset && fs.existsSync(path.resolve(process.cwd(), 'public/media', asset.files.video))
+const minutes = asset?.durationSeconds ? `${Math.max(1, Math.round(asset.durationSeconds / 60))} min` : null
+---
+
+<CourseNote kind="explainer" title={`Explainer: ${title}${minutes ? ` (${minutes})` : ''}`}>
+  <div class="explainer">
+    {available ? (
+      <video controls preload="metadata" playsinline poster={asset.files.poster && `/media/${asset.files.poster}`}>
+        <source src={`/media/${asset.files.video}`} type="video/mp4" />
+        {asset.files.captions && <track kind="captions" srclang="en" label="English" src={`/media/${asset.files.captions}`} default />}
+      </video>
+    ) : (
+      <div class="explainer-missing">
+        This explainer hasn't been rendered on this machine yet.<br />
+        Instructors: run <code>course/media/build.sh</code>, then rebuild the site.
+      </div>
+    )}
+    {asset?.transcript?.length ? (
+      <details>
+        <summary>Read the transcript</summary>
+        {asset.transcript.map((line) => <p>{line}</p>)}
+      </details>
+    ) : null}
+    <slot />
+  </div>
+</CourseNote>

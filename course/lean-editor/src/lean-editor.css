@@ -1,0 +1,75 @@
+lean-editor {
+  display: block;
+  margin: 1rem 0;
+  border: 1px solid var(--lean-border, #c9ccd4);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+lean-editor .lean-editor-code {
+  min-height: 6em;
+}
+
+lean-editor .lean-editor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  font: 0.85rem/1.4 system-ui, sans-serif;
+  border-top: 1px solid var(--lean-border, #c9ccd4);
+  background: var(--lean-toolbar-bg, #f4f5f7);
+  color: var(--lean-toolbar-fg, #333);
+}
+
+lean-editor .lean-editor-toolbar button {
+  font: inherit;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--lean-border, #c9ccd4);
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+lean-editor .lean-editor-status[data-status='error'] { color: #b42318; }
+lean-editor .lean-editor-status[data-status='incomplete'] { color: #9a6700; }
+lean-editor .lean-editor-status[data-status='solved'] { color: #1a7f37; font-weight: 600; }
+
+lean-infoview {
+  display: block;
+  min-height: 8rem;
+}
+
+lean-infoview > * {
+  width: 100%;
+  height: 100%;
+  min-height: 8rem;
+  border: 0;
+}
+
+lean-infoview[floating] {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  width: min(28rem, calc(100vw - 2rem));
+  height: 40vh;
+  z-index: 50;
+  border: 1px solid #c9ccd4;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.15);
+  overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  lean-editor {
+    --lean-border: #3a3f4b;
+    --lean-toolbar-bg: #1f232b;
+    --lean-toolbar-fg: #d6d9e0;
+  }
+  lean-editor .lean-editor-status[data-status='error'] { color: #ff8a80; }
+  lean-editor .lean-editor-status[data-status='incomplete'] { color: #e3b341; }
+  lean-editor .lean-editor-status[data-status='solved'] { color: #56d364; }
+  lean-infoview[floating] { background: #1e1e1e; border-color: #3a3f4b; }
+}

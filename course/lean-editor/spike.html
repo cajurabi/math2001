@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lean Editor Spike</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 1rem; background: #fff; color: #222; }
+    main { display: grid; grid-template-columns: 1fr 26rem; gap: 1rem; }
+    lean-infoview { position: sticky; top: 1rem; height: 80vh; border: 1px solid #ccc; border-radius: 8px; }
+  </style>
+  <script type="module" src="./src/lean-editor.ts"></script>
+</head>
+<body>
+  <h1>Lean 4.3.0 spike</h1>
+  <main>
+    <div>
+      <h2>Example 1.2.1 (solved)</h2>
+      <lean-editor file="Math2001/Course/Spike/Ex121.lean" prelude-lines="4"><template>import Mathlib.Data.Real.Basic
+import Library.Basic
+
+math2001_init
+example {a b : ℚ} (h1 : a - b = 4) (h2 : a * b = 1) : (a + b) ^ 2 = 20 :=
+  calc
+    (a + b) ^ 2 = (a - b) ^ 2 + 4 * (a * b) := by ring
+    _ = 4 ^ 2 + 4 * 1 := by rw [h1, h2]
+    _ = 20 := by ring</template></lean-editor>
+      <h2>Example 1.2.2 (exercise)</h2>
+      <lean-editor file="Math2001/Course/Spike/Ex122.lean" prelude-lines="4"><template>import Mathlib.Data.Real.Basic
+import Library.Basic
+
+math2001_init
+example {r s : ℝ} (h1 : s = 3) (h2 : r + 2 * s = -1) : r = -7 :=
+  calc
+    r = r + 2 * s - 2 * s := by sorry
+    _ = -1 - 2 * s := by sorry
+    _ = -1 - 2 * 3 := by sorry
+    _ = -7 := by sorry</template></lean-editor>
+    </div>
+    <lean-infoview></lean-infoview>
+  </main>
+</body>
+</html>

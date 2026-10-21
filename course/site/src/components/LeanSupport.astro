@@ -1,0 +1,64 @@
+---
+// Loads the <lean-editor> bundle (built from ../lean-editor) and the page's shared infoview dock.
+// Safe to include more than once: everything below is emitted only for the first use per page.
+import fs from 'node:fs'
+import path from 'node:path'
+
+const locals = Astro.locals as { leanSupportEmitted?: boolean }
+const first = !locals.leanSupportEmitted
+locals.leanSupportEmitted = true
+
+const manifestPath = path.resolve(process.cwd(), 'public/lean-editor/.vite/manifest.json')
+let script: string | null = null
+let styles: string[] = []
+if (first && fs.existsSync(manifestPath)) {
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
+  const entry = manifest['src/lean-editor.ts']
+  script = `/lean-editor/${entry.file}`
+  styles = (entry.css ?? []).map((css: string) => `/lean-editor/${css}`)
+}
+---
+
+{first && (
+  <>
+    {styles.map((href) => <link rel="stylesheet" href={href} />)}
+    {script
+      ? <script type="module" src={script} is:inline></script>
+      : <p class="explainer-missing">The Lean editor bundle is missing; run <code>npm run build</code> in <code>course/lean-editor</code>.</p>}
+    <div class="infoview-dock not-content" id="infoview-dock" data-collapsed>
+      <header>
+        <span>Lean Infoview</span>
+        <button type="button" id="infoview-toggle" aria-expanded="false">Show</button>
+      </header>
+      <lean-infoview></lean-infoview>
+    </div>
+    <script is:inline>
+      (() => {
+        // Collapsed until the student first clicks into an editor; after that, their
+        // Hide/Show choice is remembered in this browser.
+        const dock = document.getElementById('infoview-dock')
+        const button = document.getElementById('infoview-toggle')
+        const set = (collapsed, remember) => {
+          dock.toggleAttribute('data-collapsed', collapsed)
+          button.textContent = collapsed ? 'Show' : 'Hide'
+          button.setAttribute('aria-expanded', String(!collapsed))
+          if (remember) try { localStorage.setItem('infoview-collapsed', collapsed ? '1' : '0') } catch {}
+        }
+        let saved = null
+        try { saved = localStorage.getItem('infoview-collapsed') } catch {}
+        set(saved !== '0', false)
+        button.addEventListener('click', () => set(!dock.hasAttribute('data-collapsed'), true))
+        if (saved === null) {
+          // open once an editor actually has focus (capture phase, after Monaco moved focus);
+          // resizing the dock during the click itself made Monaco drop that first click
+          const open = (event) => {
+            if (!(event.target instanceof Element) || !event.target.closest('lean-editor')) return
+            document.removeEventListener('focusin', open, true)
+            setTimeout(() => set(false, false))
+          }
+          document.addEventListener('focusin', open, true)
+        }
+      })()
+    </script>
+  </>
+)}

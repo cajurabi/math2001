@@ -1,0 +1,47 @@
+---
+title: Set up your computer
+description: Run the course and Lean locally with Docker. This replaces the book's Gitpod instructions.
+---
+
+import LeanExercise from '../../components/LeanExercise.astro'
+import CourseNote from '../../components/CourseNote.astro'
+
+The book tells you to use Gitpod, a cloud service. This course runs **on your own computer** instead, inside Docker. Once it's set up it works offline, has no monthly hour limit, and needs no account.
+
+## 1. Install Docker Desktop
+
+Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/) for Mac, Windows or Linux, then start it. You'll need about **8 GB of free disk space**. The course image includes Lean's mathematics library, Mathlib, which is large.
+
+## 2. Get the course and start it
+
+Open a terminal (on Windows, PowerShell) and run:
+
+```bash
+git clone -b interactive-course https://github.com/cajurabi/math2001.git
+cd math2001
+docker compose up
+```
+
+The first run downloads and prepares Lean and Mathlib, which takes about 5–15 minutes depending on your internet connection. After that, `docker compose up` starts in a few seconds. Leave the terminal window open while you work. Press <kbd>Ctrl</kbd>+<kbd>C</kbd> in it when you're done for the day.
+
+## 3. Open the course
+
+Go to **[http://localhost:8080](http://localhost:8080)** in your browser. Then check that Lean is connected using the editor below. After a few seconds the badge should say **Proof complete ✓**:
+
+<LeanExercise name="SetupCheck" title="Connection check" code={`example : 2 + 2 = 4 := by numbers`} />
+
+If it says *Starting Lean…* for more than a minute, see Troubleshooting below.
+
+## Troubleshooting
+
+| Problem | Fix |
+|---|---|
+| `port is already allocated` | Something else is using port 8080. Run `COURSE_PORT=8081 docker compose up` and open `http://localhost:8081`. |
+| Badge stuck on *Starting Lean…* | Make sure the terminal running `docker compose up` is still open. Reload the page. |
+| "Too many Lean sessions" | Each open lesson tab runs its own copy of Lean. Close lesson tabs you aren't using. |
+| A lesson's editor is slow the first time | Lean loads its library when a page first opens (about 5–10 s). After that, checking is fast. |
+| Start completely fresh | `docker compose down`, then `docker compose up --build`. |
+
+<CourseNote kind="lean" title="Power users: VS Code with the same setup">
+If you'd rather work the way the book describes, in VS Code with the full Lean extension, install VS Code and its **Dev Containers** extension, open this folder, and choose **Reopen in Container**. It uses the same Lean and Mathlib as the course pages, and the book's chapter files are in `Math2001/`.
+</CourseNote>

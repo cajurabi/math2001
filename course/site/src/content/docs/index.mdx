@@ -1,0 +1,34 @@
+---
+title: Welcome
+description: An interactive, self-paced course built on The Mechanics of Proof by Heather Macbeth.
+---
+
+import Book from '../../components/Book.astro'
+import CourseNote from '../../components/CourseNote.astro'
+
+This course teaches you to **write mathematical proofs**: in words, the way mathematicians have for thousands of years, and in **Lean**, a computer program that checks every step of a proof. It follows the book [*The Mechanics of Proof*](/book/index.html) by Heather Macbeth. The book was written for a university course and is used here with the author's permission for educational purposes.
+
+You need solid Algebra 1 and 2. You don't need calculus: the book never uses it.
+
+## How the pages work
+
+Each lesson mixes two kinds of material, and you can always tell them apart.
+
+**1. The book's own text.** It's marked with a book icon and a gray rule down the left:
+
+<Book file="00_Introduction" section="about-this-book" parts={["intro"]} />
+
+**2. Material added for this course.** Guide notes, algebra refreshers, Lean tips, hints and video explainers always appear in a box like this one:
+
+<CourseNote kind="guide" title="Example of an added note">
+Anything in a box labelled **"Added for this course"** was written for this course, not by the book's author. Pages with no book text at all, like [Setup](/setup/) and the [Syllabus](/syllabus/), are written entirely for this course.
+</CourseNote>
+
+## How to work through a lesson
+
+- Read the book's text first. The added notes are there for when you get stuck or want to go deeper; skip any you don't need.
+- Every gray editor box is **live Lean**. Type in it, and Lean checks your proof as you go. The badge underneath tells you where you stand: *Lean is checking…*, *Lean found an error*, *Not finished yet (sorry)*, or **Proof complete ✓**.
+- Your work in each editor is saved in this browser. **Reset** brings back the original exercise.
+- Each lesson ends at a **Stopping point** box. That's your signal you're done for the day.
+
+Start with [Set up your computer](/setup/), then go to [Week 1 · Day 1](/week-01/day-1/).

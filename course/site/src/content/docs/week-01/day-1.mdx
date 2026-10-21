@@ -1,0 +1,159 @@
+---
+title: "Day 1 · Proving equalities"
+description: "Week 1, Day 1: proofs by calculation, on paper (§1.1) and in Lean (§1.2)."
+---
+
+import Book from '../../../components/Book.astro'
+import CourseNote from '../../../components/CourseNote.astro'
+import LeanExercise from '../../../components/LeanExercise.astro'
+import Explainer from '../../../components/Explainer.astro'
+import AreaModel from '../../../components/AreaModel.astro'
+
+export const CH1 = '01_Proofs_by_Calculation'
+export const LEAN12 = '01_Proofs_by_Calculation/02_Proving_Equalities_in_Lean.lean'
+
+<CourseNote kind="guide" title="Today's plan (about 50 minutes)">
+- **Part 1:** read §1.1, four short proofs written on paper.
+- **Part 2:** in §1.2, write the same proofs in Lean, right on this page.
+- **You're done** when you've finished Example 1.2.4 in Lean and reached the *Stopping point* box at the bottom.
+
+Haven't set up yet? Do [Set up your computer](/setup/) first, so the Lean editors on this page can connect.
+</CourseNote>
+
+## 1.1 Proving equalities
+
+<Book file={CH1} section="proving-equalities" parts={["example"]} />
+
+<CourseNote kind="algebra" title="Algebra refresher: why is (a + b)² = (a − b)² + 4ab?">
+Step 1 of that proof says the two sides are "the same quantity" after expanding. Here's the check, one side at a time:
+
+$$
+(a+b)^2 = a^2 + 2ab + b^2
+$$
+
+$$
+(a-b)^2 + 4ab = (a^2 - 2ab + b^2) + 4ab = a^2 + 2ab + b^2
+$$
+
+Both sides come to $a^2 + 2ab + b^2$, so they're equal **for every** $a$ and $b$. That's what makes this step "purely algebraic": it doesn't depend on the facts $a - b = 4$ or $ab = 1$ at all.
+
+There's also a picture of it. A square with side $a + b$ splits into four $a \times b$ rectangles around a smaller square with side $a - b$. Drag the sliders. The two numbers below the picture always agree.
+
+<AreaModel />
+</CourseNote>
+
+<Explainer id="w01d1/calc-chain" title="What is a proof by calculation?" />
+
+<Book file={CH1} section="proving-equalities" parts={["id4", "id6", "id8"]} />
+
+<CourseNote kind="guide" title="One question to ask about every line">
+For each `=` in a chain, ask: **is this step algebra (rearranging) or substitution (using a given fact)?** In §1.2 you'll see that Lean asks exactly the same question. Algebra steps get one justification and substitution steps get another.
+</CourseNote>
+
+## 1.2 Proving equalities in Lean
+
+<Book file={CH1} section="proving-equalities-in-lean" parts={["intro"]} />
+
+<CourseNote kind="lean" title="In this course, Lean runs in the page">
+The book says to open Gitpod and VS Code. **You don't need either.** Every gray editor box on this page *is* Lean, running in the Docker container you set up. The **Lean Infoview** the book mentions is docked in the bottom-right corner of the screen. Click **Hide** if it's in the way; you won't need it until Chapter 2.
+</CourseNote>
+
+<Book file={CH1} section="proving-equalities-in-lean" parts={["id11"]} />
+
+<LeanExercise file={LEAN12} example="1.2.1" title="Example 1.2.1 (already solved: click around in it, nothing to fix)" />
+
+<Explainer id="w01d1/reading-calc" title="Reading a Lean calc block" />
+
+<Book file={CH1} section="proving-equalities-in-lean" parts={["id12"]} />
+
+<CourseNote kind="lean" title="Where's the &quot;blue status line&quot;?">
+The book mentions a status line at the bottom of VS Code. Here, **the badge under each editor does that job.** It says **Proof complete ✓** only when there are no errors and no `sorry` left. Try the mistakes the book lists (`rin` instead of `ring`, a missing `]`) and watch the badge and the red underlines change.
+</CourseNote>
+
+<LeanExercise file={LEAN12} example="1.2.2">
+<CourseNote kind="hints" title="Hints for Example 1.2.2">
+<details>
+<summary>Hint 1</summary>
+
+Look back at the paper proof of Example 1.1.2 above. Label each of its four lines: *algebra* or *substitution*?
+
+</details>
+<details>
+<summary>Hint 2</summary>
+
+Algebra steps are justified by `ring`. A substitution step is justified by `rw [h]`, where `h` is the hypothesis being substituted. Which hypothesis turns `r + 2 * s` into `-1`? Which one turns `s` into `3`?
+
+</details>
+<details>
+<summary>Hint 3 (worked first step)</summary>
+
+The first line, `r = r + 2 * s - 2 * s`, is pure algebra: no hypotheses needed. So its `sorry` becomes `ring`. Now do the other three the same way.
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<Book file={CH1} section="proving-equalities-in-lean" parts={["id14"]} />
+
+<LeanExercise file={LEAN12} example="1.2.3">
+<CourseNote kind="hints" title="Hints for Example 1.2.3">
+<details>
+<summary>Hint 1</summary>
+
+Same idea as 1.2.2. Compare each Lean line with the paper proof of Example 1.1.3. The middle line substitutes **two** facts at once.
+
+</details>
+<details>
+<summary>Hint 2</summary>
+
+`rw` can take a list: `rw [h1, h2]` substitutes using `h1`, then `h2`.
+
+</details>
+<details>
+<summary>Hint 3 (worked first step)</summary>
+
+The first line only rearranges the expression (expand both sides and they match), so it's `ring`.
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<Book file={CH1} section="proving-equalities-in-lean" parts={["id15"]} />
+
+<LeanExercise file={LEAN12} example="1.2.4">
+<CourseNote kind="hints" title="Hints for Example 1.2.4">
+<details>
+<summary>Hint 1</summary>
+
+Replace the `sorry` with a `calc` block shaped like the one in Example 1.2.2: one Lean line for each line of the paper proof, five in all. The first line starts with `d * (a * f - b * e) = …`, and each later line starts with `_ = …`.
+
+</details>
+<details>
+<summary>Hint 2</summary>
+
+For `rw [h1]` to work, Lean must find `a * d` **exactly** as written, parentheses included. So write `(a * d) * f` in the line before you use `h1`, just as the paper proof writes $(ad)f$.
+
+</details>
+<details>
+<summary>Hint 3 (worked first step)</summary>
+
+```lean
+  calc
+    d * (a * f - b * e) = (a * d) * f - d * b * e := by ring
+```
+Now add the next four lines: substitute with `h1`, regroup with `ring`, substitute with `h2`, and finish with `ring`.
+
+</details>
+</CourseNote>
+</LeanExercise>
+
+<Book file={CH1} section="proving-equalities-in-lean" parts={["exercises"]} />
+
+<CourseNote kind="stop" title="Stopping point">
+That's Day 1. You've read four proofs by calculation and written all four in Lean. Before you stop, check:
+
+- [ ] Every editor above shows **Proof complete ✓** (1.2.2, 1.2.3 and 1.2.4).
+- [ ] You can say, for any line of a calculation, whether it's *algebra* (`ring`) or *substitution* (`rw`).
+
+The book's exercise just above (typing up examples from §1.3) is how **Day 2** begins, so leave it for next time. Your work is saved in this browser.
+</CourseNote>

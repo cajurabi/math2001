@@ -1,0 +1,27 @@
+{
+  "name": "math2001-lean-editor",
+  "private": true,
+  "version": "0.1.0",
+  "description": "<lean-editor> web component: lean4monaco editor + shared infoview, built as a standalone bundle",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "lean4monaco": "^1.1.16",
+    "memfs": "^4.80.0"
+  },
+  "devDependencies": {
+    "@codingame/esbuild-import-meta-url-plugin": "1.0.3",
+    "@types/node": "24.19.2",
+    "typescript": "5.9.3",
+    "vite": "6.4.2",
+    "vite-plugin-node-polyfills": "0.23.0",
+    "vite-plugin-static-copy": "2.3.2"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "esbuild@0.25.12": true
+  }
+}

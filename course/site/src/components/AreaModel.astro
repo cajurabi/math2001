@@ -1,0 +1,89 @@
+---
+// Interactive picture of (a + b)² = (a − b)² + 4ab: a square of side a + b cut into
+// four a×b rectangles around a square of side a − b. Drag the sliders to change a and b.
+---
+
+<div class="widget not-content" data-area-model>
+  <div class="jxgbox" id="area-model-board" role="img"
+    aria-label="A square of side a plus b, made of four a by b rectangles around a smaller square of side a minus b"></div>
+  <div class="widget-controls">
+    <label>a = <input type="range" min="2" max="7" step="0.1" value="6" data-a /><output data-a-out>6.0</output></label>
+    <label>b = <input type="range" min="0.5" max="4" step="0.1" value="2.5" data-b /><output data-b-out>2.5</output></label>
+  </div>
+  <p class="widget-readout" data-readout></p>
+</div>
+
+<script>
+  import JXG from 'jsxgraph'
+
+  const root = document.querySelector<HTMLElement>('[data-area-model]')!
+  const aInput = root.querySelector<HTMLInputElement>('[data-a]')!
+  const bInput = root.querySelector<HTMLInputElement>('[data-b]')!
+  const aOut = root.querySelector('[data-a-out]')!
+  const bOut = root.querySelector('[data-b-out]')!
+  const readout = root.querySelector('[data-readout]')!
+
+  let a = Number(aInput.value)
+  let b = Number(bInput.value)
+
+  const board = JXG.JSXGraph.initBoard('area-model-board', {
+    boundingbox: [-0.6, 11.2, 11.2, -0.6],
+    axis: false,
+    showCopyright: false,
+    showNavigation: false,
+    pan: { enabled: false },
+    zoom: { wheel: false, pinchHorizontal: false, pinchVertical: false },
+  })
+
+  const RECT = { fillColor: '#2a9d8f', fillOpacity: 0.55, strokeColor: '#1d6f66', strokeWidth: 1.5 }
+  const CENTER = { fillColor: '#e9a23b', fillOpacity: 0.7, strokeColor: '#a86c12', strokeWidth: 1.5 }
+
+  /** rectangle [x0, x1] × [y0, y1] whose corners follow the current a and b */
+  function rect(corners: () => [number, number, number, number], style: object, label: () => string) {
+    const [p, q, r, s] = [0, 1, 2, 3].map((i) =>
+      board.create('point', [
+        () => (i === 0 || i === 3 ? corners()[0] : corners()[1]),
+        () => (i < 2 ? corners()[2] : corners()[3]),
+      ], { visible: false, withLabel: false }))
+    board.create('polygon', [p, q, r, s], {
+      ...style,
+      vertices: { visible: false },
+      borders: { strokeColor: (style as { strokeColor: string }).strokeColor, strokeWidth: 1.5 },
+      highlight: false,
+      fixed: true,
+    })
+    board.create('text', [
+      () => (corners()[0] + corners()[1]) / 2,
+      () => (corners()[2] + corners()[3]) / 2,
+      label,
+    ], { anchorX: 'middle', anchorY: 'middle', fontSize: 15, strokeColor: '#ffffff', cssStyle: 'font-weight: 600', fixed: true, highlight: false })
+  }
+
+  const s = () => a + b
+  rect(() => [0, a, 0, b], RECT, () => 'ab')
+  rect(() => [a, s(), 0, a], RECT, () => 'ab')
+  rect(() => [b, s(), a, s()], RECT, () => 'ab')
+  rect(() => [0, b, b, s()], RECT, () => 'ab')
+  rect(() => [b, a, b, a], CENTER, () => (a - b > 0.8 ? '(a−b)²' : ''))
+
+  function update() {
+    a = Number(aInput.value)
+    b = Number(bInput.value)
+    if (b >= a) {
+      b = Math.max(0.5, a - 0.1)
+      bInput.value = String(b)
+    }
+    aOut.textContent = a.toFixed(1)
+    bOut.textContent = b.toFixed(1)
+    const whole = (a + b) ** 2
+    const parts = (a - b) ** 2 + 4 * a * b
+    readout.textContent =
+      `(a + b)² = ${(a + b).toFixed(1)}² = ${whole.toFixed(2)}    ·    ` +
+      `(a − b)² + 4ab = ${(a - b).toFixed(1)}² + 4·${a.toFixed(1)}·${b.toFixed(1)} = ${parts.toFixed(2)}`
+    board.update()
+  }
+
+  aInput.addEventListener('input', update)
+  bInput.addEventListener('input', update)
+  update()
+</script>

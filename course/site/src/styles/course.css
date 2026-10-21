@@ -1,0 +1,214 @@
+/* Course styles layered on Starlight. Starlight's :root is the dark theme and
+   :root[data-theme='light'] the light one; our tokens follow the same convention. */
+
+:root {
+  --course-added-accent: #2dd4bf;
+  --course-added-bg: rgb(45 212 191 / 0.08);
+  --course-added-border: rgb(45 212 191 / 0.45);
+  --course-stop-accent: #fbbf24;
+  --course-book-rule: var(--sl-color-gray-5);
+  --course-code-bg: #1d2129;
+  --course-code-fg: #e6e6e6;
+  --course-tok-keyword: #7aa2ff;
+  --course-tok-number: #e5a76b;
+  --course-tok-op: #a3a8b3;
+  --course-tok-comment: #7fbf7f;
+  --course-tok-error: #ff7b72;
+  --course-box-bg: var(--sl-color-gray-6);
+  --lean-border: var(--sl-color-gray-5);
+  --lean-toolbar-bg: var(--sl-color-gray-6);
+  --lean-toolbar-fg: var(--sl-color-gray-2);
+}
+
+:root[data-theme='light'] {
+  --course-added-accent: #0f766e;
+  --course-added-bg: rgb(15 118 110 / 0.06);
+  --course-added-border: rgb(15 118 110 / 0.35);
+  --course-stop-accent: #b45309;
+  --course-code-bg: #f6f8fa;
+  --course-code-fg: #1f2328;
+  --course-tok-keyword: #0000ff;
+  --course-tok-number: #036682;
+  --course-tok-op: #666666;
+  --course-tok-comment: #008000;
+  --course-tok-error: #e40000;
+  --course-box-bg: var(--sl-color-gray-7);
+}
+
+/* display math scrolls inside its own box rather than widening the page on phones */
+.katex-display { overflow-x: auto; overflow-y: hidden; padding-block: 0.2rem; }
+
+/* ---------- Book excerpts: the author's text, unedited ---------- */
+
+.book-source {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 2rem;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+}
+
+.book-source a { color: inherit; }
+
+.book-excerpt { border-left: 3px solid var(--course-book-rule); padding-left: 1rem; }
+.book-excerpt > section > h3:first-child,
+.book-excerpt section > h3 { margin-top: 1.5rem; }
+.book-excerpt .section-number { color: var(--sl-color-gray-3); font-weight: 500; }
+.book-excerpt .book-math { overflow-x: auto; overflow-y: hidden; }
+.book-excerpt img { margin-inline: auto; margin-block: 0.75rem; }
+
+/* the book's figures are dark line art on transparent backgrounds: in the dark theme, give them
+   a paper card so the ink stays legible */
+:root:not([data-theme='light']) .book-excerpt img {
+  padding: 0.6rem;
+  border-radius: 6px;
+  background: #ffffff;
+  box-sizing: content-box;
+}
+
+.book-excerpt .admonition {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  background: var(--course-box-bg);
+}
+.book-excerpt .admonition-title { margin: 0 0 0.25rem; font-weight: 700; }
+
+.book-excerpt .highlight pre {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  background: var(--course-code-bg);
+  color: var(--course-code-fg);
+  font-size: 0.9em;
+}
+.book-excerpt .highlight .k,
+.book-excerpt .highlight .kd,
+.book-excerpt .highlight .kt,
+.book-excerpt .highlight .kn { color: var(--course-tok-keyword); font-weight: 600; }
+.book-excerpt .highlight .mi,
+.book-excerpt .highlight .mf { color: var(--course-tok-number); }
+.book-excerpt .highlight .o,
+.book-excerpt .highlight .bp { color: var(--course-tok-op); }
+.book-excerpt .highlight .c,
+.book-excerpt .highlight .c1,
+.book-excerpt .highlight .cm { color: var(--course-tok-comment); font-style: italic; }
+.book-excerpt .highlight .gr { color: var(--course-tok-error); }
+
+.book-excerpt dl.footnote { font-size: var(--sl-text-sm); color: var(--sl-color-gray-2); }
+.book-excerpt dl.footnote dt { float: left; margin-right: 0.4rem; }
+.book-excerpt .rubric { font-weight: 700; margin-top: 1.5rem; }
+
+/* ---------- "Added for this course" material ---------- */
+
+.course-added {
+  margin: 1.5rem 0;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--course-added-border);
+  border-left: 4px solid var(--course-added-accent);
+  border-radius: 8px;
+  background: var(--course-added-bg);
+}
+
+.course-added-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.5rem;
+  font-size: var(--sl-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--course-added-accent);
+}
+
+.course-added-label svg { width: 1.1em; height: 1.1em; flex: none; }
+.course-added-label .kind {
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--sl-color-white);
+  font-size: var(--sl-text-sm);
+}
+
+.course-added > :last-child { margin-bottom: 0; }
+.course-added[data-kind='stop'] { --course-added-accent: var(--course-stop-accent); border-color: var(--course-stop-accent); }
+
+.course-added details { margin-top: 0.5rem; }
+.course-added details summary { cursor: pointer; font-weight: 600; }
+.course-added details > :not(summary) { margin-top: 0.4rem; }
+
+/* ---------- Lean exercises ---------- */
+
+.lean-exercise { margin: 1.5rem 0; }
+.lean-exercise-title { font-weight: 700; margin-bottom: 0.25rem; }
+.lean-exercise lean-editor { margin-top: 0.5rem; }
+
+/* Shared infoview panel, docked bottom-right */
+.infoview-dock {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 40;
+  width: min(30rem, calc(100vw - 2rem));
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 8px;
+  background: var(--sl-color-bg);
+  box-shadow: 0 8px 28px rgb(0 0 0 / 0.25);
+  overflow: hidden;
+}
+
+.infoview-dock header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.3rem 0.6rem;
+  font-size: var(--sl-text-sm);
+  font-weight: 600;
+  background: var(--sl-color-gray-6);
+}
+
+.infoview-dock header button {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  padding: 0.1rem 0.5rem;
+  cursor: pointer;
+}
+
+.infoview-dock lean-infoview { height: 38vh; }
+/* the infoview iframe's document has no color-scheme; matching it avoids an opaque white backdrop */
+.infoview-dock iframe { color-scheme: normal; }
+.infoview-dock[data-collapsed] lean-infoview { height: 0; min-height: 0; }
+.infoview-dock[data-collapsed] lean-infoview > * { min-height: 0; }
+
+/* ---------- Explainers ---------- */
+
+.explainer video { width: 100%; border-radius: 6px; background: #000; aspect-ratio: 16 / 9; }
+.explainer-missing {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  border: 1px dashed var(--course-added-border);
+  border-radius: 6px;
+  color: var(--sl-color-gray-3);
+  font-size: var(--sl-text-sm);
+  text-align: center;
+  padding: 1rem;
+}
+
+.widget { margin-top: 0.75rem; }
+.widget .jxgbox { position: relative; overflow: hidden; width: 100%; aspect-ratio: 1 / 1; max-width: 26rem; margin-inline: auto; border-radius: 6px; }
+.widget-controls { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 0.5rem; font-size: var(--sl-text-sm); }
+.widget-controls label { display: flex; align-items: center; gap: 0.4rem; }
+.widget-readout { text-align: center; font-size: var(--sl-text-sm); margin-top: 0.4rem; }
+
+@media (max-width: 50rem) {
+  .infoview-dock { right: 0.5rem; left: 0.5rem; width: auto; bottom: 0.5rem; }
+  .infoview-dock lean-infoview { height: 30vh; }
+}

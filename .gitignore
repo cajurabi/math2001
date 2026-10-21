@@ -5,3 +5,10 @@
 /build
 /.lake/
 /.cache
+# local secrets (OpenRouter key etc.)
+.env
+.env.*
+
+# course tooling
+node_modules/
+__pycache__/

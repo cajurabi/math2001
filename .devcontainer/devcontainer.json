@@ -1,0 +1,17 @@
+{
+  // VS Code "Reopen in Container": the same Lean + Mathlib as the course image, with the
+  // repository mounted so the book's chapter files in Math2001/ can be edited directly.
+  "name": "Mechanics of Proof (Lean 4.3.0)",
+  "build": {
+    "dockerfile": "../.docker/course/Dockerfile",
+    "context": "..",
+    "target": "lean-base"
+  },
+  "remoteUser": "node",
+  "postCreateCommand": "lake exe cache get && lake build Library",
+  "customizations": {
+    "vscode": {
+      "extensions": ["leanprover.lean4"]
+    }
+  }
+}

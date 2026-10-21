@@ -1,0 +1,27 @@
+---
+// Material added for this course (not in the book), always visibly marked as such.
+interface Props {
+  kind?: 'guide' | 'algebra' | 'lean' | 'hints' | 'explainer' | 'stop'
+  title?: string
+}
+
+const KINDS = {
+  guide: 'Guide note',
+  algebra: 'Algebra refresher',
+  lean: 'Lean tip',
+  hints: 'Hints',
+  explainer: 'Explainer',
+  stop: 'Stopping point',
+} as const
+
+const { kind = 'guide', title } = Astro.props
+---
+
+<aside class="course-added" data-kind={kind}>
+  <p class="course-added-label">
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9" /><path d="M12 8v8M8 12h8" /></svg>
+    Added for this course
+    <span class="kind">· {title ?? KINDS[kind]}</span>
+  </p>
+  <slot />
+</aside>

@@ -1,0 +1,19 @@
+{
+  "name": "math2001-course-server",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Serves the course site and bridges browser Lean editors to `lake serve`",
+  "type": "module",
+  "main": "index.mjs",
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "vscode-ws-jsonrpc": "^3.3.2",
+    "ws": "^8.22.0"
+  }
+}

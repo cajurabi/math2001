@@ -25,7 +25,12 @@ These correct a few assumptions in the original brief, and they change the scope
 - **The prose homework already exists.** The upstream wiki (`github.com/hrmacbeth/math2001/wiki/Homework-N`) has the English statement of every problem, with hints and special instructions (e.g. "Lean only", "don't use `exhaust`"). These are the Fall 2024 versions. So we don't need to reverse-engineer the questions. We do need to **write and verify our own reference solutions** (§5.3).
 - **The instructor notes describe 13 weeks, not 11.** That was 2 × 75-minute classes per week, covering about 80% of the book, with 5–7 homework problems per week, oral Lean checks at weeks 5 and 10, and Lean-free written exams. Your 11-week target fits because there are exactly **11 homework sets (HW0–HW10)**: one per week.
 - **The book assumes Calc II maturity but uses no calculus.** It says so in its introduction. The real prerequisite is fluent algebra: expanding and factoring, inequality manipulation, and substitution. An 11th grader can do this if we add algebra and notation scaffolding (§3).
-- **Licensing:** the repo has no LICENSE file, and the Lean files carry "© Heather Macbeth, 2023. All rights reserved." See §9.
+- **Licensing:** the repo has no LICENSE file, and the Lean files carry "© Heather Macbeth, 2023. All rights reserved." **The author has authorized use of the instructional lessons for educational purposes** (confirmed 2026-10-21). See §2.1.
+
+### 2.1 Book text vs. course additions
+
+- **The book's text is the lesson.** Each lesson page pulls its section's text, math, and examples from this repo's `html/` build at site-build time, unedited. Lean exercises come from `Math2001/` the same way. Nothing is retyped by hand, so the lessons stay faithful to the book and pick up upstream fixes when the files change.
+- **Everything we add is visibly marked.** Guide notes, algebra refreshers, hint ladders, and explainers each appear in an **"Added for this course"** callout. It has its own icon, accent color, and label, so a student or instructor can always tell the author's text from ours. Book content carries a small "From *The Mechanics of Proof* §x.y" source line.
 
 ## 3. Audience adaptations (11th grade, pre-Calc II)
 
@@ -90,23 +95,25 @@ Each week has **3 lesson days** and a **Lab day** (homework, plus a checkpoint i
 - We also write a prose solution per HW problem, for instructors.
 - **Solutions must not live in a public branch** (see open question Q4). Proposed: a private repo or a git submodule, mounted into the dev container only for instructors.
 
-## 6. Tooling decisions (TO DECIDE)
+## 6. Tooling decisions
 
 Researched 2026-10-21. Versions are current as of that date.
 
-### 6.1 Proposed architecture (Docker Compose)
+### 6.1 Architecture (Docker Compose)
+
+Students run a single container. Authors also use a separate media image.
 
 ```
-┌─ course-site (nginx) ─────────────┐     ┌─ lean (Node bridge) ──────────────────┐
-│ Astro + Starlight static build    │ ws  │ one `lake serve` per editor session,  │
-│ MDX lessons, KaTeX                │◀───▶│ run in the prebuilt math2001 project  │
-│ <LeanEditor> lean4monaco+infoview │     │ + leanprover-community/repl (warm)    │
-│ <Explainer> video + JSXGraph      │     │   for "check my answer"               │
-└───────────────────────────────────┘     └───────────────────────────────────────┘
-        ▲ static media (from cache)
-┌─ media pipeline (offline; authors only, never students) ──────────────────────┐
-│ Manim CE 0.22 container + ElevenLabs TTS service + content-hash cache (§7)     │
-└────────────────────────────────────────────────────────────────────────────────┘
+┌─ course container (compose service "course", port 8080) ───────────────────────┐
+│ Node server (course/server)                                                     │
+│   • serves the static Astro + Starlight site: lessons, /book/, /media/           │
+│   • ws /lean → one `lake serve` per browser tab, in the prebuilt math2001 project │
+│ Lean 4.3.0 + Mathlib (cached) + Library, built at image build time               │
+└──────────────────────────────────────────────────────────────────────────────────┘
+        ▲ site build copies media listed in course/assets.lock.json from the cache
+┌─ media image (authors only: course/media/build.sh) ───────────────────────────────┐
+│ Manim CE 0.22 + stable-ts aligner + OpenRouter TTS → ~/.cache/math2001-course (§7) │
+└────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### 6.2 Decisions
@@ -124,7 +131,7 @@ Researched 2026-10-21. Versions are current as of that date.
 
 | # | Status | Choice |
 |---|--------|--------|
-| D1 | ✅ decided | Spike 4.3.0 first; fall back to the Lean 4.33 port if the editor/infoview fails |
+| D1 | ✅ decided | **Lean 4.3.0 — spike passed 2026-10-21** (lean4monaco 1.1.16 + infoview 0.11 against `lake serve` in Docker: live diagnostics, goal view, solved/sorry/error status all work; the Mathlib v4.3.0 cache is still downloadable). No port needed. |
 | D2 | ✅ decided | lean4monaco + infoview component, with the REPL as answer checker |
 | D3 | ✅ decided | Astro + Starlight + MDX |
 | D4 | ✅ decided | Manim CE videos + JSXGraph interactives |
@@ -159,7 +166,7 @@ Result: ElevenLabs voice quality on your existing OpenRouter account, with times
 
 1. **Docker:** `docker compose up` starts the course app at `http://localhost:<port>` plus a Lean server with the pinned toolchain and the Mathlib cache built into the image.
 2. **Lesson page** for 1.1 + 1.2:
-   - Original prose written for 11th graders, following the book's examples.
+   - The book's §1.1–1.2 text pulled from `html/`, with marked "Added for this course" guide notes for 11th graders.
    - KaTeX math.
    - Calculation chains shown step by step.
 3. **Two drill-down explainers:**
@@ -173,12 +180,50 @@ POC exit criteria:
 - A fresh machine goes from clone to solving the first exercise in the browser in **15 minutes or less** (excluding the image download).
 - A second `build` makes **zero** TTS/render calls.
 
+### 8.1 POC status (2026-10-21)
+
+**Built and verified in a browser against the Docker image:**
+
+| Piece | Where | Verified |
+|---|---|---|
+| Course image (Lean 4.3.0, Mathlib cache, Library prebuilt, site, bridge) | `.docker/course/Dockerfile`, `compose.yaml` | `docker compose up`: all pages are served, `/healthz` is OK, and the setup page's connection check reports **Proof complete ✓** |
+| `<lean-editor>` web component | `course/lean-editor` | 4 editors on one page share one `lake serve`. Each has its own solved / sorry / error badge. Solving Example 1.2.2 by typing reaches **Proof complete ✓**. The infoview follows the clicked editor. |
+| Lesson pages (book text pulled from `html/`, exercises from `Math2001/`) | `course/site` | Welcome, Setup, Syllabus and Week 1 Day 1 build with no `astro check` errors. Book math is re-rendered with KaTeX. |
+| "Added for this course" markers | `CourseNote.astro` | Every guide note, refresher, hint ladder and explainer is boxed and labelled. Book excerpts carry a source line. |
+| Interactive drill-down: area model of (a+b)² = (a−b)² + 4ab | `AreaModel.astro` (JSXGraph) | Sliders and live readout |
+| Media pipeline (OpenRouter TTS → stable-ts alignment → Manim → VTT captions + poster) | `course/media` | Dry run estimated $0.13 for Day 1. A re-render after a scene edit synthesized 0 characters (cache hit). |
+| Reference solutions for 1.2.2–1.2.4 | scratch only (goes to the private repo, D6) | They compile with `lake env lean` in the image |
+
+**Run it:**
+
+```bash
+docker compose up                          # students: http://localhost:8080
+course/media/build.sh --dry-run            # authors: what narration/video is missing, and its cost
+course/media/build.sh                      # authors: generate into ~/.cache/math2001-course, update assets.lock.json
+cd course/lean-editor && npx vite build    # authors: rebuild the editor bundle into the site
+cd course/site && npm run dev              # authors: live site at :4321 (needs `docker compose up` for Lean)
+```
+
+**Lessons learned and workarounds:**
+- **Monaco focus.** lean4monaco calls `focus()` on every editor it creates. On a page that isn't focused (still loading), that leaves Monaco's per-editor focus flag stale, and keystrokes jump to the first editor. We send a blur to every editor that doesn't really have focus (`syncEditorFocusState` in `lean-editor.ts`).
+- **Starlight spacing.** Starlight's content spacing (`* + *` margins) misaligns Monaco's line rendering, so editors and widgets carry `not-content`.
+- **Infoview paths.** The infoview iframe loads `/infoview/*` from the site root, so the editor build copies it there.
+- **Astro 7.** Astro 7 needs `@astrojs/markdown-remark`'s `unified()` processor for remark-math / rehype-katex.
+- **Media image.** It needs CPU-only `torch` and `torchaudio` from the same index, plus `ffmpeg` for stable-ts.
+
+**Open items:**
+- The infoview's own header shows the real file line (e.g. `:11:21`), while the editor gutter numbers from the first visible line.
+- There is no per-viewer "progress" yet: badges are per browser, through `localStorage`.
+- Publish a prebuilt multi-arch image so students don't build locally.
+- Pick a narrator voice after an A/B listen (currently `george`).
+
 ## 9. Risks and open questions
 
 | Risk | Mitigation |
 |------|-----------|
-| **Copyright/licensing**: the book text and Lean files are "All rights reserved" with no LICENSE. | Write original lesson prose (no copying of the book's text), link to the book's sections, and use the repo's Lean files as students already do. **Recommend contacting Dr. Macbeth before distributing beyond your own classroom.** |
+| Licensing scope: the author authorized educational use. | Keep the attribution line on every book excerpt and the "Added for this course" marker on our material (§2.1). Re-confirm with the author before any public or commercial distribution. |
 | Lean 4.3.0 / Mathlib (Nov 2023) is old. Newer editor tooling may not support it, and the Mathlib cache download for that old commit may no longer be hosted. | Bake the Mathlib build into the Docker image once and publish the image. Verify in the POC. |
 | Docker image size (Mathlib oleans are several GB). | Prebuilt multi-arch image (amd64 + arm64; Lean 4.3.0 ships `linux_aarch64`) on GHCR, so students pull it once. |
+| **Lean runs code.** `#eval` can execute programs, so whoever reaches the `/lean` socket runs code in the container. | Port bound to `127.0.0.1` only (compose). The websocket rejects any `Origin` other than the serving host, which blocks cross-site hijacking from other web pages. The container runs as a non-root user. A hosted multi-student deployment would need per-session sandboxing (lean4web uses bubblewrap). |
 | Student laptops (Chromebooks can't run Docker). | Fallback: a hosted instance of the same container. Out of scope for the POC. |
 | TTS/render cost creep | §7 cache plus `--dry-run` cost estimate. |

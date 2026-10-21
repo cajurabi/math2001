@@ -1,0 +1,41 @@
+---
+// A live Lean editor holding one example from the book's Lean file.
+import { leanExample } from '../lib/lean'
+import LeanSupport from './LeanSupport.astro'
+
+type Props = { title?: string } & (
+  | {
+      /** path under Math2001/, e.g. "01_Proofs_by_Calculation/02_Proving_Equalities_in_Lean.lean" */
+      file: string
+      /** example number, e.g. "1.2.2" */
+      example: string
+    }
+  | {
+      /** Lean written for this course; the standard math2001 header is added in front */
+      code: string
+      /** short name for the editor's file, e.g. "SetupCheck" */
+      name: string
+    }
+)
+
+const HEADER = ['import Mathlib.Data.Real.Basic', 'import Library.Basic', '', 'math2001_init']
+
+const { title } = Astro.props
+const { code, preludeLines } = 'code' in Astro.props
+  ? { code: [...HEADER, Astro.props.code.trim()].join('\n') + '\n', preludeLines: HEADER.length }
+  : leanExample(Astro.props.file, Astro.props.example)
+const name = 'code' in Astro.props ? Astro.props.name : `Example_${Astro.props.example.replaceAll('.', '_')}`
+// one Lean file per exercise and page, inside the math2001 project so lakefile options apply
+const page = Astro.url.pathname.replace(/^\/|\/$/g, '').replace(/[^A-Za-z0-9]+/g, '_') || 'index'
+const editorFile = `Math2001/Course/${page}/${name}.lean`
+const heading = title ?? ('example' in Astro.props ? `Try it in Lean: Example ${Astro.props.example}` : 'Try it in Lean')
+---
+
+<LeanSupport />
+<div class="lean-exercise">
+  <div class="lean-exercise-title">{heading}</div>
+  <lean-editor class="not-content" file={editorFile} prelude-lines={preludeLines}>
+    <template>{code}</template>
+  </lean-editor>
+  <slot />
+</div>

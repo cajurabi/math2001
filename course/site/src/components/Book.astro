@@ -1,0 +1,26 @@
+---
+// The author's own text for (part of) a book section, pulled from the repo's html/ build.
+import { bookExcerpt } from '../lib/book'
+
+interface Props {
+  /** chapter file, e.g. "01_Proofs_by_Calculation" */
+  file: string
+  /** section id, e.g. "proving-equalities" */
+  section: string
+  /** subsection ids to include; "intro" is the text before the first subsection */
+  parts?: string[]
+  /** show the "From The Mechanics of Proof" source line (default true) */
+  source?: boolean
+}
+
+const { file, section, parts, source = true } = Astro.props
+const excerpt = bookExcerpt(file, section, parts)
+---
+
+{source && (
+  <p class="book-source">
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z" /><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" /></svg>
+    <span>From <a href={excerpt.url}><em>The Mechanics of Proof</em>, {excerpt.number ? `§${excerpt.number} ` : ''}{excerpt.title}</a>, by Heather Macbeth</span>
+  </p>
+)}
+<div class="book-excerpt" set:html={excerpt.html} />
