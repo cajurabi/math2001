@@ -44,7 +44,11 @@ There's also a picture of it. A square with side $a + b$ splits into four $a \ti
 
 <Explainer id="w01d1/calc-chain" title="What is a proof by calculation?" />
 
-<Book file={CH1} section="proving-equalities" parts={["id4", "id6", "id8"]} />
+<Book file={CH1} section="proving-equalities" parts={["id4", "id6"]} />
+
+<Explainer id="w01d1/brahmagupta" title="Brahmagupta's identity" />
+
+<Book file={CH1} section="proving-equalities" parts={["id8"]} />
 
 <CourseNote kind="guide" title="One question to ask about every line">
 For each `=` in a chain, ask: **is this step algebra (rearranging) or substitution (using a given fact)?** In §1.2 you'll see that Lean asks exactly the same question. Algebra steps get one justification and substitution steps get another.
@@ -100,7 +104,7 @@ The first line, `r = r + 2 * s - 2 * s`, is pure algebra: no hypotheses needed. 
 <details>
 <summary>Hint 1</summary>
 
-Same idea as 1.2.2. Compare each Lean line with the paper proof of Example 1.1.3. The middle line substitutes **two** facts at once.
+Same idea as 1.2.2. Compare each Lean line with the paper proof of Example 1.1.3. The first line is Brahmagupta's identity (see the explainer in §1.1). The middle line substitutes **two** facts at once.
 
 </details>
 <details>
@@ -112,7 +116,7 @@ Same idea as 1.2.2. Compare each Lean line with the paper proof of Example 1.1.3
 <details>
 <summary>Hint 3 (worked first step)</summary>
 
-The first line only rearranges the expression (expand both sides and they match), so it's `ring`.
+The first line only rearranges the expression: expand both sides and they match, which is what the Brahmagupta explainer shows. So it's `ring`, and Lean does that whole expansion for you.
 
 </details>
 </CourseNote>

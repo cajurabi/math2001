@@ -1,4 +1,40 @@
 {
+  "w01d1/brahmagupta": {
+    "title": "Brahmagupta's identity",
+    "key": "fb4d430f1e19bf06a44a266d91a3098a8a723af8657e4972ef5b1a8f5c8e076b",
+    "files": {
+      "video": "fb4d430f1e19bf06a44a266d91a3098a8a723af8657e4972ef5b1a8f5c8e076b.mp4",
+      "captions": "fb4d430f1e19bf06a44a266d91a3098a8a723af8657e4972ef5b1a8f5c8e076b.vtt",
+      "poster": "fb4d430f1e19bf06a44a266d91a3098a8a723af8657e4972ef5b1a8f5c8e076b.jpg"
+    },
+    "durationSeconds": 120.4,
+    "transcript": [
+      "In Example 1.1.3, the very first step is a monster. The book calls it Brahmagupta's identity, after the Indian mathematician who discovered it around the year 628.",
+      "Let's check it, one side at a time. Squaring two a n plus b m is like finding the area of a square with those two lengths along each side. There are four pieces: four a squared n squared, two copies of two a b m n, and b squared m squared.",
+      "On the right, two times a m plus b n, squared, gives two a squared m squared, plus four a b m n, plus two b squared n squared.",
+      "The product of the two brackets fills another box: b squared m squared, minus two a squared m squared, minus two b squared n squared, plus four a squared n squared.",
+      "Now add up the right side. Two a squared m squared cancels with its negative partner. So does two b squared n squared. What's left is exactly the left side. So the identity is true for every a, b, m and n.",
+      "So why use it? Because it makes both facts appear. a m plus b n is one, and b squared minus two a squared is zero. Substitute, and everything collapses to two.",
+      "Brahmagupta cared for a different reason. His identity turns one solution of x squared minus two y squared equals one into a bigger one. Three and two work. Feed them in, and out come seventeen and twelve. Again, and you get ninety nine and seventy.",
+      "And the fractions seventeen over twelve, then ninety nine over seventy, get closer and closer to the square root of two.",
+      "In Lean, you don't have to do any of this by hand. ring checks the whole expansion in one step."
+    ],
+    "narration": {
+      "model": "elevenlabs/eleven-v4",
+      "voice": "george",
+      "audio": {
+        "monster": "d2acee0bbbc77035120c2d40ba9afa7d35d57d1047db871ce890d21ade1c26c5",
+        "left": "5efe394d0181cdb32c17fcf1ca873c8979943532a7ff7f28fe714744d413f343",
+        "right1": "814578548f5084941156622165ad071d638c7c4f344587cf0f3d9142c743d312",
+        "right2": "64bd5d0d1f2d54000c35552fb19bf4c58a2b0bd6425de9b4076e5cfd2692094f",
+        "cancel": "8f1429e9b0afef0744248b991cab7489a78375ca6bdb5b3df8d6449ef3889da9",
+        "why": "58f3be5466505f794d9f18a0d174c2b0ebdc1cc2147af8ebf73c3fe59266b7e1",
+        "story": "a4113ec358f5f82ffa74a276a7127810147533878d7c93cd6a6f843502b4efc6",
+        "sqrt2": "f2c7b6030a8db101ff49e67cf3908e615d5e88fe2d4dbb18702a8301f97c1458",
+        "outro": "3ed8507d34827d7d91fa587d56175c4cd385cd423677fe2fbe8eb13ef1b47454"
+      }
+    }
+  },
   "w01d1/calc-chain": {
     "title": "What is a proof by calculation?",
     "key": "eddd2a2bd741f38a7b05da4b9e143ba9bdeb6539b48fda77f3415cb8b9ef5c8b",
