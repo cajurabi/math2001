@@ -14,25 +14,53 @@ const PROJECT_DIR = path.resolve(process.env.LEAN_PROJECT_DIR ?? '/home/node/mat
 const STATIC_DIR = process.env.STATIC_DIR ? path.resolve(process.env.STATIC_DIR) : null
 const MAX_SESSIONS = Number(process.env.MAX_LEAN_SESSIONS ?? 4)
 const LOG_RPC = process.env.LOG_RPC === '1'
-// hosted mode: when set, every page and the Lean socket require HTTP Basic auth (any username)
+// hosted mode: when set, every page and the Lean socket require signing in (HTTP Basic, any username)
 const PASSWORD = process.env.COURSE_PASSWORD || null
 
 const log = (...args) => console.log(`[${new Date().toISOString()}]`, ...args)
 
-function authorized(req) {
-  if (!PASSWORD) return true
+function sameSecret(supplied, expected) {
+  const a = crypto.createHash('sha256').update(supplied).digest()
+  const b = crypto.createHash('sha256').update(expected).digest()
+  return crypto.timingSafeEqual(a, b)
+}
+
+function basicAuthorized(req) {
   const [scheme, encoded] = (req.headers.authorization ?? '').split(' ')
   if (scheme !== 'Basic' || !encoded) return false
   const supplied = Buffer.from(encoded, 'base64').toString('utf8').split(':').slice(1).join(':')
-  const a = crypto.createHash('sha256').update(supplied).digest()
-  const b = crypto.createHash('sha256').update(PASSWORD).digest()
-  return crypto.timingSafeEqual(a, b)
+  return sameSecret(supplied, PASSWORD)
+}
+
+// Browsers don't reliably resend Basic credentials on the websocket handshake, so a signed-in
+// page also gets a session cookie, which they do send. The token is derived from the password,
+// so changing the password signs everyone out.
+const SESSION_COOKIE = 'course_session'
+const SESSION_TOKEN = PASSWORD
+  ? crypto.createHmac('sha256', PASSWORD).update('math2001-course-session-v1').digest('hex')
+  : null
+
+function cookieAuthorized(req) {
+  const cookies = Object.fromEntries((req.headers.cookie ?? '').split(';').map((c) => {
+    const [name, ...rest] = c.trim().split('=')
+    return [name, rest.join('=')]
+  }))
+  return Boolean(cookies[SESSION_COOKIE]) && sameSecret(cookies[SESSION_COOKIE], SESSION_TOKEN)
+}
+
+function authorized(req) {
+  return !PASSWORD || basicAuthorized(req) || cookieAuthorized(req)
 }
 
 const app = express()
 app.get('/healthz', (_req, res) => res.json({ ok: true, sessions: activeSessions }))
 app.use((req, res, next) => {
-  if (authorized(req)) return next()
+  if (authorized(req)) {
+    if (PASSWORD && !cookieAuthorized(req)) {
+      res.cookie(SESSION_COOKIE, SESSION_TOKEN, { httpOnly: true, sameSite: 'strict', path: '/' })
+    }
+    return next()
+  }
   res.set('WWW-Authenticate', 'Basic realm="Mechanics of Proof course", charset="UTF-8"')
   res.status(401).send('Sign in to use the course.')
 })
