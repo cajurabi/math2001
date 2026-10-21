@@ -18,6 +18,8 @@ export default defineConfig({
       title: 'Mechanics of Proof',
       description: 'An interactive course on The Mechanics of Proof by Heather Macbeth',
       customCss: ['katex/dist/katex.min.css', './src/styles/course.css'],
+      // "On this page" also lists the book's examples, explainers and stopping points
+      routeMiddleware: './src/routeData.ts',
       sidebar: [
         {
           label: 'Start here',

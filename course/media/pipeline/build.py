@@ -21,7 +21,7 @@ from pathlib import Path
 
 import manim
 
-from . import PIPELINE_VERSION, align, cache, captions, tts
+from . import PIPELINE_VERSION, align, cache, captions, cues, tts
 
 MEDIA_DIR = Path(__file__).resolve().parent.parent
 EXPLAINERS_DIR = MEDIA_DIR / "explainers"
@@ -118,6 +118,11 @@ def main(argv=None):
         model = info.get("model", tts.DEFAULT_MODEL)
         voice = info.get("voice", tts.DEFAULT_VOICE)
         print(f"{info['id']}: {info['title']}  [{model}, voice {voice}]")
+        cue_problems = cues.problems(path)
+        for problem in cue_problems:
+            print(f"  cue: {problem}")
+        if cue_problems:
+            raise SystemExit(f"build: fix the cue words in {path.name} first (nothing was synthesized)")
 
         audio_keys = [tts.key_for(text, model, voice) for text in module.NARRATION.values()]
         missing = [(beat, text) for (beat, text), key in zip(module.NARRATION.items(), audio_keys)

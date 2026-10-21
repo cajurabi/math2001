@@ -14,10 +14,19 @@ What it means in practice:
 - **Claims.** Any claim like "these get closer to √2" needs its reason on screen, not only the numbers.
 - **Narration and screen.** The narration may summarize, but the screen must carry every line, so a student can pause on any frame and check it.
 - **Lean first.** Verify every equation that appears in an explainer with Lean (`ring` / `numbers`) in the course image before rendering.
+- **Cue words.** Each `beat.until(word, n)` / `self.show(beat, word, occurrence=n)` must name the n-th time that word is spoken in the beat, in order. Check them statically before rendering: a wrong occurrence fails the render or rushes an animation.
+
+## Explainers: engaging, not only correct
+
+Don't show only the pure math. Where a result has a history, give the person and the context briefly. Then show the intuition: what someone in their day could have noticed, and how a student could have discovered it themselves with tools they know (Algebra 2, pictures, small cases). The Brahmagupta explainer is the model: bio, the Śulba-sūtra altar puzzle, tile "near misses", conjugates, then the book's identity.
+
+- **History is sourced.** State only what sources support (MacTutor, Bhāvanā magazine, the book itself). When the record is silent on how something was found, say so on screen and frame the discovery path as "one way you could have found it", never as what the mathematician did.
+- **Length.** A story and a full check together can run long (Brahmagupta is ~13 min). Offer to split one into two explainers when that helps.
 
 ## Course content rules
 
 - **The book's text is the lesson.** It is pulled unedited from `html/` (`Book.astro`), and exercises come from `Math2001/` (`LeanExercise.astro`). Nothing is retyped. The author authorized educational use.
+- **On this page.** `src/routeData.ts` rebuilds Starlight's "On this page" from each page's MDX: its headings, every book subsection a `<Book>` includes, each `<Explainer>` and the stopping point. A new component that should appear there needs an `h2`/`h3` with an id, plus a case in that file.
 - **Additions are marked.** Everything written for the course (guide notes, refreshers, hints, explainers) goes in a `CourseNote` box labelled "Added for this course". Book excerpts carry a source line.
 - **Homework duplicates.** Some end-of-section exercises are homework problems word for word (e.g. §1.3 exercises 6 and 12 are HW1 #1 and #2). Flag them, and never use them as practice.
 - **Lesson split points.** Split lessons at subsection boundaries, where the tools the next homework needs are complete (e.g. §1.4 splits after 1.4.7 because HW0 needs `extra`).
@@ -33,5 +42,5 @@ What it means in practice:
 ## Hosting (linux-dev, `ssh linux-dev`, 192.168.50.205)
 
 - **Location.** The repo is at `~/source/github/math2001`, served on port 28080 with `docker compose -f compose.yaml -f compose.hosted.yaml up -d --build`. The password is in its `.env`.
-- **Deploying.** Push the branch to linux-dev as `incoming` (the checked-out branch can't be pushed directly), then `git merge --ff-only incoming` there. Copy `course/site/public/media/` with `rsync --delete`, since media isn't in git. Rebuild, then verify pages, media and a Lean round-trip over the network.
+- **Deploying.** Push the branch to linux-dev as `incoming` (the checked-out branch can't be pushed directly), then `git merge --ff-only incoming` there. Copy `course/site/public/media/` with `rsync --delete`, since media isn't in git. Rebuild, then verify pages, media and a Lean round-trip over the network. The round-trip must authenticate the way a browser does: sign in on a page with Basic auth, then open the `/lean` socket with **only** the `course_session` cookie and no Authorization header. Browsers don't resend Basic credentials on websockets, so a check that sends them hides failures.
 - **Security.** Lean `#eval` can run programs, so the hosted server keeps its password and origin check. Never expose it beyond the LAN without TLS.

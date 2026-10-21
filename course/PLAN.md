@@ -186,8 +186,11 @@ POC exit criteria:
 
 Week 1 is complete: Day 1 (§1.1–1.2), Day 2 (§1.3), Day 3 (§1.4.1–1.4.7) and the Lab day (HW0 in words and in Lean, plus review and practice).
 
-- **Content:** 4 narrated explainers and 2 interactive widgets.
-- **Narration cost:** about $0.27 in total, each line paid once.
+- **Content:** 6 narrated explainers and 2 interactive widgets. Brahmagupta's identity (Day 1) and polynomial long division (Day 2) were added after review.
+- **Every step shown (2026-10-21):** all explainers were audited against the CLAUDE.md "never hide steps" rule. Expansions, sign flips, multiply-backs and arithmetic now appear on screen, and each new equation was checked in Lean.
+- **Brahmagupta as a story:** it now opens with a short bio, the Śulba-sūtra doubled-square puzzle and tile "near misses". It derives the rule with conjugates, then checks the book's identity step by step. It runs the near-miss chain to 577/408, and is about 13 minutes long.
+- **"On this page":** the sidebar lists the book's examples, the explainers and the stopping point (`src/routeData.ts`).
+- **Narration cost:** about $1.4 in total, each line paid once.
 - **Reference solutions:** all of them compile; they are kept outside the repo until the private solutions repo exists (D6).
 - **Hosting:** the course runs on linux-dev at `http://192.168.50.205:28080` (`compose.hosted.yaml`).
 

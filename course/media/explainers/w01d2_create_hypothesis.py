@@ -18,9 +18,11 @@ NARRATION = {
     "swap": "Now x plus four sits right inside our expression. Swap it for two, because that's what the "
             "fact says it equals.",
     "finish": "And two minus four is negative two. Done.",
-    "system": "The same trick works with two facts at once. To get x from these two, add them up. The y's "
-              "cancel, leaving x plus one.",
-    "system2": "So x is the first fact, plus the second, minus one. Swap in four and two, and x is five.",
+    "system": "The same trick works with two facts at once. To get x from these two, add them up. Group the "
+              "x's, the y's, and the number: two x minus x is x, minus y plus y is zero, and there's a plus "
+              "one. So the sum is x plus one.",
+    "system2": "So x is the first fact, plus the second, minus one. Swap in four and two. Four plus two is "
+               "six, and six minus one is five. So x is five.",
     "outro": "Every proof in this section asks the same question: how can I rearrange the goal, so that the "
              "facts appear inside it?",
 }
@@ -89,13 +91,28 @@ class CreateHypothesis(NarratedScene):
         VGroup(*total[0:4]).set_color(FACT)
         VGroup(*total[5:9]).set_color(FACT2)
 
+        # add the facts, grouping like terms one step at a time
+        add = VGroup(
+            MathTex("(2x-y)", "+", "(y-x+1)"),
+            MathTex("=", "(2x-x)", "+", "(-y+y)", "+1"),
+            MathTex("=", "x", "+", "0", "+1"),
+            MathTex("=", "x+1"),
+        ).scale(1.0).arrange(DOWN, buff=0.3)
+        add[0][0].set_color(FACT)
+        add[0][2].set_color(FACT2)
+        add[1][3].set_color(ZERO)
+        add[2][3].set_color(ZERO)
+        for row in add[1:]:  # "=" signs lined up, indented under the sum
+            row.shift(RIGHT * (add[0].get_left()[0] + 0.5 - row[0].get_left()[0]))
+        add.move_to(UP * 0.1 + RIGHT * 0.8)
+
         with self.beat("system") as beat:
             self.play(FadeIn(facts_label), Create(facts_box), Write(facts), run_time=beat.until("add"))
-            self.play(Write(total[:9]), run_time=beat.until("cancel"))
-            strike1 = Line(total[2].get_left(), total[2].get_right(), color=RED_C, stroke_width=5)
-            strike2 = Line(total[6].get_left(), total[6].get_right(), color=RED_C, stroke_width=5)
-            self.play(Create(strike1), Create(strike2), run_time=beat.until("leaving"))
-            self.play(Write(total[9:]))
+            self.play(Write(add[0]), run_time=beat.until("Group"))
+            self.play(Write(add[1]), run_time=beat.until("two", 3))
+            self.play(Write(add[2]), run_time=beat.until("So"))
+            self.play(Write(add[3]), run_time=1.0)
+        self.play(FadeOut(add), FadeIn(total), run_time=0.7)
 
         x0 = MathTex("x").scale(1.15)
         s1 = MathTex("=", "(2x-y)", "+", "(y-x+1)", "-1").scale(1.15)
@@ -108,15 +125,20 @@ class CreateHypothesis(NarratedScene):
         s3.next_to(s2, DOWN, buff=0.45, aligned_edge=LEFT)
         chain2 = VGroup(x0, s1, s2, s3).move_to(DOWN * 1.6)
 
+        work = MathTex("4+2-1", "=", "6-1", "=", "5", color=GREY_A).scale(0.8)
+
         with self.beat("system2") as beat:
             self.play(FadeIn(x0), Write(s1), run_time=beat.until("Swap"))
             self.play(Write(s2[0]), TransformFromCopy(f1[2], s2[1]), Write(s2[2]),
-                      TransformFromCopy(f2[2], s2[3]), Write(s2[4]), run_time=beat.until("and", 2))
-            self.play(Write(s3), run_time=beat.until("five"))
+                      TransformFromCopy(f2[2], s2[3]), Write(s2[4]), run_time=beat.until("Four", 2))
+            work.next_to(VGroup(s2, s3), RIGHT, buff=1.0)
+            self.play(Write(work[:3]), run_time=beat.until("and", 2))
+            self.play(Write(work[3:]), run_time=beat.until("So", 2))
+            self.play(Write(s3), run_time=beat.until("five", 2))
 
         with self.beat("outro") as beat:
             question = Text("How can I rearrange the goal\nso that the facts appear inside it?",
                             font_size=36, line_spacing=1.2)
-            self.play(FadeOut(VGroup(known, total, strike1, strike2, chain2)), run_time=beat.until("question"))
+            self.play(FadeOut(VGroup(known, total, chain2, work)), run_time=beat.until("question"))
             self.play(Write(question), run_time=beat.until("facts") + 0.4)
         self.wait(0.8)

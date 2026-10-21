@@ -1,8 +1,12 @@
 ---
 // Material added for this course (not in the book), always visibly marked as such.
+import { STOP_SLUG } from '../lib/toc'
+
 interface Props {
   kind?: 'guide' | 'algebra' | 'lean' | 'hints' | 'explainer' | 'stop'
   title?: string
+  /** anchor id; the label becomes a heading so "On this page" can link to and track it */
+  id?: string
 }
 
 const KINDS = {
@@ -15,13 +19,15 @@ const KINDS = {
 } as const
 
 const { kind = 'guide', title } = Astro.props
+const id = Astro.props.id ?? (kind === 'stop' ? STOP_SLUG : undefined)
+const Label = id ? 'h3' : 'p'
 ---
 
 <aside class="course-added" data-kind={kind}>
-  <p class="course-added-label">
+  <Label class="course-added-label" id={id}>
     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9" /><path d="M12 8v8M8 12h8" /></svg>
     Added for this course
     <span class="kind">· {title ?? KINDS[kind]}</span>
-  </p>
+  </Label>
   <slot />
 </aside>

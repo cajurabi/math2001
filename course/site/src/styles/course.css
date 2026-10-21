@@ -111,12 +111,14 @@
   background: var(--course-added-bg);
 }
 
-.course-added-label {
+/* doubled class: the label is an <h3> when "On this page" links to it, and must beat Starlight's heading styles */
+.course-added .course-added-label {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
   margin: 0 0 0.5rem;
+  line-height: var(--sl-line-height);
   font-size: var(--sl-text-xs);
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -125,7 +127,7 @@
 }
 
 .course-added-label svg { width: 1.1em; height: 1.1em; flex: none; }
-.course-added-label .kind {
+.course-added .course-added-label .kind {
   font-weight: 600;
   letter-spacing: normal;
   text-transform: none;

@@ -1,55 +1,85 @@
 {
   "w01d1/brahmagupta": {
     "title": "Brahmagupta's identity",
-    "key": "fb4d430f1e19bf06a44a266d91a3098a8a723af8657e4972ef5b1a8f5c8e076b",
+    "key": "4e748ca1fd40ee37940eb203fd2aeb6dd373afd9bb2a76363b89f9c3f9e9e31c",
     "files": {
-      "video": "fb4d430f1e19bf06a44a266d91a3098a8a723af8657e4972ef5b1a8f5c8e076b.mp4",
-      "captions": "fb4d430f1e19bf06a44a266d91a3098a8a723af8657e4972ef5b1a8f5c8e076b.vtt",
-      "poster": "fb4d430f1e19bf06a44a266d91a3098a8a723af8657e4972ef5b1a8f5c8e076b.jpg"
+      "video": "4e748ca1fd40ee37940eb203fd2aeb6dd373afd9bb2a76363b89f9c3f9e9e31c.mp4",
+      "captions": "4e748ca1fd40ee37940eb203fd2aeb6dd373afd9bb2a76363b89f9c3f9e9e31c.vtt",
+      "poster": "4e748ca1fd40ee37940eb203fd2aeb6dd373afd9bb2a76363b89f9c3f9e9e31c.jpg"
     },
-    "durationSeconds": 120.4,
+    "durationSeconds": 764.8,
     "transcript": [
       "In Example 1.1.3, the very first step is a monster. The book calls it Brahmagupta's identity, after the Indian mathematician who discovered it around the year 628.",
-      "Let's check it, one side at a time. Squaring two a n plus b m is like finding the area of a square with those two lengths along each side. There are four pieces: four a squared n squared, two copies of two a b m n, and b squared m squared.",
-      "On the right, two times a m plus b n, squared, gives two a squared m squared, plus four a b m n, plus two b squared n squared.",
-      "The product of the two brackets fills another box: b squared m squared, minus two a squared m squared, minus two b squared n squared, plus four a squared n squared.",
-      "Now add up the right side. Two a squared m squared cancels with its negative partner. So does two b squared n squared. What's left is exactly the left side. So the identity is true for every a, b, m and n.",
-      "So why use it? Because it makes both facts appear. a m plus b n is one, and b squared minus two a squared is zero. Substitute, and everything collapses to two.",
-      "Brahmagupta cared for a different reason. His identity turns one solution of x squared minus two y squared equals one into a bigger one. Three and two work. Feed them in, and out come seventeen and twelve. Again, and you get ninety nine and seventy.",
-      "And the fractions seventeen over twelve, then ninety nine over seventy, get closer and closer to the square root of two.",
-      "In Lean, you don't have to do any of this by hand. ring checks the whole expansion in one step."
+      "Brahmagupta was born in India in 598. He was an astronomer, and predicting where the planets will be takes a lot of arithmetic, including square roots. In 628, at the age of thirty, he finished a huge book of astronomy and mathematics, the Brahma-sphuta-siddhanta, in the city of Bhillamala. Later he led the observatory at Ujjain. His book is the oldest we know that treats zero as a number with rules of its own. It also has rules for positive and negative numbers, which he called fortunes and debts. One of those rules matters today: a debt times a debt is a fortune.",
+      "Here's a puzzle that was already old in his day. Indian altar builders, in texts called the Shulba Sutras, needed a square with twice the area of another square. The trick is the diagonal. Cut a square in half along its diagonal. The square built on that diagonal is made of four of those halves, which is two whole squares. So the doubled square's side is the diagonal. And the diagonal is the square root of two times the side, because the square root of two, squared, is two.",
+      "But no fraction is exactly the square root of two, so builders needed good approximations. Look for whole numbers where one square is almost exactly two copies of another. A single tile is one short of two tiles. A three by three square is nine tiles, and two squares of two by two make eight: one tile over. In symbols, one squared minus two times one squared is one minus two, which is negative one. Three squared minus two times two squared is nine minus eight, which is positive one. Call these near misses. Each one gives a fraction near the square root of two: one over one, and three over two.",
+      "Here's the question anyone in his day could have asked: from the near misses you have, can you build a bigger one? A bigger square that misses by just one tile gives a fraction even closer to the square root of two. Brahmagupta found a rule that does exactly that. His book states the rule in verse, and doesn't say how he found it. So here's one way you could have found it yourself, using a tool from Algebra 2.",
+      "In Algebra 2 you multiply by a conjugate to clear a square root. Multiply three plus two root two by three minus two root two, one pair at a time. You get nine, minus six root two, plus six root two, minus two root two times two root two, which is four times two, because root two times root two is two. The root twos cancel, leaving nine minus eight, which is one. That's our near miss, three squared minus two times two squared, hiding inside the product.",
+      "Now square both of them. Three plus two root two, squared, is nine, plus six root two, plus six root two, plus four times two. Group the plain numbers and the root twos: seventeen plus twelve root two. Three minus two root two, squared, comes out the same way with minus signs: seventeen minus twelve root two.",
+      "Multiply those two results together. Their product is the square of the product we already found, so it's one squared, which is one. But a number times its conjugate always follows one pattern: x plus y root two, times x minus y root two, is x squared minus two y squared. So the same product is seventeen squared minus two times twelve squared. That makes seventeen and twelve a new near miss, still just one tile off, out of 289.",
+      "Does this work for any two near misses? Multiply x one plus y one root two by x two plus y two root two. You get four products, and the last is y one root two times y two root two, which is y one y two times two. Gather the plain parts and the root two parts. Call the plain part capital X, and the root two part capital Y. Now put minus signs in both brackets. The same four products come out, but the root two parts are subtracted. The last product stays positive, because a debt times a debt is a fortune. You get capital X minus capital Y root two.",
+      "Now multiply capital X plus capital Y root two by capital X minus capital Y root two. The conjugate pattern says that's X squared minus two Y squared. But it's also all four brackets multiplied together, and you can multiply them in any order. Pair each bracket with its own conjugate. The first pair gives x one squared minus two y one squared. The second gives x two squared minus two y two squared. So: put in two near misses, and you get a new pair whose miss is the two misses multiplied. That's Brahmagupta's rule.",
+      "And here is the monster from the book, in disguise. Rename x one, y one, x two and y two as b, a, m and n. Write the terms in the book's order. Then add two times a m plus b n, squared, to both sides. That's exactly Brahmagupta's identity.",
+      "The book checks it a different way, by expanding both sides. Let's do that too, one side at a time. Squaring two a n plus b m is like finding the area of a square with those two lengths along each side. It splits into four pieces. Two a n times two a n is four a squared n squared. Each side piece is two a n times b m, which is two a b m n. And b m times b m is b squared m squared.",
+      "Now add the four pieces. The two middle pieces are the same, so two a b m n plus two a b m n is four a b m n. The left side is four a squared n squared, plus four a b m n, plus b squared m squared.",
+      "Now the first part of the right side. Square a m plus b n the same way: a m squared, plus two times a m times b n, plus b n squared. That's a squared m squared, plus two a b m n, plus b squared n squared. Then multiply every term by two.",
+      "The second part multiplies two brackets, so fill a box with every pair. m squared times b squared is b squared m squared. m squared times negative two a squared is negative two a squared m squared. Negative two n squared times b squared is negative two b squared n squared. And negative two n squared times negative two a squared is positive four a squared n squared, because a negative times a negative is positive.",
+      "Now add the two parts of the right side, and group the matching terms. Two a squared m squared minus two a squared m squared is zero. Two b squared n squared minus two b squared n squared is zero too. What's left is four a b m n, plus b squared m squared, plus four a squared n squared. Put those in the same order as the left side, and they match exactly. So the identity is true for every a, b, m and n.",
+      "So why use it? Because it makes both facts appear. a m plus b n is one, and b squared minus two a squared is zero. Substitute them in. One squared is one, so the first part is two times one. Anything times zero is zero. And two plus zero is two.",
+      "Now let's use the rule to build near misses. Start with the smallest, one and one, which misses by negative one: a debt of one tile. Use it for both pairs. The new x is one times one, plus two times one times one: one plus two, three. The new y is one times one, plus one times one: one plus one, two. The new miss is negative one times negative one. A debt times a debt is a fortune: positive one. Three and two, nine tiles against eight.",
+      "Now use three and two for both pairs. The new x is three times three, plus two times two times two: nine plus eight, seventeen. The new y is three times two, plus two times three: six plus six, twelve. The miss is one times one, which is one. Check it: seventeen squared minus two times twelve squared is 289 minus two times 144, which is 289 minus 288, which is one. The same pair the conjugates gave.",
+      "Do it again, with seventeen and twelve as the first pair, and three and two as the second. The new x is seventeen times three, plus two times twelve times two: fifty one plus forty eight, ninety nine. The new y is seventeen times two, plus twelve times three: thirty four plus thirty six, seventy. Ninety nine squared minus two times seventy squared is 9801 minus two times 4900, which is 9801 minus 9800: one again.",
+      "Once more, with ninety nine and seventy. The new x is ninety nine times three, plus two times seventy times two: two hundred ninety seven plus two hundred eighty, five hundred seventy seven. The new y is ninety nine times two, plus seventy times three: one hundred ninety eight plus two hundred ten, four hundred eight. And five hundred seventy seven squared minus two times four hundred eight squared works out, step by step, to one, yet again.",
+      "Look at that pair: five hundred seventy seven over four hundred eight. The Shulba Sutras give the diagonal of a square with side one as one, plus a third, plus a fourth of that third, minus a thirty fourth of that fourth. A fourth of a third is a twelfth, and a thirty fourth of a twelfth is one over four hundred eight. Over the common denominator, four hundred eight, that's four hundred eight, plus one hundred thirty six, plus thirty four, minus one, which is exactly five hundred seventy seven over four hundred eight. Whether the altar builders found it this way, no one knows. But with near misses and Brahmagupta's rule, you could have found it yourself.",
+      "Why do these fractions get close to the square root of two? Divide both sides of x squared minus two y squared equals one by y squared. That gives x over y, squared, minus two, equals one over y squared. So x over y, squared, is two plus one over y squared. For seventeen over twelve, that's two plus one over 144. For ninety nine over seventy, two plus one over 4900. And for five hundred seventy seven over four hundred eight, two plus one over one hundred sixty six thousand, four hundred sixty four. As y grows, the extra bit shrinks toward zero, so x over y gets closer and closer to the square root of two.",
+      "In Lean, you don't have to do any of this by hand. ring checks the whole expansion in one step. But now you know where the monster comes from: an old puzzle about doubling a square, and a debt times a debt."
     ],
     "narration": {
       "model": "elevenlabs/eleven-v4",
       "voice": "george",
       "audio": {
         "monster": "d2acee0bbbc77035120c2d40ba9afa7d35d57d1047db871ce890d21ade1c26c5",
-        "left": "5efe394d0181cdb32c17fcf1ca873c8979943532a7ff7f28fe714744d413f343",
-        "right1": "814578548f5084941156622165ad071d638c7c4f344587cf0f3d9142c743d312",
-        "right2": "64bd5d0d1f2d54000c35552fb19bf4c58a2b0bd6425de9b4076e5cfd2692094f",
-        "cancel": "8f1429e9b0afef0744248b991cab7489a78375ca6bdb5b3df8d6449ef3889da9",
-        "why": "58f3be5466505f794d9f18a0d174c2b0ebdc1cc2147af8ebf73c3fe59266b7e1",
-        "story": "a4113ec358f5f82ffa74a276a7127810147533878d7c93cd6a6f843502b4efc6",
-        "sqrt2": "f2c7b6030a8db101ff49e67cf3908e615d5e88fe2d4dbb18702a8301f97c1458",
-        "outro": "3ed8507d34827d7d91fa587d56175c4cd385cd423677fe2fbe8eb13ef1b47454"
+        "bio": "c04ac1fb8ca60b271ae9d10e68fa37d2e2bb98bd63bf43da4c26832d76d39dc9",
+        "altar": "f354592476f5116b4374100f679edd07381c7053cc08caf091fe147ce72f7dae",
+        "tiles": "d34d800bd844a71eb725ea7b94fd94eb6b9de7cb6c5d0e7981466aa001cbe445",
+        "question": "4fc8d77a4b0a4968bf8f51b14445f55be896ba67ff7bcd8272ad53864f567c63",
+        "conj": "0b8b5d1e80da12b36bc973419f91b8febdbcce6700f00fc0c1be3dadbf1013b8",
+        "square3": "ef186fb37456ee638a2a79f9de3ca514e348b0542234bbbfbcc68249a7017a0e",
+        "product": "20a61f745bc34b3d644c053f6ce53ca302829dbdc8d554a5153b67686c3d5e26",
+        "gen1": "9d4e0ff7da6dcc13751ee527c94f6a0b9429937010347e1adca93dbc5f73f46e",
+        "gen2": "d380d83298b553a2a3b47f6552faf0e98245a96adbf9a4f954b6c1f5ad5122a2",
+        "book": "2ab4eb040823ba8e7d3361a9b5bc91cc60237d5b8f6961655019813bb9845461",
+        "left": "a2c56de28c66313ee1758b659473b3cc3458a898046aa6cc5d1c2cfcc9f7c0b3",
+        "left2": "3669d7fdd3a16a268aa5361dede1d9f0e6d33f68552b045cc25acfbf25dd3272",
+        "right1": "396fd11525be13321013752c1ddff2c02a9b292accf5785e3c4b344df433dae5",
+        "right2": "fc80593522f47de648d6f372543c84c4bf31ca44b12004aa8672e96023d7b45d",
+        "cancel": "1a95de51e56480b1241ff14db3ea789e93c3e6842a307ad51ff5dec71d01c6f8",
+        "why": "50d3dbead83acf94147761d24338998595ec996db1bba7017032f5f4b88d0c44",
+        "chain1": "c632dca826f63c0681027a4ccaa41dcf798fc844b9f6e96e6adf5dc8e884d82c",
+        "chain2": "adfe40886b47061ecb7fa4e927935984ac25e4ed20bfe0b924a0fcb1dfd0a464",
+        "chain3": "a64d90d6a3cc285f7d92a41222b2486a1556d04f84ef4e80f186356f882182a1",
+        "chain4": "3d32f61f8aa10df985914d0febe2b091eb654dd6b36aec7102f3d07cdd005021",
+        "sulba": "2e5ae77bddbe0e9ec9bf15533886ef2819a90ca1b18077e4b8cdd61e10c7091d",
+        "sqrt2": "b64ae9077a3ccb0bc3b2d89d7b7622bd91fbf72b1b8b6c08231327036e25088a",
+        "outro": "eca2131e8da7561c4a4aadec5eaf7b13022581236649440b9ae1cba27e7512b1"
       }
     }
   },
   "w01d1/calc-chain": {
     "title": "What is a proof by calculation?",
-    "key": "eddd2a2bd741f38a7b05da4b9e143ba9bdeb6539b48fda77f3415cb8b9ef5c8b",
+    "key": "3a2b9bb64b4210e3d122f6687294fad759006001100aa7a0251a1b8f542f9c45",
     "files": {
-      "video": "eddd2a2bd741f38a7b05da4b9e143ba9bdeb6539b48fda77f3415cb8b9ef5c8b.mp4",
-      "captions": "eddd2a2bd741f38a7b05da4b9e143ba9bdeb6539b48fda77f3415cb8b9ef5c8b.vtt",
-      "poster": "eddd2a2bd741f38a7b05da4b9e143ba9bdeb6539b48fda77f3415cb8b9ef5c8b.jpg"
+      "video": "3a2b9bb64b4210e3d122f6687294fad759006001100aa7a0251a1b8f542f9c45.mp4",
+      "captions": "3a2b9bb64b4210e3d122f6687294fad759006001100aa7a0251a1b8f542f9c45.vtt",
+      "poster": "3a2b9bb64b4210e3d122f6687294fad759006001100aa7a0251a1b8f542f9c45.jpg"
     },
-    "durationSeconds": 71.2,
+    "durationSeconds": 93.4,
     "transcript": [
       "Here's a puzzle. We have two numbers, a and b. We know that a minus b equals four, and a times b equals one. What is a plus b, all squared?",
       "You could try to solve for a and b first. But there's a shortcut: rewrite what you want in terms of what you know.",
-      "Step one is pure algebra. a plus b, squared, always equals a minus b, squared, plus four times a b. No facts needed: expand both sides, and they match.",
+      "Step one is pure algebra. a plus b, squared, always equals a minus b, squared, plus four times a b. No facts needed: expand both sides. The left is a squared plus two a b plus b squared. The right is a squared minus two a b plus b squared, plus four a b. Group the a b terms: minus two a b plus four a b is two a b. They match.",
       "Step two is substitution. Our facts say a minus b is four, and a b is one. So we swap them in.",
-      "Step three is arithmetic. Four squared, plus four times one, is twenty.",
+      "Step three is arithmetic. Four squared is sixteen, and four times one is four. Sixteen plus four is twenty.",
       "Now read the whole chain, from the top left to the bottom right: a plus b, squared, equals twenty. And every link in the chain is either algebra, or substitution.",
       "That's a proof by calculation. In Lean, you'll write exactly this chain, and justify each link the same way."
     ],
@@ -59,9 +89,9 @@
       "audio": {
         "puzzle": "dee75784d5e347ab8008bc1aef04fc9682dd86f96e656307da848b5b4d0f9712",
         "shortcut": "18e0afee703dc3a8ae499cd0e988388adc461c7d814cbf04c8febb6b786e9c8b",
-        "algebra": "e771cb04ee658011cfaa03123508730aaf9c1f132fab12727337ba77db92e7d0",
+        "algebra": "425f946be5feae61bf59476e4c899c085a6ab974caf5cf818c8071aee1598248",
         "substitute": "b6c668dfc64f43c2d740a8f9fe0802a8ba791638adfbfd8aa9a10b2a740096ea",
-        "arithmetic": "b4cfb1fef421be66cc498fd1b8b3d571955528c36a3c71c87bd1e64cfada6272",
+        "arithmetic": "461a78bcec18299223097cccad4277ff86fda5c9288d38ee010a7424f1c0e2bf",
         "chain": "4d024b8689fac6c7aea4646ff3e8036dd30b1b41b210c3872b94dbcce715ad07",
         "outro": "f4eaf8c7330d6632c73fce47bf83d00e45ffe58dfe92486beedef0ad93cc1323"
       }
@@ -99,20 +129,20 @@
   },
   "w01d2/create-hypothesis": {
     "title": "Making the facts appear",
-    "key": "6a4a9130516220c5e34562ed2882d533815422fc643f683689c2c4e687bdc5ce",
+    "key": "cb75f1effcc1b18c056096aa3c8447f9f52c08f9a06cbc141b388223110962e0",
     "files": {
-      "video": "6a4a9130516220c5e34562ed2882d533815422fc643f683689c2c4e687bdc5ce.mp4",
-      "captions": "6a4a9130516220c5e34562ed2882d533815422fc643f683689c2c4e687bdc5ce.vtt",
-      "poster": "6a4a9130516220c5e34562ed2882d533815422fc643f683689c2c4e687bdc5ce.jpg"
+      "video": "cb75f1effcc1b18c056096aa3c8447f9f52c08f9a06cbc141b388223110962e0.mp4",
+      "captions": "cb75f1effcc1b18c056096aa3c8447f9f52c08f9a06cbc141b388223110962e0.vtt",
+      "poster": "cb75f1effcc1b18c056096aa3c8447f9f52c08f9a06cbc141b388223110962e0.jpg"
     },
-    "durationSeconds": 60.7,
+    "durationSeconds": 75.4,
     "transcript": [
       "Here's the fact: x plus four equals two. And here's the goal: show that x equals negative two. The trouble is, the fact talks about x plus four, but the goal only has x.",
       "So we make x plus four appear. Add four, and take away four. That's adding zero, so it's still just x.",
       "Now x plus four sits right inside our expression. Swap it for two, because that's what the fact says it equals.",
       "And two minus four is negative two. Done.",
-      "The same trick works with two facts at once. To get x from these two, add them up. The y's cancel, leaving x plus one.",
-      "So x is the first fact, plus the second, minus one. Swap in four and two, and x is five.",
+      "The same trick works with two facts at once. To get x from these two, add them up. Group the x's, the y's, and the number: two x minus x is x, minus y plus y is zero, and there's a plus one. So the sum is x plus one.",
+      "So x is the first fact, plus the second, minus one. Swap in four and two. Four plus two is six, and six minus one is five. So x is five.",
       "Every proof in this section asks the same question: how can I rearrange the goal, so that the facts appear inside it?"
     ],
     "narration": {
@@ -123,31 +153,31 @@
         "create": "06a359b5de19baeedeb4393563de4f3149a5afb9db7226e2ed9ed0f910c65823",
         "swap": "5a9beecf0d029cff7ec781510fa9285d9de63791c188f6bd2557eb2aba9f1c3c",
         "finish": "218406597f6b33f1381514179501bd306308e3980f1aea960fc299585ad4f0bb",
-        "system": "60dda4473264db560500abd93e2eaee4b7cc7ea8efa507fa51913e9113914c58",
-        "system2": "8bd857ae6793ab88aac7c9a4841ddba76b82ede1e1fec87754bedbbb384b7fc2",
+        "system": "f6c18d7856ec13b3a7f46922549a512e14821e4daf89ee5a068a86b26cbc3a20",
+        "system2": "c5969bb30086459d12724a08bad3f5ec318e0dd6b80fe345e22965bb7d224dc4",
         "outro": "4f0bf3635e131679bd54c48f07bc0d3f02cb8195d96b9e985ddeb048e40de9b4"
       }
     }
   },
   "w01d2/long-division": {
     "title": "Polynomial long division",
-    "key": "1bf9d572bf8cdc8177a58cb56f270b503c6242a80c30a2e8298433ff8b5d5fb6",
+    "key": "650ca3bdff28ae91ae63542586634972e542dbb843045ca736f902d67b50f184",
     "files": {
-      "video": "1bf9d572bf8cdc8177a58cb56f270b503c6242a80c30a2e8298433ff8b5d5fb6.mp4",
-      "captions": "1bf9d572bf8cdc8177a58cb56f270b503c6242a80c30a2e8298433ff8b5d5fb6.vtt",
-      "poster": "1bf9d572bf8cdc8177a58cb56f270b503c6242a80c30a2e8298433ff8b5d5fb6.jpg"
+      "video": "650ca3bdff28ae91ae63542586634972e542dbb843045ca736f902d67b50f184.mp4",
+      "captions": "650ca3bdff28ae91ae63542586634972e542dbb843045ca736f902d67b50f184.vtt",
+      "poster": "650ca3bdff28ae91ae63542586634972e542dbb843045ca736f902d67b50f184.jpg"
     },
-    "durationSeconds": 127.9,
+    "durationSeconds": 182.4,
     "transcript": [
       "In Example 1.3.10, the first line looks almost like magic. Where did z squared minus z plus one come from? The book's author found it with polynomial long division. Let's see how it works.",
       "Start with plain numbers: thirteen seventy one, divided by twelve. Twelve goes into thirteen once, leaving one. Bring down the seven. Twelve goes into seventeen once, leaving five. Bring down the one. Twelve goes into fifty one four times, leaving three.",
-      "So thirteen seventy one equals twelve times one hundred fourteen, plus a remainder of three. Polynomials work exactly the same way.",
+      "So thirteen seventy one equals twelve times one hundred fourteen, plus a remainder of three. Check: twelve times one hundred fourteen is thirteen sixty eight, and thirteen sixty eight plus three is thirteen seventy one. Polynomials work exactly the same way.",
       "Divide z to the fourth, minus z cubed, minus z squared, plus two z, plus one, by z squared minus two. Line up the terms by their power of z, like digits in columns.",
-      "How many times does z squared go into z to the fourth? z squared times. Multiply it back: z squared times the divisor is z to the fourth, minus two z squared. Subtract, and the leading term disappears.",
-      "Next, z squared goes into negative z cubed, negative z times. Multiply back: negative z cubed, plus two z. Subtract again.",
-      "Last, z squared goes into z squared once. Multiply back, subtract, and three is left over. Three has no z squared in it, so it's the remainder.",
+      "How many times does z squared go into z to the fourth? z squared times. Multiply it back: z squared times z squared minus two is z to the fourth, minus two z squared. Subtract. z to the fourth minus z to the fourth is zero, so the leading term disappears. And watch the signs: negative z squared, minus negative two z squared, is negative z squared plus two z squared, which is z squared.",
+      "Next, z squared goes into negative z cubed, negative z times. Multiply back: negative z times z squared minus two is negative z cubed, plus two z. Subtract again: negative z cubed minus negative z cubed is zero, and two z minus two z is zero, which leaves z squared plus one.",
+      "Last, z squared goes into z squared once. Multiply back: one times z squared minus two is z squared minus two. Subtract: z squared minus z squared is zero, and one minus negative two is one plus two, which is three. Three has no z squared in it, so it's the remainder.",
       "So the polynomial equals the divisor, times z squared minus z plus one, plus three. That's exactly the book's first line.",
-      "And our fact says z squared minus two is zero. That wipes out the whole first part, so the answer is just the remainder: three.",
+      "And our fact says z squared minus two is zero. Put that in: zero times z squared minus z plus one, plus three. Zero times anything is zero, so that's zero plus three, which is just the remainder: three.",
       "In the proof, you don't show any of this. It's scratch work for finding the identity, and ring checks it in one step. Try the same trick on exercise fourteen."
     ],
     "narration": {
@@ -156,32 +186,32 @@
       "audio": {
         "slick": "fd74bb2c8347e6c651ab4bf36b7af8426ac82f10a2596cb785d200c9699d77ee",
         "numbers": "49a876f66abcb10251c250e7f5490c7ee1fcacd0010e1d6dfe067b8964bb42b5",
-        "numbers2": "10387ca62566f2d54cb0fe24e6d5b9c55f0d808e64d499a9008480a5a1d06b10",
+        "numbers2": "9b8b123b7841e4495ab9ea65c1f27f7eeddc4eec066eb8c93d0ed876575b79eb",
         "setup": "8a88bd82d507ca85fabc73afaef1d434908e6fe0aa0ae0b50269cdba5e758068",
-        "step1": "7656a9b9d03725046c023e16a822abbab355276fd99b189774ea0da8cae1cb5d",
-        "step2": "be5380cddb03361923d184c5b1d6d5b1b6436c56c419444fba9916ca35f3ed89",
-        "step3": "92b15ffbc82ac305d0cdbefaec271d86745b2d0687842a7b9fc0a47ae35a0e62",
+        "step1": "71f7b0b27569f8bec2ef86c62602ee9d1aaceaefe2d67dbc095e2ce6daa102fd",
+        "step2": "be3c28703514cb95428b813814024e01ca7e31336c11b624b42a48a9df746634",
+        "step3": "7bbe1070566ee7ad42dae00b7e13c6d8d3aa2252a8394971c29825146c7ccf4b",
         "result": "6fb62aa6105201819a981eddd2bda252643640abcfcd77a9053b41dd3a332177",
-        "payoff": "3f0478751a3925d01fad99974fe4f9430b16ae66fa61c9ef5661d98e24fe8395",
+        "payoff": "2cc65f861cac14fce34256c75f585d659b230ca272e8b59d1ce5368be7ae88a1",
         "outro": "c98bddfe5e50838e6a83b24f48106f22f2212c28c450b37a099303c7641334ed"
       }
     }
   },
   "w01d3/inequality-chains": {
     "title": "Which way does a substitution push?",
-    "key": "94c69b86cadb942fe09214f1c50aab437ee28c3d037410bdfcb00c781960dbaa",
+    "key": "c96a0702cc8d84965cbd99c3068c7d00f7811d59804f5a885be0ba39c52c6465",
     "files": {
-      "video": "94c69b86cadb942fe09214f1c50aab437ee28c3d037410bdfcb00c781960dbaa.mp4",
-      "captions": "94c69b86cadb942fe09214f1c50aab437ee28c3d037410bdfcb00c781960dbaa.vtt",
-      "poster": "94c69b86cadb942fe09214f1c50aab437ee28c3d037410bdfcb00c781960dbaa.jpg"
+      "video": "c96a0702cc8d84965cbd99c3068c7d00f7811d59804f5a885be0ba39c52c6465.mp4",
+      "captions": "c96a0702cc8d84965cbd99c3068c7d00f7811d59804f5a885be0ba39c52c6465.vtt",
+      "poster": "c96a0702cc8d84965cbd99c3068c7d00f7811d59804f5a885be0ba39c52c6465.jpg"
     },
-    "durationSeconds": 84.2,
+    "durationSeconds": 99.8,
     "transcript": [
       "Here are our facts: x plus three is at most two, and y plus two x is at least three. We want to show that y is bigger than three.",
       "We build a chain, just like with equalities. But now each link can be equals, at least, or bigger than.",
-      "First, y equals y plus two x, minus two x. Then substitute: y plus two x is at least three, so the whole thing is at least three minus two x.",
-      "Next we want x plus three to appear. Three minus two x is the same as nine, minus two times x plus three. Now, careful. x plus three is at most two, but it's multiplied by negative two. Making it smaller makes the whole expression bigger. So this link is at least, not at most.",
-      "Nine minus four is five, which is bigger than three. Every link points the same way, so y is bigger than three.",
+      "First, y equals y plus two x, minus two x: adding two x and taking it away adds zero. Then substitute: y plus two x is at least three, so the whole thing is at least three minus two x.",
+      "Next we want x plus three to appear. Three minus two x is the same as nine, minus two times x plus three. Check it: nine minus two times x plus three is nine minus two x minus six, which is three minus two x. Now, careful. x plus three is at most two, but it's multiplied by negative two. Making it smaller makes the whole expression bigger. So this link is at least, not at most.",
+      "Nine minus two times two is nine minus four, which is five, and five is bigger than three. Every link points the same way, so y is bigger than three.",
       "Here's what goes wrong when the links disagree. n squared is at least twenty five, which is bigger than twenty one, which is at most two n plus eleven. Up, up, then down. That tells us nothing at all.",
       "In Lean, rel makes each substitution and checks its direction for you. Push the wrong way, and it refuses."
     ],
@@ -191,9 +221,9 @@
       "audio": {
         "facts": "c9ede47894fc4a497955ab8cebe81ccc675aa4501cb3726794d7f19fa80b7970",
         "chain": "d753e55eb663a7975f76df95f1d9447a61d39803523d9961e4aa29cba165fc3a",
-        "first": "f26a2286a6c7e1ca805eaf8cd2e2b7d0ae4b25684f89d5cd5701d59d244fa8fb",
-        "flip": "f8dfbf966e0aef06962706d88e0a01c0a784fb5b2c3bbb4ed67332c8de59276b",
-        "end": "a91499a19cbe1f7fcdf94c13b2cfe4b05ca6e06a2ed4b098020f390afdcd3796",
+        "first": "78762b8344e9d307eaad0d580072878793aca563fc0266542753a86dd035db86",
+        "flip": "ba2e483df27bfc330ee0b2fd0aca91a2f15d7cfd29cacffd053c2d5aeaead6e6",
+        "end": "dd53678d656ee609f965c59e7163201e32745dade9068e3ad70a5ab8a81a4c82",
         "mixed": "83d25901c288791ecc45227cd0c7effb007b92b9960590e1a10cc9866de274ac",
         "outro": "9255cee59c1c2069c4dea6c84e019d9c9820f4a98668ae11082f52c52ca50fe6"
       }

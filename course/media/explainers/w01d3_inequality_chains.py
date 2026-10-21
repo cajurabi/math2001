@@ -15,13 +15,14 @@ NARRATION = {
              "to show that y is bigger than three.",
     "chain": "We build a chain, just like with equalities. But now each link can be equals, at least, or "
              "bigger than.",
-    "first": "First, y equals y plus two x, minus two x. Then substitute: y plus two x is at least three, so "
-             "the whole thing is at least three minus two x.",
+    "first": "First, y equals y plus two x, minus two x: adding two x and taking it away adds zero. Then "
+             "substitute: y plus two x is at least three, so the whole thing is at least three minus two x.",
     "flip": "Next we want x plus three to appear. Three minus two x is the same as nine, minus two times x "
-            "plus three. Now, careful. x plus three is at most two, but it's multiplied by negative two. "
+            "plus three. Check it: nine minus two times x plus three is nine minus two x minus six, which is "
+            "three minus two x. Now, careful. x plus three is at most two, but it's multiplied by negative two. "
             "Making it smaller makes the whole expression bigger. So this link is at least, not at most.",
-    "end": "Nine minus four is five, which is bigger than three. Every link points the same way, so y is "
-           "bigger than three.",
+    "end": "Nine minus two times two is nine minus four, which is five, and five is bigger than three. Every "
+           "link points the same way, so y is bigger than three.",
     "mixed": "Here's what goes wrong when the links disagree. n squared is at least twenty five, which is "
              "bigger than twenty one, which is at most two n plus eleven. Up, up, then down. That tells us "
              "nothing at all.",
@@ -74,13 +75,23 @@ class InequalityChains(NarratedScene):
                       run_time=beat.until("than") + 0.3)
 
         with self.beat("first") as beat:
-            self.play(FadeOut(symbols), Write(r1), run_time=beat.until("Then"))
+            zero_note = MathTex("+2x-2x=0", color=GREY_B).scale(0.7).next_to(r1, RIGHT, buff=0.6)
+            self.play(FadeOut(symbols), Write(r1), run_time=beat.until("adding"))
+            self.play(FadeIn(zero_note), run_time=beat.until("Then"))
             self.play(Indicate(fb[0], color=FACT_B), Indicate(r1[1], color=FACT_B), run_time=beat.until("so"))
             self.play(Write(r2[0]), TransformFromCopy(fb[2], r2[1]), Write(r2[2]), run_time=beat.until("minus", 2) + 0.3)
+            self.play(FadeOut(zero_note), run_time=0.4)
 
         with self.beat("flip") as beat:
-            self.play(Write(r3), run_time=beat.until("careful"))
-            self.play(Indicate(fa, color=FACT_A), Indicate(r3[3], color=FACT_A), run_time=beat.until("multiplied"))
+            # scratch work beside the chain: why 3 − 2x = 9 − 2(x + 3)
+            check = VGroup(MathTex("9-2(x+3)", "=", "9-2x-6"), MathTex("=", "3-2x")).scale(0.75).set_color(GREY_A)
+            check.arrange(DOWN, buff=0.18)
+            check[1].shift(RIGHT * (check[0][1].get_x() - check[1][0].get_x()))
+            check.next_to(r3, RIGHT, buff=1.0)
+            self.play(Write(r3), run_time=beat.until("Check"))
+            self.play(Write(check[0]), run_time=beat.until("which"))
+            self.play(Write(check[1]), run_time=beat.until("Now"))
+            self.play(FadeOut(check), Indicate(fa, color=FACT_A), Indicate(r3[3], color=FACT_A), run_time=beat.until("multiplied"))
             # small seesaw: (x + 3) goes down, −2(x + 3) goes up
             down = VGroup(MathTex("x+3", color=FACT_A).scale(0.8), Arrow(UP * 0.4, DOWN * 0.4, color=FACT_A, buff=0))
             down.arrange(RIGHT, buff=0.15)
@@ -94,14 +105,17 @@ class InequalityChains(NarratedScene):
             self.play(Indicate(r4[0], color=GOOD))
 
         with self.beat("end") as beat:
-            self.play(FadeOut(seesaw), Write(r5), run_time=beat.until("Every"))
+            work = MathTex("9-2\\cdot 2", "=", "9-4", "=", "5", ">", "3").scale(0.75).set_color(GREY_A)
+            work.next_to(VGroup(r4, r5), RIGHT, buff=1.0)
+            self.play(FadeOut(seesaw), Write(work[:5]), run_time=beat.until("and"))
+            self.play(Write(work[5:]), Write(r5), run_time=beat.until("Every"))
             links = VGroup(*(row[0] for row in rows))
             self.play(LaggedStart(*(Indicate(s, color=GOOD) for s in links), lag_ratio=0.25),
                       run_time=beat.until("so") + 0.3)
             done = MathTex("y", ">", "3", color=GOOD).scale(1.2).move_to(goal[:3])
             self.play(FadeOut(goal), FadeIn(done))
 
-        self.play(FadeOut(VGroup(known, chain, done)), run_time=0.6)
+        self.play(FadeOut(VGroup(known, chain, done, work)), run_time=0.6)
 
         bad = VGroup(
             MathTex("n^2"), MathTex("\\ge", "25"), MathTex(">", "21"), MathTex("\\le", "2n+11"),

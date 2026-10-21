@@ -16,10 +16,13 @@ NARRATION = {
     "shortcut": "You could try to solve for a and b first. But there's a shortcut: rewrite what you want "
                 "in terms of what you know.",
     "algebra": "Step one is pure algebra. a plus b, squared, always equals a minus b, squared, plus four "
-               "times a b. No facts needed: expand both sides, and they match.",
+               "times a b. No facts needed: expand both sides. The left is a squared plus two a b plus b "
+               "squared. The right is a squared minus two a b plus b squared, plus four a b. Group the a b "
+               "terms: minus two a b plus four a b is two a b. They match.",
     "substitute": "Step two is substitution. Our facts say a minus b is four, and a b is one. So we swap "
                   "them in.",
-    "arithmetic": "Step three is arithmetic. Four squared, plus four times one, is twenty.",
+    "arithmetic": "Step three is arithmetic. Four squared is sixteen, and four times one is four. Sixteen "
+                  "plus four is twenty.",
     "chain": "Now read the whole chain, from the top left to the bottom right: a plus b, squared, equals "
              "twenty. And every link in the chain is either algebra, or substitution.",
     "outro": "That's a proof by calculation. In Lean, you'll write exactly this chain, and justify each "
@@ -85,15 +88,26 @@ class CalcChain(NarratedScene):
             self.play(FadeOut(idea), ReplacementTransform(goal[0], lhs), FadeOut(goal[1:]),
                       run_time=beat.until("always"))
             self.play(Write(r1), run_time=beat.until("No"))
-            expand = MathTex("a^2+2ab+b^2", color=GREY_A).scale(0.95).next_to(r1, UP, buff=0.4)
-            both = VGroup(
-                Arrow(lhs.get_top(), expand.get_left() + DOWN * 0.1, buff=0.1, color=GREY_B, stroke_width=3),
-                Arrow(r1[1:].get_top(), expand.get_right() + DOWN * 0.1, buff=0.1, color=GREY_B, stroke_width=3),
-            )
+            # scratch work under the chain: both sides expanded, every step shown
+            expand = VGroup(
+                MathTex("(a+b)^2", "=", "a^2+2ab+b^2"),
+                MathTex("(a-b)^2+4ab", "=", "a^2-2ab+b^2+4ab"),
+                MathTex("=", "a^2+(-2ab+4ab)+b^2"),
+                MathTex("=", "a^2+2ab+b^2"),
+            ).scale(0.75).set_color(GREY_A).arrange(DOWN, buff=0.2)
+            for row, eq in zip(expand[1:], (1, 0, 0)):
+                row.shift(RIGHT * (expand[0][1].get_x() - row[eq].get_x()))
+            expand.next_to(r1, DOWN, buff=0.6).set_x(chain.get_x())
+            expand_label = Text("expand both sides", font_size=22, color=ALGEBRA).next_to(expand, RIGHT, buff=0.5)
             t1 = tag("algebra", ALGEBRA, r1)
-            self.play(GrowArrow(both[0]), GrowArrow(both[1]), FadeIn(expand), run_time=beat.until("match"))
+            self.play(FadeIn(expand_label), run_time=beat.until("The"))
+            self.play(Write(expand[0]), run_time=beat.until("The", 2))
+            self.play(Write(expand[1]), run_time=beat.until("Group"))
+            self.play(Write(expand[2]), run_time=beat.until("is", 4))
+            self.play(Write(expand[3]), run_time=beat.until("They"))
+            self.play(Indicate(expand[0][2]), Indicate(expand[3][1]), run_time=beat.until("match") + 0.6)
             self.play(FadeIn(t1, shift=LEFT * 0.2))
-        self.play(FadeOut(both), FadeOut(expand), run_time=0.4)
+        self.play(FadeOut(expand), FadeOut(expand_label), run_time=0.4)
 
         with self.beat("substitute") as beat:
             t2 = tag("substitution", SUBST, r2)
@@ -108,15 +122,19 @@ class CalcChain(NarratedScene):
 
         with self.beat("arithmetic") as beat:
             t3 = tag("algebra", ALGEBRA, r3)
-            self.play(Write(r3), run_time=beat.until("twenty"))
-            self.play(FadeIn(t3, shift=LEFT * 0.2))
+            work = MathTex("4^2+4\\cdot 1", "=", "16+4", "=", "20").scale(0.8).set_color(GREY_A)
+            work.next_to(r3, DOWN, buff=0.55).set_x(chain.get_x())
+            self.play(Write(work[0]), run_time=beat.until("sixteen"))
+            self.play(Write(work[1:3]), run_time=beat.until("Sixteen", 2))
+            self.play(Write(work[3:]), run_time=beat.until("twenty"))
+            self.play(Write(r3), FadeIn(t3, shift=LEFT * 0.2))
 
         with self.beat("chain") as beat:
             start = SurroundingRectangle(lhs, color=WHITE, buff=0.12)
             end = SurroundingRectangle(r3[1], color=WHITE, buff=0.12)
             path = CurvedArrow(start.get_bottom() + DOWN * 0.05, end.get_left() + LEFT * 0.05,
                                angle=TAU / 8, color=WHITE)
-            self.play(Create(start), run_time=beat.until("bottom"))
+            self.play(FadeOut(work), Create(start), run_time=beat.until("bottom"))
             self.play(Create(path), Create(end), run_time=beat.until("And"))
             self.play(Indicate(t1, color=ALGEBRA), Indicate(t3, color=ALGEBRA), run_time=beat.until("or"))
             self.play(Indicate(t2, color=SUBST))

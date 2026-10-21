@@ -5,6 +5,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import CourseNote from './CourseNote.astro'
+import { explainerSlug } from '../lib/toc'
 
 interface Props {
   /** logical asset id, e.g. "w01d1/calc-chain" */
@@ -29,7 +30,7 @@ const available = asset && fs.existsSync(path.resolve(process.cwd(), 'public/med
 const minutes = asset?.durationSeconds ? `${Math.max(1, Math.round(asset.durationSeconds / 60))} min` : null
 ---
 
-<CourseNote kind="explainer" title={`Explainer: ${title}${minutes ? ` (${minutes})` : ''}`}>
+<CourseNote kind="explainer" id={explainerSlug(id)} title={`Explainer: ${title}${minutes ? ` (${minutes})` : ''}`}>
   <div class="explainer">
     {available ? (
       <video controls preload="metadata" playsinline poster={asset.files.poster && `/media/${asset.files.poster}`}>

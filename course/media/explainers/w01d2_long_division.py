@@ -17,20 +17,26 @@ NARRATION = {
                "once, leaving one. Bring down the seven. Twelve goes into seventeen once, leaving five. Bring "
                "down the one. Twelve goes into fifty one four times, leaving three.",
     "numbers2": "So thirteen seventy one equals twelve times one hundred fourteen, plus a remainder of three. "
-                "Polynomials work exactly the same way.",
+                "Check: twelve times one hundred fourteen is thirteen sixty eight, and thirteen sixty eight plus "
+                "three is thirteen seventy one. Polynomials work exactly the same way.",
     "setup": "Divide z to the fourth, minus z cubed, minus z squared, plus two z, plus one, by z squared minus "
              "two. Line up the terms by their power of z, like digits in columns.",
     "step1": "How many times does z squared go into z to the fourth? z squared times. Multiply it back: z "
-             "squared times the divisor is z to the fourth, minus two z squared. Subtract, and the leading "
-             "term disappears.",
-    "step2": "Next, z squared goes into negative z cubed, negative z times. Multiply back: negative z cubed, "
-             "plus two z. Subtract again.",
-    "step3": "Last, z squared goes into z squared once. Multiply back, subtract, and three is left over. Three "
-             "has no z squared in it, so it's the remainder.",
+             "squared times z squared minus two is z to the fourth, minus two z squared. Subtract. z to the "
+             "fourth minus z to the fourth is zero, so the leading term disappears. And watch the signs: "
+             "negative z squared, minus negative two z squared, is negative z squared plus two z squared, "
+             "which is z squared.",
+    "step2": "Next, z squared goes into negative z cubed, negative z times. Multiply back: negative z times z "
+             "squared minus two is negative z cubed, plus two z. Subtract again: negative z cubed minus "
+             "negative z cubed is zero, and two z minus two z is zero, which leaves z squared plus one.",
+    "step3": "Last, z squared goes into z squared once. Multiply back: one times z squared minus two is z "
+             "squared minus two. Subtract: z squared minus z squared is zero, and one minus negative two is "
+             "one plus two, which is three. Three has no z squared in it, so it's the remainder.",
     "result": "So the polynomial equals the divisor, times z squared minus z plus one, plus three. That's "
               "exactly the book's first line.",
-    "payoff": "And our fact says z squared minus two is zero. That wipes out the whole first part, so the "
-              "answer is just the remainder: three.",
+    "payoff": "And our fact says z squared minus two is zero. Put that in: zero times z squared minus z plus "
+              "one, plus three. Zero times anything is zero, so that's zero plus three, which is just the "
+              "remainder: three.",
     "outro": "In the proof, you don't show any of this. It's scratch work for finding the identity, and ring "
              "checks it in one step. Try the same trick on exercise fourteen.",
 }
@@ -117,13 +123,17 @@ class LongDivision(NarratedScene):
         check[2].set_color(DIVISOR)
         check[4].set_color(QUOT)
         check[6].set_color(REM)
+        check2 = MathTex("12\\cdot 114+3", "=", "1368+3", "=", "1371").scale(0.8).next_to(check, DOWN, buff=0.45)
+        check2.set_color(GREY_A)
         with self.beat("numbers2") as beat:
-            self.play(Write(check), run_time=beat.until("Polynomials"))
+            self.play(Write(check), run_time=beat.until("Check"))
+            self.play(Write(check2[:3]), run_time=beat.until("and"))
+            self.play(Write(check2[3:]), run_time=beat.until("Polynomials"))
             self.play(Indicate(check, scale_factor=1.05))
-        self.play(FadeOut(VGroup(warmup, check)), run_time=0.5)
+        self.play(FadeOut(VGroup(warmup, check, check2)), run_time=0.5)
 
         # --- z⁴ − z³ − z² + 2z + 1 divided by z² − 2: column c holds the z^(4−c) terms
-        p = Grid(origin=[-2.2, 3.1, 0], col_width=1.35, row_height=0.62, scale=0.85)
+        p = Grid(origin=[-3.5, 3.1, 0], col_width=1.35, row_height=0.62, scale=0.85)
         pdivisor = p.tex("z^2-2", -1.55, 1, DIVISOR)
         dividend = VGroup(p.tex("z^4", 0, 1), p.tex("-z^3", 1, 1), p.tex("-z^2", 2, 1),
                           p.tex("+2z", 3, 1), p.tex("+1", 4, 1))
@@ -148,24 +158,41 @@ class LongDivision(NarratedScene):
             self.play(LaggedStart(*(FadeIn(c, shift=DOWN * 0.15) for c in columns), lag_ratio=0.2),
                       run_time=beat.until("columns"))
 
+        # scratch column on the right: every multiply-back and every subtraction, signs included
+        def note(tex, row):
+            return MathTex(tex, color=GREY_A).scale(0.55).move_to([4.6, p.point(0, row)[1], 0])
+
+        n1 = note("z^2(z^2-2)=z^4-2z^2", 2)
+        n2 = note("z^4-z^4=0", 3).shift(UP * 0.2)
+        n3 = note("-z^2-(-2z^2)=-z^2+2z^2=z^2", 3).shift(DOWN * 0.2)
+        m1 = note("-z(z^2-2)=-z^3+2z", 4)
+        m2 = note("-z^3-(-z^3)=0,\\;\\; 2z-2z=0", 5)
+        k1 = note("1\\cdot(z^2-2)=z^2-2", 6)
+        k2 = note("z^2-z^2=0,\\;\\; 1-(-2)=1+2=3", 7)
+        scratch_notes = VGroup(n1, n2, n3, m1, m2, k1, k2)
+
         with self.beat("step1") as beat:
             self.play(Indicate(dividend[0]), Indicate(pdivisor[0][0:2], color=DIVISOR), run_time=beat.until("squared", 2))
             self.play(Write(pq[0]), run_time=beat.until("Multiply"))
-            self.play(Write(ps1), run_time=beat.until("Subtract"))
-            self.play(Create(pu1), Write(pr1), run_time=beat.until("leading"))
-            self.play(Indicate(dividend[0], color=GREY_B), run_time=beat.until("disappears"))
+            self.play(Write(ps1), FadeIn(n1), run_time=beat.until("Subtract"))
+            self.play(Create(pu1), FadeIn(n2), run_time=beat.until("leading"))
+            self.play(Indicate(dividend[0], color=GREY_B), run_time=beat.until("And"))
+            self.play(FadeIn(n3), run_time=beat.until("which"))
+            self.play(Write(pr1))
 
         with self.beat("step2") as beat:
             self.play(Write(pq[1]), run_time=beat.until("Multiply"))
-            self.play(Write(ps2), run_time=beat.until("Subtract"))
+            self.play(Write(ps2), FadeIn(m1), run_time=beat.until("Subtract"))
+            self.play(FadeIn(m2), run_time=beat.until("which"))
             self.play(Create(pu2), Write(pr2))
 
         with self.beat("step3") as beat:
             self.play(Write(pq[2]), run_time=beat.until("Multiply"))
-            self.play(Write(ps3), run_time=beat.until("subtract"))
-            self.play(Create(pu3), Write(pr3), run_time=beat.until("left"))
+            self.play(Write(ps3), FadeIn(k1), run_time=beat.until("Subtract"))
+            self.play(FadeIn(k2), run_time=beat.until("which"))
+            self.play(Create(pu3), Write(pr3), run_time=beat.until("Three", 2))
             rem_box = SurroundingRectangle(pr3, color=REM, buff=0.12)
-            rem_label = Text("remainder", font_size=24, color=REM).next_to(rem_box, RIGHT, buff=0.25)
+            rem_label = Text("remainder", font_size=24, color=REM).next_to(rem_box, DOWN, buff=0.12)
             self.play(Create(rem_box), FadeIn(rem_label), run_time=beat.until("remainder"))
 
         result = MathTex("z^4-z^3-z^2+2z+1", "=", "(z^2-2)", "(z^2-z+1)", "+", "3").scale(0.85)
@@ -180,20 +207,27 @@ class LongDivision(NarratedScene):
             self.play(Write(result[4]), TransformFromCopy(pr3, result[5]), run_time=beat.until("That's"))
             self.play(Indicate(result, scale_factor=1.05))
 
+        fact = MathTex("z^2-2", "=", "0", color=DIVISOR).scale(0.8).move_to(UP * 2.6)
+        pay = VGroup(
+            MathTex("=", "0", "\\cdot", "(z^2-z+1)", "+3"),
+            MathTex("=", "0", "+3"),
+            MathTex("=", "3"),
+        ).scale(0.85)
+        pay[0][1].set_color(DIVISOR)
+        pay[2][1].set_color(REM)
         with self.beat("payoff") as beat:
-            self.play(FadeOut(VGroup(division, columns, rem_box, rem_label)), result.animate.move_to(UP * 1.2),
-                      run_time=beat.until("zero"))
-            zero = MathTex("0", color=DIVISOR).scale(0.85).move_to(result[2])
-            self.play(Transform(result[2], zero), run_time=beat.until("wipes"))
-            gone = VGroup(result[2], result[3], result[4])
-            self.play(gone.animate.set_opacity(0.25), run_time=beat.until("answer"))
-            answer = MathTex("=", "3", color=REM).scale(1.1).next_to(result, DOWN, buff=0.6).align_to(result[1], LEFT)
-            self.play(Write(answer), run_time=beat.until("three"))
+            self.play(FadeOut(VGroup(division, columns, rem_box, rem_label, scratch_notes)), result.animate.move_to(UP * 1.2),
+                      FadeIn(fact), run_time=beat.until("Put"))
+            for i, row in enumerate(pay):
+                row.next_to(result, DOWN, buff=0.45 + 0.6 * i).align_to(result[1], LEFT)
+            self.play(Write(pay[0]), run_time=beat.until("Zero", 3))
+            self.play(Write(pay[1]), run_time=beat.until("which"))
+            self.play(Write(pay[2]), run_time=beat.until("three", 3))
 
         with self.beat("outro") as beat:
             lean = Text(":= by ring", font="Noto Sans Mono", font_size=44, color=TEAL_C).move_to(DOWN * 0.3)
             scratch = Text("long division = scratch work", font_size=28, color=GREY_B).next_to(lean, UP, buff=0.6)
-            self.play(FadeOut(VGroup(result, answer)), FadeIn(scratch), run_time=beat.until("ring"))
+            self.play(FadeOut(VGroup(result, pay, fact)), FadeIn(scratch), run_time=beat.until("ring"))
             self.play(Write(lean), run_time=beat.until("Try"))
             ex = MathTex("t^2-4=0", "\\;\\Rightarrow\\;", "t^4+3t^3-3t^2-2t-2=10t+2").scale(0.8).next_to(lean, DOWN, buff=0.8)
             self.play(FadeIn(ex, shift=UP * 0.2), run_time=beat.until("fourteen"))
