@@ -53,17 +53,29 @@ $$
 \end{aligned}
 $$
 
-**Compare the two.** $(a+b)^2 = a^2 + 2ab + b^2$ and $(a-b)^2 = a^2 - 2ab + b^2$ have the same $a^2$ and $b^2$. They differ only in the middle term. Getting from $-2ab$ to $+2ab$ means adding $4ab$:
+**The goal of this step.** You want an equation that starts with $(a+b)^2$ and whose right side uses only $(a-b)^2$ and $ab$, because those are what you can turn into numbers. But $(a+b)^2$ and $(a-b)^2$ are not equal: they have the same $a^2$ and $b^2$, but different middle terms ($+2ab$ and $-2ab$). So $(a-b)^2$ alone is the wrong size. Whatever it's missing has to be added back on.
+
+**How do you know it's $4ab$? Measure the gap.** You don't guess the $4ab$. You subtract to find how far apart the two squares are:
 
 $$
 \begin{aligned}
-(a-b)^2 + 4ab &= (a^2 - 2ab + b^2) + 4ab \\
-  &= a^2 + 2ab + b^2 \\
-  &= (a+b)^2
+(a+b)^2 - (a-b)^2 &= (a^2 + 2ab + b^2) - (a^2 - 2ab + b^2) \\
+  &= a^2 + 2ab + b^2 - a^2 + 2ab - b^2 \\
+  &= (a^2 - a^2) + (2ab + 2ab) + (b^2 - b^2) \\
+  &= 0 + 4ab + 0 \\
+  &= 4ab
 \end{aligned}
 $$
 
-That's the first line. Now both facts appear in it, so the next line can put in $4$ for $a - b$ and $1$ for $ab$.
+(Subtracting the bracket flips every sign inside it: $-2ab$ becomes $+2ab$.) So $(a+b)^2$ is always exactly $4ab$ bigger than $(a-b)^2$. Adding that gap back on makes the two sides equal:
+
+$$
+(a+b)^2 = (a-b)^2 + 4ab
+$$
+
+That's the first line. You're allowed to add $4ab$ because it's made of $ab$, which you know. Now both facts appear, so the next line puts in $4$ for $a - b$ and $1$ for $ab$: $4^2 + 4 \cdot 1$.
+
+**Check it with numbers.** Try $a = 3$ and $b = 1$ (any numbers work, since this step doesn't use the facts). Then $(a+b)^2 = 4^2 = 16$ and $(a-b)^2 = 2^2 = 4$. The gap is $16 - 4 = 12$, and $4ab = 4 \cdot 3 \cdot 1 = 12$. They agree.
 
 <details>
 <summary>Why not just solve for a and b?</summary>
