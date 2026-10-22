@@ -129,13 +129,13 @@
   },
   "w01d1/rearranging": {
     "title": "What is an algebraic rearrangement?",
-    "key": "da5ed19977c61b0709bd44703fca695940dd88f9e0860f395e2994161d71b82f",
+    "key": "8ac381eed7759aa82bdbb0a831ebdb64c324be94bd19eaa405c25eeaa3544b89",
     "files": {
-      "video": "da5ed19977c61b0709bd44703fca695940dd88f9e0860f395e2994161d71b82f.mp4",
-      "captions": "da5ed19977c61b0709bd44703fca695940dd88f9e0860f395e2994161d71b82f.vtt",
-      "poster": "da5ed19977c61b0709bd44703fca695940dd88f9e0860f395e2994161d71b82f.jpg"
+      "video": "8ac381eed7759aa82bdbb0a831ebdb64c324be94bd19eaa405c25eeaa3544b89.mp4",
+      "captions": "8ac381eed7759aa82bdbb0a831ebdb64c324be94bd19eaa405c25eeaa3544b89.vtt",
+      "poster": "8ac381eed7759aa82bdbb0a831ebdb64c324be94bd19eaa405c25eeaa3544b89.jpg"
     },
-    "durationSeconds": 283.3,
+    "durationSeconds": 347.1,
     "transcript": [
       "In Examples 1.1.1 and 1.1.2, the book calls some steps purely algebraic rearrangements. Here's what that means, and the exact moves the author used.",
       "Rearranging is as old as algebra. In the 800s, al-Khwarizmi, a scholar at the House of Wisdom in Baghdad, wrote a book called al-jabr wa al-muqabala. Al-jabr means completion, and al-muqabala means balancing. The first word of that title became our word algebra.",
@@ -146,11 +146,12 @@
       "Move two: regroup. Adding two s minus two s to r is the same as first adding two s to r, and then subtracting two s. Moving the brackets like this doesn't change the value. And now r plus two s sits right there, in brackets.",
       "Test it with any numbers. Take r equals five and s equals one. The left side is five. The right side is five plus two, minus two: seven minus two, which is five. It works for every r and s, so no facts were used.",
       "The next two steps are substitutions, and they do use the facts. Swap r plus two s for negative one, then swap s for three. The last step is arithmetic: two times three is six, and negative one minus six is negative seven.",
-      "Now Example 1.1.1. Its first line, a plus b squared equals a minus b squared plus four a b, uses the other two moves: expanding products, and collecting like terms.",
+      "Now Example 1.1.1. Its first line, a plus b squared equals a minus b squared plus four a b, seems to come out of nowhere. So let's build it ourselves, starting from the left side and using only rearrangement moves.",
       "Expand the left side. a plus b squared means a plus b, times a plus b. Multiply every term by every term: a times a, a times b, b times a, and b times b. That's a squared, plus a b, plus a b, plus b squared, because b times a is the same as a b. Collect the like terms: a b plus a b is two a b.",
-      "Now the right side. Expand a minus b, times a minus b, the same way. Watch the signs: minus b times minus b is plus b squared. That gives a squared, minus a b, minus a b, plus b squared, plus four a b. Collect the a b terms: negative a b, minus a b, plus four a b, is two a b.",
-      "Both sides come out to a squared plus two a b plus b squared, for every a and b. So the first line is a rearrangement: no facts used. The next line substitutes the facts. The last is arithmetic: four squared is sixteen, four times one is four, and sixteen plus four is twenty.",
-      "So a rearrangement changes how an expression looks, never its value, and never uses the facts. Example 1.1.2 used adding zero and regrouping. Example 1.1.1 used expanding and collecting like terms. In Lean, ring checks rearrangements like these, and rw does the substitutions."
+      "Now, where do we want to end up? The fact a minus b equals four is about a minus b, so we want a minus b, squared, to appear. Expand it, to see what it looks like inside. a minus b, times a minus b, is a times a, minus a times b, minus b times a, plus minus b times minus b. Watch the signs: minus b times minus b is plus b squared. So a minus b squared is a squared, minus two a b, plus b squared.",
+      "Compare that with what we have: a squared, plus two a b, plus b squared. The a squared and the b squared already match. Only the middle is different: we have plus two a b, but we need minus two a b. So split the plus two a b into minus two a b, plus four a b, since minus two plus four is two. That's collecting like terms, run backwards. Next, regroup, so a squared, minus two a b, plus b squared, sit together in one bracket. That bracket is exactly a minus b, squared. Turning it back into a square is factoring: expanding, run backwards. And the four a b is simply what was left over.",
+      "Every step was a rearrangement, so a plus b squared equals a minus b squared plus four a b, for every a and b. That's the book's first line. The next line substitutes the facts. The last is arithmetic: four squared is sixteen, four times one is four, and sixteen plus four is twenty.",
+      "So a rearrangement changes how an expression looks, never its value, and never uses the facts. Example 1.1.2 used adding zero and regrouping. Example 1.1.1 used expanding and collecting, then two moves run backwards: splitting a term, and factoring. In Lean, ring checks rearrangements like these, and rw does the substitutions."
     ],
     "narration": {
       "model": "elevenlabs/eleven-v4",
@@ -165,11 +166,12 @@
         "ex2_regroup": "f6a8edf6ff28baaf5cc45fd45ff32adb75ff71fb859f0301431831d4b99622d0",
         "ex2_test": "49dedad2410597df5b1d42fe2b3440b73c512f57d8f1773015956d8f4baab1de",
         "ex2_rest": "a336950e411a663a525403744211a9df64094f1573507e107829ffde73fd6293",
-        "ex1": "3105200230f8dea6c2501db49242138dddcf918a3da93654ca1b51805e123fd7",
+        "ex1": "07ca0db38fb20ec7933b45992255dbde8da9d173f1ff0c27bcf80bb2fe89f498",
         "ex1_left": "b09548142ed7d119874f27189464ec61d92d1d989d2ec5bcc48a59010e13e151",
-        "ex1_right": "448d386f65de3ea2c8a37364b8e1b303caa3b57b06979372052cc7d191b6dbe0",
-        "ex1_same": "bd053af565c8ee788d14a0bcf7d42187639496d317027737e12e44fc30000b3c",
-        "summary": "5686b3c29675983c2c55ff116896973284279e6cb1865a4b986d9a56cc43b4a9"
+        "ex1_aim": "83ec9e0b382de33ff33240a93fc52db56857b419033bac7635f2f8085abf6281",
+        "ex1_split": "cef5f2cb111e2d79f70beaf860f09989249eecf07c0ac7699ea3b0d2360fbcc1",
+        "ex1_same": "19e9b79d9aeb5acf68e5ed5f20e91d1f29d6acda73358ce1f7dc357131698bfe",
+        "summary": "dfea8bb5f49d8c766e9d6f7fa13ff35b9f05511c31467aaf738b1696730425bf"
       }
     }
   },

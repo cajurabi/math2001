@@ -44,21 +44,32 @@ NARRATION = {
     "ex2_rest": "The next two steps are substitutions, and they do use the facts. Swap r plus two s for "
                 "negative one, then swap s for three. The last step is arithmetic: two times three is six, and "
                 "negative one minus six is negative seven.",
-    "ex1": "Now Example 1.1.1. Its first line, a plus b squared equals a minus b squared plus four a b, uses "
-           "the other two moves: expanding products, and collecting like terms.",
+    "ex1": "Now Example 1.1.1. Its first line, a plus b squared equals a minus b squared plus four a b, seems "
+           "to come out of nowhere. So let's build it ourselves, starting from the left side and using only "
+           "rearrangement moves.",
     "ex1_left": "Expand the left side. a plus b squared means a plus b, times a plus b. Multiply every term by "
                 "every term: a times a, a times b, b times a, and b times b. That's a squared, plus a b, plus a "
                 "b, plus b squared, because b times a is the same as a b. Collect the like terms: a b plus a b "
                 "is two a b.",
-    "ex1_right": "Now the right side. Expand a minus b, times a minus b, the same way. Watch the signs: minus b "
-                 "times minus b is plus b squared. That gives a squared, minus a b, minus a b, plus b squared, "
-                 "plus four a b. Collect the a b terms: negative a b, minus a b, plus four a b, is two a b.",
-    "ex1_same": "Both sides come out to a squared plus two a b plus b squared, for every a and b. So the first "
-                "line is a rearrangement: no facts used. The next line substitutes the facts. The last is "
+    "ex1_aim": "Now, where do we want to end up? The fact a minus b equals four is about a minus b, so we want "
+               "a minus b, squared, to appear. Expand it, to see what it looks like inside. a minus b, times a "
+               "minus b, is a times a, minus a times b, minus b times a, plus minus b times minus b. Watch the "
+               "signs: minus b times minus b is plus b squared. So a minus b squared is a squared, minus two a "
+               "b, plus b squared.",
+    "ex1_split": "Compare that with what we have: a squared, plus two a b, plus b squared. The a squared and the "
+                 "b squared already match. Only the middle is different: we have plus two a b, but we need minus "
+                 "two a b. So split the plus two a b into minus two a b, plus four a b, since minus two plus four "
+                 "is two. That's collecting like terms, run backwards. Next, regroup, so a squared, minus two a "
+                 "b, plus b squared, sit together in one bracket. That bracket is exactly a minus b, squared. "
+                 "Turning it back into a square is factoring: expanding, run backwards. And the four a b is "
+                 "simply what was left over.",
+    "ex1_same": "Every step was a rearrangement, so a plus b squared equals a minus b squared plus four a b, for "
+                "every a and b. That's the book's first line. The next line substitutes the facts. The last is "
                 "arithmetic: four squared is sixteen, four times one is four, and sixteen plus four is twenty.",
     "summary": "So a rearrangement changes how an expression looks, never its value, and never uses the facts. "
-               "Example 1.1.2 used adding zero and regrouping. Example 1.1.1 used expanding and collecting like "
-               "terms. In Lean, ring checks rearrangements like these, and rw does the substitutions.",
+               "Example 1.1.2 used adding zero and regrouping. Example 1.1.1 used expanding and collecting, then "
+               "two moves run backwards: splitting a term, and factoring. In Lean, ring checks rearrangements "
+               "like these, and rw does the substitutions.",
 }
 
 ALG = TEAL_C        # rearrangement steps
@@ -243,15 +254,19 @@ class Rearranging(NarratedScene):
             self.play(FadeOut(goal), FadeIn(done))
         self.play(FadeOut(VGroup(known, full, full_tags, done, ex_label)), run_time=0.6)
 
-        # ---- Example 1.1.1: expanding and collecting
+        # ---- Example 1.1.1: build the first line from the left side, one move at a time
         ex1_label = Text("Example 1.1.1", font_size=28, color=NOTE).to_edge(UP, buff=0.5)
-        first = MathTex("(a+b)^2", "=", "(a-b)^2+4ab").scale(1.1).next_to(ex1_label, DOWN, buff=0.4)
-        first_tag = Text("expanding + collecting like terms", font_size=24, color=ALG).next_to(first, DOWN, buff=0.25)
+        first = MathTex("(a+b)^2", "=", "(a-b)^2+4ab").scale(1.1).next_to(ex1_label, DOWN, buff=0.5)
+        nowhere = Text("where does this come from?", font_size=24, color=NOTE).next_to(first, DOWN, buff=0.3)
+        goal_label = Text("goal:", font_size=22, color=NOTE)
 
         with self.beat("ex1") as beat:
             self.show(beat, "Its", FadeIn(ex1_label))
-            self.show(beat, "uses", Write(first), run_time=1.5)
-            self.play(FadeIn(first_tag))
+            self.show(beat, "seems", Write(first), run_time=1.5)
+            self.show(beat, "So", FadeIn(nowhere))
+            self.play(FadeOut(nowhere), first.animate.scale(0.7).next_to(ex1_label, DOWN, buff=0.15))
+            goal_label.next_to(first, LEFT, buff=0.25)
+            self.play(FadeIn(goal_label))
 
         left = chain([
             (1, [("(a+b)^2", WHITE), ("=", WHITE), ("(a+b)(a+b)", WHITE)]),
@@ -259,41 +274,68 @@ class Rearranging(NarratedScene):
                  ("+", WHITE), ("b\\cdot b", WHITE)]),
             (0, [("=", WHITE), ("a^2", WHITE), ("+", WHITE), ("ab", FACT_A), ("+", WHITE), ("ab", FACT_A), ("+", WHITE), ("b^2", WHITE)]),
             (0, [("=", WHITE), ("a^2", WHITE), ("+", WHITE), ("2ab", FACT_A), ("+", WHITE), ("b^2", WHITE)]),
-        ], scale=0.85, buff=0.32).move_to(DOWN * 1.0).to_edge(LEFT, buff=0.9)
+        ], scale=0.85, buff=0.32).move_to(DOWN * 0.6).to_edge(LEFT, buff=0.9)
         left_tags = tags(left, [("", ALG), ("expanding: each term × each term", ALG),
                                 ("b · a = ab", ALG), ("collecting: ab + ab = 2ab", ALG)], left.get_right()[0] + 0.5)
 
         with self.beat("ex1_left") as beat:
-            self.show(beat, "Multiply", FadeOut(first_tag), first.animate.scale(0.75).next_to(ex1_label, DOWN, buff=0.2),
-                      Write(left[0]))
+            self.show(beat, "Multiply", Write(left[0]))
             self.show(beat, "That's", Write(left[1]), FadeIn(left_tags[1]), run_time=1.5)
             self.show(beat, "Collect", Write(left[2]), FadeIn(left_tags[2]), run_time=1.5)
             self.play(Write(left[3]), FadeIn(left_tags[3]), run_time=1.2)
-        sum_left = MathTex("\\text{left: }", "a^2+2ab+b^2").scale(0.65).to_corner(UL, buff=0.4)
-        sum_left[1].set_color(GREEN_C)
-        self.play(FadeOut(VGroup(left[:3], left_tags)), ReplacementTransform(left[3], sum_left), run_time=0.7)
 
-        right = chain([
-            (1, [("(a-b)^2+4ab", WHITE), ("=", WHITE), ("(a-b)(a-b)+4ab", WHITE)]),
+        # the chain we build, top left: rows appear one move at a time
+        build = chain([
+            (1, [("(a+b)^2", WHITE), ("=", WHITE), ("a^2", WHITE), ("+2ab", FACT_A), ("+b^2", WHITE)]),
+            (0, [("=", WHITE), ("a^2", WHITE), ("+(-2ab+4ab)", FACT_A), ("+b^2", WHITE)]),
+            (0, [("=", WHITE), ("(a^2-2ab+b^2)", FACT_B), ("+4ab", FACT_A)]),
+            (0, [("=", WHITE), ("(a-b)^2", FACT_B), ("+4ab", FACT_A)]),
+        ], scale=0.85, buff=0.3)
+        build.to_edge(LEFT, buff=0.9).align_to(UP * 2.35, UP)
+        build_tags = tags(build, [("expanded and collected", ALG), ("splitting: −2 + 4 = 2", ALG),
+                                  ("regrouping", ALG), ("factoring: a² − 2ab + b² = (a − b)²", FACT_B)],
+                          build.get_right()[0] + 0.5)
+        self.play(FadeOut(VGroup(left[:3], left_tags)), ReplacementTransform(left[3], build[0]),
+                  FadeIn(build_tags[0]), run_time=0.8)
+
+        # scratch work at the bottom: what (a − b)² looks like inside
+        aim_label = Text("aim: make (a − b)² appear, because a − b = 4 is a fact", font_size=22, color=FACT_B)
+        aim = chain([
+            (1, [("(a-b)^2", FACT_B), ("=", WHITE), ("(a-b)(a-b)", WHITE)]),
             (0, [("=", WHITE), ("a\\cdot a", WHITE), ("-", WHITE), ("a\\cdot b", FACT_A), ("-", WHITE), ("b\\cdot a", FACT_A),
-                 ("+", WHITE), ("(-b)(-b)", FACT_B), ("+4ab", FACT_A)]),
-            (0, [("=", WHITE), ("a^2", WHITE), ("-", WHITE), ("ab", FACT_A), ("-", WHITE), ("ab", FACT_A), ("+", WHITE), ("b^2", FACT_B),
-                 ("+4ab", FACT_A)]),
-            (0, [("=", WHITE), ("a^2", WHITE), ("+", WHITE), ("(-ab-ab+4ab)", FACT_A), ("+", WHITE), ("b^2", WHITE)]),
-            (0, [("=", WHITE), ("a^2", WHITE), ("+", WHITE), ("2ab", FACT_A), ("+", WHITE), ("b^2", WHITE)]),
-        ], scale=0.78, buff=0.3).move_to(DOWN * 1.05).to_edge(LEFT, buff=0.6)
-        right_tags = tags(right, [("", ALG), ("expanding", ALG), ("(−b)(−b) = +b²", FACT_B),
-                                  ("collecting ab terms", ALG), ("−1 − 1 + 4 = 2", ALG)], right.get_right()[0] + 0.4)
+                 ("+", WHITE), ("(-b)(-b)", FACT_B)]),
+            (0, [("=", WHITE), ("a^2", WHITE), ("-", WHITE), ("ab", FACT_A), ("-", WHITE), ("ab", FACT_A), ("+", WHITE), ("b^2", FACT_B)]),
+            (0, [("=", WHITE), ("a^2", WHITE), ("-2ab", FACT_A), ("+b^2", WHITE)]),
+        ], scale=0.75, buff=0.25)
+        aim.to_edge(LEFT, buff=0.9).align_to(DOWN * 0.35, UP)
+        aim_label.next_to(aim, UP, buff=0.2).align_to(aim, LEFT)
+        aim_tags = tags(aim, [("", ALG), ("expanding", ALG), ("(−b)(−b) = +b²: neg × neg", FACT_B),
+                              ("collecting: −ab − ab = −2ab", ALG)], aim.get_right()[0] + 0.5)
+        target = MathTex("(a-b)^2", "=", "a^2", "-2ab", "+b^2").scale(0.8)
+        target[0].set_color(FACT_B)
+        target[3].set_color(FACT_A)
+        target_label = Text("target:", font_size=22, color=FACT_B)
+        target_group = VGroup(target_label, target).arrange(RIGHT, buff=0.3).to_edge(LEFT, buff=0.9).to_edge(DOWN, buff=0.6)
 
-        with self.beat("ex1_right") as beat:
-            self.show(beat, "Watch", Write(right[0]), run_time=1.2)
-            self.show(beat, "That", Write(right[1]), FadeIn(right_tags[1]), run_time=1.5)
-            self.show(beat, "Collect", Write(right[2]), FadeIn(right_tags[2]), run_time=1.5)
-            self.show(beat, "is", Write(right[3]), FadeIn(right_tags[3]), occurrence=2, run_time=1.5)
-            self.play(Write(right[4]), FadeIn(right_tags[4]), run_time=1.2)
-        sum_right = MathTex("\\text{right: }", "a^2+2ab+b^2").scale(0.65).next_to(sum_left, DOWN, buff=0.2, aligned_edge=LEFT)
-        sum_right[1].set_color(GREEN_C)
-        self.play(FadeOut(VGroup(right[:4], right_tags)), ReplacementTransform(right[4], sum_right), run_time=0.7)
+        with self.beat("ex1_aim") as beat:
+            self.show(beat, "Expand", FadeIn(aim_label))
+            self.show(beat, "a", Write(aim[0]), occurrence=6)
+            self.show(beat, "Watch", Write(aim[1]), FadeIn(aim_tags[1]), run_time=1.5)
+            self.show(beat, "So", Write(aim[2]), FadeIn(aim_tags[2]), occurrence=2, run_time=1.5)
+            self.play(Write(aim[3]), FadeIn(aim_tags[3]), run_time=1.2)
+        self.play(FadeOut(VGroup(aim[:3], aim_tags, aim_label)), ReplacementTransform(aim[3], target),
+                  FadeIn(target_label), run_time=0.8)
+
+        with self.beat("ex1_split") as beat:
+            self.show(beat, "The", Indicate(build[0][2]), Indicate(build[0][4]), Indicate(target[2]), Indicate(target[4]),
+                      run_time=1.5)
+            self.show(beat, "So", Indicate(build[0][3], color=FACT_A, scale_factor=1.3),
+                      Indicate(target[3], color=FACT_A, scale_factor=1.3), run_time=1.5)
+            self.show(beat, "That's", Write(build[1]), FadeIn(build_tags[1]), run_time=1.5)
+            self.show(beat, "Next", Indicate(build_tags[1], color=ALG))
+            self.show(beat, "That", Write(build[2]), FadeIn(build_tags[2]), occurrence=2, run_time=1.5)
+            self.show(beat, "And", Write(build[3]), FadeIn(build_tags[3]), Indicate(target, color=FACT_B), occurrence=2, run_time=1.5)
+            self.play(Indicate(build[3][2], color=FACT_A, scale_factor=1.3))
 
         proof = chain([
             (1, [("(a+b)^2", WHITE), ("=", WHITE), ("(a-b)^2+4ab", WHITE)]),
@@ -301,24 +343,26 @@ class Rearranging(NarratedScene):
             (0, [("=", WHITE), ("16+4", WHITE)]),
             (0, [("=", WHITE), ("20", GREEN_C)]),
         ], scale=0.95, buff=0.32).move_to(LEFT * 1.4 + DOWN * 0.6)
-        proof_tags = tags(proof, [("rearrangement: expand, collect", ALG), ("substitution: a − b = 4, ab = 1", SUBST),
+        proof_tags = tags(proof, [("rearrangement: built above", ALG), ("substitution: a − b = 4, ab = 1", SUBST),
                                   ("arithmetic: 4² = 16, 4 · 1 = 4", ALG), ("arithmetic: 16 + 4 = 20", ALG)],
                           proof.get_right()[0] + 0.6)
 
         with self.beat("ex1_same") as beat:
-            self.show(beat, "So", Indicate(sum_left[1], color=GREEN_C), Indicate(sum_right[1], color=GREEN_C), run_time=1.5)
-            self.show(beat, "The", ReplacementTransform(first, proof[0]), FadeIn(proof_tags[0]), occurrence=1, run_time=1.2)
+            self.show(beat, "That's", Indicate(build, color=ALG, scale_factor=1.03), first.animate.set_color(GREEN_C),
+                      run_time=1.5)
+            self.show(beat, "The", FadeOut(VGroup(build, build_tags, target_group, goal_label)),
+                      ReplacementTransform(first, proof[0]), FadeIn(proof_tags[0]), occurrence=1, run_time=1.2)
             self.show(beat, "The", Write(proof[1]), FadeIn(proof_tags[1]), occurrence=2)
             self.show(beat, "and", Write(proof[2]), FadeIn(proof_tags[2]), occurrence=2)
             self.play(Write(proof[3]), FadeIn(proof_tags[3]), run_time=1.2)
-        self.play(FadeOut(VGroup(ex1_label, sum_left, sum_right, proof, proof_tags)), run_time=0.6)
+        self.play(FadeOut(VGroup(ex1_label, proof, proof_tags)), run_time=0.6)
 
         # ---- summary
         heading = Text("Rearrangement", font_size=36, color=ALG).to_edge(UP, buff=0.7)
         lines = VGroup(
             Text("changes how an expression looks, never its value; uses no facts", font_size=26),
             VGroup(Text("Example 1.1.2:", font_size=26, color=NOTE), Text("adding zero, regrouping", font_size=26, color=ALG)).arrange(RIGHT, buff=0.3),
-            VGroup(Text("Example 1.1.1:", font_size=26, color=NOTE), Text("expanding, collecting like terms", font_size=26, color=ALG)).arrange(RIGHT, buff=0.3),
+            VGroup(Text("Example 1.1.1:", font_size=26, color=NOTE), Text("expanding, collecting; then splitting, factoring", font_size=26, color=ALG)).arrange(RIGHT, buff=0.3),
         ).arrange(DOWN, buff=0.45).move_to(UP * 0.4)
         lean = VGroup(
             VGroup(Text("by ring", font="Noto Sans Mono", font_size=30, color=ALG), Text("checks a rearrangement", font_size=24, color=NOTE)).arrange(RIGHT, buff=0.4),
