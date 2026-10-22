@@ -28,20 +28,59 @@ Haven't set up yet? Do [Set up your computer](/setup/) first, so the Lean editor
 
 <Book file={CH1} section="proving-equalities" parts={["example"]} />
 
-<CourseNote kind="algebra" title="Algebra refresher: why is (a + b)² = (a − b)² + 4ab?">
-Step 1 of that proof says the two sides are "the same quantity" after expanding. Here's the check, one side at a time:
+<CourseNote kind="guide" title="Where did the first line come from?">
+The first line, $(a+b)^2 = (a-b)^2 + 4ab$, isn't part of the problem. It's the first step of the solution. The author found it with scratch work that a finished proof doesn't show. (Day 2, §1.3, is all about doing that scratch work.) Here's how you could find it yourself.
+
+**Ask what you want and what you know.** You want $(a+b)^2$. You know $a - b$ and $ab$. So try to rewrite $(a+b)^2$ using only $a - b$ and $ab$.
+
+**Expand both squares and compare them.**
 
 $$
 (a+b)^2 = a^2 + 2ab + b^2
 $$
 
 $$
-(a-b)^2 + 4ab = (a^2 - 2ab + b^2) + 4ab = a^2 + 2ab + b^2
+(a-b)^2 = a^2 - 2ab + b^2
 $$
 
+They're the same except for the middle term. Getting from $-2ab$ to $+2ab$ means adding $4ab$:
+
+$$
+\begin{aligned}
+(a-b)^2 + 4ab &= (a^2 - 2ab + b^2) + 4ab \\
+  &= a^2 + 2ab + b^2 \\
+  &= (a+b)^2
+\end{aligned}
+$$
+
+That's the first line. Now both facts appear in it, so the next line can put in $4$ for $a - b$ and $1$ for $ab$.
+
+<details>
+<summary>Why not just solve for a and b?</summary>
+
+You can, but it takes many more steps. From $a - b = 4$ you get $a = b + 4$. Put that into $ab = 1$: $(b + 4)b = 1$, so $b^2 + 4b - 1 = 0$. The quadratic formula gives
+
+$$
+\begin{aligned}
+b &= \frac{-4 \pm \sqrt{4^2 - 4\cdot 1\cdot(-1)}}{2} \\
+  &= \frac{-4 \pm \sqrt{16 + 4}}{2} \\
+  &= \frac{-4 \pm \sqrt{20}}{2} \\
+  &= \frac{-4 \pm 2\sqrt{5}}{2} \\
+  &= -2 \pm \sqrt{5}
+\end{aligned}
+$$
+
+using $\sqrt{20} = \sqrt{4 \cdot 5} = 2\sqrt{5}$. Then $a = b + 4 = 2 \pm \sqrt{5}$. With the plus signs, $a + b = (2 + \sqrt{5}) + (-2 + \sqrt{5}) = 2\sqrt{5}$, and $(2\sqrt{5})^2 = 4 \cdot 5 = 20$. With the minus signs, $a + b = -2\sqrt{5}$, and $(-2\sqrt{5})^2 = 20$ too. Same answer, much more work.
+
+There's a surprise hiding here: $-2 \pm \sqrt{5}$ isn't a rational number, so no rational $a$ and $b$ satisfy both facts, even though the problem says $a$ and $b$ are rational. The proof is still correct. It shows that *if* $a - b = 4$ and $ab = 1$, then $(a+b)^2 = 20$, and it never needs to know what $a$ and $b$ are.
+
+</details>
+</CourseNote>
+
+<CourseNote kind="algebra" title="A picture of (a + b)² = (a − b)² + 4ab">
 Both sides come to $a^2 + 2ab + b^2$, so they're equal **for every** $a$ and $b$. That's what makes this step "purely algebraic": it doesn't depend on the facts $a - b = 4$ or $ab = 1$ at all.
 
-There's also a picture of it. A square with side $a + b$ splits into four $a \times b$ rectangles around a smaller square with side $a - b$. Drag the sliders. The two numbers below the picture always agree.
+Here's a picture of it. A square with side $a + b$ splits into four $a \times b$ rectangles around a smaller square with side $a - b$. Drag the sliders. The two numbers below the picture always agree.
 
 <AreaModel />
 </CourseNote>
