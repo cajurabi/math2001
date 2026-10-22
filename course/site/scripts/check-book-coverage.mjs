@@ -4,8 +4,9 @@
 // site quotes (found from the excerpts' source lines), this walks the book's text blocks in order,
 // finds the furthest block that appears on some course page, and requires every block before it
 // to appear somewhere too. Chapters the syllabus hasn't reached yet don't count as missing, but a
-// skipped introduction or subsection does. Math is left out of the comparison (the course
-// re-renders it with KaTeX), and so are headings (lessons title sections in their own words).
+// skipped introduction or subsection does. Math is compared by its TeX source (the book's \( \)
+// and \[ \], the course's KaTeX annotation), so a dropped or altered equation fails too. Headings
+// are left out (lessons title sections in their own words).
 //
 //   node scripts/check-book-coverage.mjs        (runs after `astro build`; see package.json)
 
@@ -18,24 +19,41 @@ const DIST = path.join(SITE, 'dist')
 const BOOK_DIR = path.resolve(SITE, '../../html')
 
 const BLOCK_TAGS = new Set(['p', 'li', 'pre', 'td', 'th', 'dt', 'dd', 'figcaption', 'caption'])
-const SKIP_CLASSES = ['math', 'katex', 'headerlink', 'section-number']
+const SKIP_CLASSES = ['headerlink', 'section-number']
 // short or repeated blocks ("Solution", "Problem") can't tell one place in the book from another
 const MIN_DISTINCTIVE = 30
 
 const classesOf = (node) => (node.attrs?.find((a) => a.name === 'class')?.value ?? '').split(/\s+/)
 const skipped = (node) => ['script', 'style'].includes(node.nodeName) || classesOf(node).some((c) => SKIP_CLASSES.includes(c))
 const normalize = (text) => text.replace(/’/g, "'").replace(/\s+/g, ' ').trim()
+// display math is its own block: the book's <div class="math">, the course's <div class="book-math">
+const isBlock = (node) => BLOCK_TAGS.has(node.nodeName) ||
+  (node.nodeName === 'div' && classesOf(node).some((c) => c === 'math' || c === 'book-math'))
+
+const rawText = (node) => (node.nodeName === '#text' ? node.value : (node.childNodes ?? []).map(rawText).join(''))
+const tex = (source) => `⟨${normalize(source)}⟩`
 
 function textOf(node) {
   if (node.nodeName === '#text') return node.value
   if (skipped(node)) return ''
+  const classes = classesOf(node)
+  // the book: \(…\) or \[…\] inside a "math notranslate" span or div
+  if (classes.includes('math') && classes.includes('notranslate')) {
+    return tex(rawText(node).trim().replace(/^\\[([]/, '').replace(/\\[)\]]$/, ''))
+  }
+  // the course: KaTeX keeps the source in an annotation, and an error keeps it in its title
+  if (classes.includes('katex')) {
+    const annotation = find(node, (n) => n.nodeName === 'annotation')
+    return tex(annotation ? rawText(annotation) : '')
+  }
+  if (classes.includes('katex-error')) return tex(node.attrs.find((a) => a.name === 'title')?.value ?? '')
   return (node.childNodes ?? []).map(textOf).join('')
 }
 
 /** Text of each outermost block element under `node`, in document order. */
 function blocks(node, out = []) {
   if (skipped(node)) return out
-  if (BLOCK_TAGS.has(node.nodeName)) {
+  if (isBlock(node)) {
     const text = normalize(textOf(node))
     if (text) out.push(text)
     return out

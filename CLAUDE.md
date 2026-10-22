@@ -26,7 +26,7 @@ Don't show only the pure math. Where a result has a history, give the person and
 ## Course content rules
 
 - **The book's text is the lesson.** It is pulled unedited from `html/` (`Book.astro`), and exercises come from `Math2001/` (`LeanExercise.astro`). Nothing is retyped. The author authorized educational use.
-- **All of it, not links to it.** Every paragraph of the book up to where the syllabus has reached must be on a course page, including chapter and section introductions, the Preface and homework text. `scripts/check-book-coverage.mjs` runs after `astro build` and fails the build when a block is missing.
+- **All of it, not links to it.** Every paragraph of the book up to where the syllabus has reached must be on a course page, including chapter and section introductions, the Preface and homework text. `scripts/check-book-coverage.mjs` runs after `astro build` and fails the build when a block is missing. It compares equations by their TeX source, so a dropped or altered equation fails too.
 - **On this page.** `src/routeData.ts` rebuilds Starlight's "On this page" from each page's MDX: its headings, every book subsection a `<Book>` includes, each `<Explainer>` and the stopping point. A new component that should appear there needs an `h2`/`h3` with an id, plus a case in that file.
 - **Additions are marked.** Everything written for the course (guide notes, refreshers, hints, explainers) goes in a `CourseNote` box labelled "Added for this course". Book excerpts carry a source line.
 - **Homework duplicates.** Some end-of-section exercises are homework problems word for word (e.g. §1.3 exercises 6 and 12 are HW1 #1 and #2). Flag them, and never use them as practice.
