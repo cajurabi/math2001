@@ -127,6 +127,52 @@
       }
     }
   },
+  "w01d1/rearranging": {
+    "title": "What is an algebraic rearrangement?",
+    "key": "da5ed19977c61b0709bd44703fca695940dd88f9e0860f395e2994161d71b82f",
+    "files": {
+      "video": "da5ed19977c61b0709bd44703fca695940dd88f9e0860f395e2994161d71b82f.mp4",
+      "captions": "da5ed19977c61b0709bd44703fca695940dd88f9e0860f395e2994161d71b82f.vtt",
+      "poster": "da5ed19977c61b0709bd44703fca695940dd88f9e0860f395e2994161d71b82f.jpg"
+    },
+    "durationSeconds": 283.3,
+    "transcript": [
+      "In Examples 1.1.1 and 1.1.2, the book calls some steps purely algebraic rearrangements. Here's what that means, and the exact moves the author used.",
+      "Rearranging is as old as algebra. In the 800s, al-Khwarizmi, a scholar at the House of Wisdom in Baghdad, wrote a book called al-jabr wa al-muqabala. Al-jabr means completion, and al-muqabala means balancing. The first word of that title became our word algebra.",
+      "A rearrangement rewrites an expression in a different form that is equal for every possible value of its letters. It uses only the rules of algebra, never the facts of the problem. That gives a simple test: plug in any numbers you like, and both sides must agree.",
+      "These two examples use four kinds of moves. Adding zero. Regrouping brackets. Expanding products. And collecting like terms.",
+      "Example 1.1.2 first. The facts are r plus two s equals negative one, and s equals three. The goal is r equals negative seven. The goal is about r alone, but the useful fact is about r plus two s. So the plan is to make r plus two s appear.",
+      "Move one: add zero. Adding zero never changes a number, so r equals r plus zero. Now write the zero as two s minus two s, since anything minus itself is zero. Why two s? Because the fact has a plus two s in it. Add exactly the piece that's missing, and take it away again.",
+      "Move two: regroup. Adding two s minus two s to r is the same as first adding two s to r, and then subtracting two s. Moving the brackets like this doesn't change the value. And now r plus two s sits right there, in brackets.",
+      "Test it with any numbers. Take r equals five and s equals one. The left side is five. The right side is five plus two, minus two: seven minus two, which is five. It works for every r and s, so no facts were used.",
+      "The next two steps are substitutions, and they do use the facts. Swap r plus two s for negative one, then swap s for three. The last step is arithmetic: two times three is six, and negative one minus six is negative seven.",
+      "Now Example 1.1.1. Its first line, a plus b squared equals a minus b squared plus four a b, uses the other two moves: expanding products, and collecting like terms.",
+      "Expand the left side. a plus b squared means a plus b, times a plus b. Multiply every term by every term: a times a, a times b, b times a, and b times b. That's a squared, plus a b, plus a b, plus b squared, because b times a is the same as a b. Collect the like terms: a b plus a b is two a b.",
+      "Now the right side. Expand a minus b, times a minus b, the same way. Watch the signs: minus b times minus b is plus b squared. That gives a squared, minus a b, minus a b, plus b squared, plus four a b. Collect the a b terms: negative a b, minus a b, plus four a b, is two a b.",
+      "Both sides come out to a squared plus two a b plus b squared, for every a and b. So the first line is a rearrangement: no facts used. The next line substitutes the facts. The last is arithmetic: four squared is sixteen, four times one is four, and sixteen plus four is twenty.",
+      "So a rearrangement changes how an expression looks, never its value, and never uses the facts. Example 1.1.2 used adding zero and regrouping. Example 1.1.1 used expanding and collecting like terms. In Lean, ring checks rearrangements like these, and rw does the substitutions."
+    ],
+    "narration": {
+      "model": "elevenlabs/eleven-v4",
+      "voice": "george",
+      "audio": {
+        "intro": "332c36f043def68a60b8e7753398dc67bc7cb3c7cbd1d44fa25217217e08bce4",
+        "history": "a4f1ed36e49843a92a60f4ccecd92268431b3edb690daba227fc15235ffccffd",
+        "define": "e2680a04d5f0487598e3e1ff02c3160e6351ca0b1ab81d60861d196ff1bb9078",
+        "moves": "89112de18b79b38e529a57da9d1902f45480d1d98b6e9dc47201b313a326a33a",
+        "ex2_goal": "88a514d1893ab80e614d835d8ae18002779a7e81e06eaffc643600013d5a4199",
+        "ex2_zero": "b1371184095a22754444df0d92eea123570b2eef061572e795a031c35aa26e21",
+        "ex2_regroup": "f6a8edf6ff28baaf5cc45fd45ff32adb75ff71fb859f0301431831d4b99622d0",
+        "ex2_test": "49dedad2410597df5b1d42fe2b3440b73c512f57d8f1773015956d8f4baab1de",
+        "ex2_rest": "a336950e411a663a525403744211a9df64094f1573507e107829ffde73fd6293",
+        "ex1": "3105200230f8dea6c2501db49242138dddcf918a3da93654ca1b51805e123fd7",
+        "ex1_left": "b09548142ed7d119874f27189464ec61d92d1d989d2ec5bcc48a59010e13e151",
+        "ex1_right": "448d386f65de3ea2c8a37364b8e1b303caa3b57b06979372052cc7d191b6dbe0",
+        "ex1_same": "bd053af565c8ee788d14a0bcf7d42187639496d317027737e12e44fc30000b3c",
+        "summary": "5686b3c29675983c2c55ff116896973284279e6cb1865a4b986d9a56cc43b4a9"
+      }
+    }
+  },
   "w01d2/create-hypothesis": {
     "title": "Making the facts appear",
     "key": "cb75f1effcc1b18c056096aa3c8447f9f52c08f9a06cbc141b388223110962e0",
