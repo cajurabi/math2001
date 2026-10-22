@@ -217,8 +217,6 @@
 
 /* ---------- Homework ---------- */
 
-.homework-problem .homework-label { font-weight: 700; margin-bottom: 0.25rem; }
-
 .written-answer { margin: 1rem 0; }
 .written-answer-label { display: block; font-weight: 700; margin-bottom: 0.35rem; }
 .written-answer textarea {

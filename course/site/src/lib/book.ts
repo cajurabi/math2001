@@ -73,7 +73,7 @@ function transform(html: string, file: string, ownIds: Set<string>): string {
     // Starlight renders its own heading anchors
     .replace(/<a class="headerlink"[^>]*>.*?<\/a>/g, '')
     // a subsection's id moves onto its heading, so "On this page" can link to and track it
-    .replace(/<section id="([^"]+)">(\s*(?:<span id="[^"]*"><\/span>)?\s*)<h3>/g, '<section>$2<h3 id="$1">')
+    .replace(/<section id="([^"]+)">(\s*(?:<span id="[^"]*"><\/span>)?\s*)<h([23])>/g, '<section>$2<h$3 id="$1">')
     .replace(/<div class="math notranslate nohighlight">\s*\\\[([\s\S]*?)\\\]\s*<\/div>/g,
       (_m, tex: string) => `<div class="book-math">${renderMath(tex, true)}</div>`)
     .replace(/<span class="math notranslate nohighlight">\\\(([\s\S]*?)\\\)<\/span>/g,
@@ -108,7 +108,7 @@ export function bookHeadings(file: string, section: string, parts?: string[]): {
   const inner = sectionInner(readChapter(file), section)
   return selectParts(inner, section, parts).flatMap(([id, chunk]) => {
     if (id === 'intro') return []
-    const heading = chunk.match(/<h3>(?:<span class="section-number">([\d.]+)\.\s*<\/span>)?([\s\S]*?)<a class="headerlink"/)
+    const heading = chunk.match(/<h[23]>(?:<span class="section-number">([\d.]+)\.\s*<\/span>)?([\s\S]*?)<a class="headerlink"/)
     if (!heading) return []
     const text = decodeEntities(heading[2]).trim()
     return [{ slug: id, text: heading[1] ? `${text} ${heading[1]}` : text }]
