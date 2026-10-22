@@ -38,6 +38,10 @@ if (first && fs.existsSync(manifestPath)) {
         // Hide/Show choice is remembered in this browser.
         const dock = document.getElementById('infoview-dock')
         const button = document.getElementById('infoview-toggle')
+        // Inside the content column the dock's z-index only counts within that column, so on wide
+        // screens Starlight's "On this page" sidebar sat on top of it and took the Hide click.
+        // At the top level of <body> it stacks above the whole page.
+        document.body.appendChild(dock)
         const set = (collapsed, remember) => {
           dock.toggleAttribute('data-collapsed', collapsed)
           button.textContent = collapsed ? 'Show' : 'Hide'
