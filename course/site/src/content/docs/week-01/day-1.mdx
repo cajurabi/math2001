@@ -31,19 +31,29 @@ Haven't set up yet? Do [Set up your computer](/setup/) first, so the Lean editor
 <CourseNote kind="guide" title="Where did the first line come from?">
 The first line, $(a+b)^2 = (a-b)^2 + 4ab$, isn't part of the problem. It's the first step of the solution. The author found it with scratch work that a finished proof doesn't show. (Day 2, §1.3, is all about doing that scratch work.) Here's how you could find it yourself.
 
-**Ask what you want and what you know.** You want $(a+b)^2$. You know $a - b$ and $ab$. So try to rewrite $(a+b)^2$ using only $a - b$ and $ab$.
+**Ask what you want and what you know.** You want $(a+b)^2$. You know only two things: $a - b = 4$ and $ab = 1$. Those are the only pieces you can swap for numbers. So try to rewrite $(a+b)^2$ using only $a - b$ and $ab$.
 
-**Expand both squares and compare them.**
-
-$$
-(a+b)^2 = a^2 + 2ab + b^2
-$$
+**Where does $(a-b)^2$ come from?** Not from a hidden $\pm$. It comes from the fact $a - b = 4$: to use that fact, $a - b$ has to show up somewhere. Look at what $(a+b)^2$ is made of when you multiply it out:
 
 $$
-(a-b)^2 = a^2 - 2ab + b^2
+\begin{aligned}
+(a+b)^2 &= (a+b)(a+b) \\
+  &= a^2 + ab + ab + b^2 \\
+  &= a^2 + 2ab + b^2
+\end{aligned}
 $$
 
-They're the same except for the middle term. Getting from $-2ab$ to $+2ab$ means adding $4ab$:
+The $2ab$ part is fine, because you know $ab$. The trouble is the $a^2$ and $b^2$, since you don't know $a$ or $b$ on their own. You need something built from $a - b$ that also has an $a^2$ and a $b^2$ in it. Squaring $a - b$ gives exactly that:
+
+$$
+\begin{aligned}
+(a-b)^2 &= (a-b)(a-b) \\
+  &= a^2 - ab - ab + b^2 \\
+  &= a^2 - 2ab + b^2
+\end{aligned}
+$$
+
+**Compare the two.** $(a+b)^2 = a^2 + 2ab + b^2$ and $(a-b)^2 = a^2 - 2ab + b^2$ have the same $a^2$ and $b^2$. They differ only in the middle term. Getting from $-2ab$ to $+2ab$ means adding $4ab$:
 
 $$
 \begin{aligned}
