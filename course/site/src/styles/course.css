@@ -210,6 +210,31 @@
 .widget-controls label { display: flex; align-items: center; gap: 0.4rem; }
 .widget-readout { text-align: center; font-size: var(--sl-text-sm); margin-top: 0.4rem; }
 
+/* (a + b)² area model: picture beside a panel of sliders and the two areas, stacked on phones */
+.area-model { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.25rem; align-items: center; }
+.area-model .jxgbox { max-width: none; }
+.area-model-panel { display: flex; flex-direction: column; gap: 0.75rem; font-size: var(--sl-text-sm); }
+.area-model-sliders label { display: flex; align-items: center; gap: 0.5rem; }
+.area-model-sliders input { flex: 1; min-width: 0; }
+.area-model-sliders output { min-width: 2.2em; text-align: right; font-variant-numeric: tabular-nums; }
+.area-model-hint { margin: 0.25rem 0 0; color: var(--sl-color-gray-3); font-size: var(--sl-text-xs); }
+.area-card { border: 1px solid var(--sl-color-gray-5); border-radius: 6px; padding: 0.5rem 0.75rem; }
+.area-card-title { margin: 0 0 0.35rem; font-weight: 700; }
+.area-card-title span { font-weight: 400; color: var(--sl-color-gray-3); margin-left: 0.35rem; }
+.area-card-steps { font-variant-numeric: tabular-nums; line-height: 1.6; }
+.area-card-steps .eq { display: inline-block; width: 1.2em; color: var(--sl-color-gray-3); }
+.area-card-steps strong { font-size: 1.05em; }
+.swatch { display: inline-block; width: 0.75em; height: 0.75em; border-radius: 2px; margin-right: 0.25em; vertical-align: -0.05em; }
+.swatch.center, .c-center { --c: #e9a23b; }
+.swatch.rect, .c-rect { --c: #2a9d8f; }
+.swatch { background: var(--c); }
+.c-center, .c-rect { color: color-mix(in srgb, var(--c) 75%, var(--sl-color-white)); }
+.area-verdict { margin: 0; font-weight: 700; color: var(--course-added-accent); }
+@media (max-width: 42rem) {
+  .area-model { grid-template-columns: 1fr; }
+  .area-model .jxgbox { max-width: 22rem; }
+}
+
 @media (max-width: 50rem) {
   .infoview-dock { right: 0.5rem; left: 0.5rem; width: auto; bottom: 0.5rem; }
   .infoview-dock lean-infoview { height: 30vh; }

@@ -1,16 +1,33 @@
 ---
 // Interactive picture of (a + b)² = (a − b)² + 4ab: a square of side a + b cut into
 // four a×b rectangles around a square of side a − b. Drag the sliders to change a and b.
+// Beside the picture, two cards work out the two areas step by step, so it's clear which
+// two numbers always agree: the whole square's area, and the total of its five pieces.
 ---
 
-<div class="widget not-content" data-area-model>
+<div class="widget area-model not-content" data-area-model>
   <div class="jxgbox" id="area-model-board" role="img"
     aria-label="A square of side a plus b, made of four a by b rectangles around a smaller square of side a minus b"></div>
-  <div class="widget-controls">
-    <label>a = <input type="range" min="2" max="7" step="0.1" value="6" data-a /><output data-a-out>6.0</output></label>
-    <label>b = <input type="range" min="0.5" max="4" step="0.1" value="2.5" data-b /><output data-b-out>2.5</output></label>
+
+  <div class="area-model-panel">
+    <div class="area-model-sliders">
+      <label>a = <input type="range" min="2" max="7" step="0.1" value="6" data-a /><output data-a-out>6.0</output></label>
+      <label>b = <input type="range" min="0.5" max="4" step="0.1" value="2.5" data-b /><output data-b-out>2.5</output></label>
+      <p class="area-model-hint">b stays smaller than a, so a − b is a real length.</p>
+    </div>
+
+    <div class="area-card">
+      <p class="area-card-title">The whole square <span>side a + b</span></p>
+      <div class="area-card-steps" data-whole aria-live="polite"></div>
+    </div>
+
+    <div class="area-card">
+      <p class="area-card-title">Its five pieces <span><i class="swatch center"></i>small square + <i class="swatch rect"></i>four rectangles</span></p>
+      <div class="area-card-steps" data-pieces aria-live="polite"></div>
+    </div>
+
+    <p class="area-verdict" data-verdict></p>
   </div>
-  <p class="widget-readout" data-readout></p>
 </div>
 
 <script>
@@ -21,13 +38,16 @@
   const bInput = root.querySelector<HTMLInputElement>('[data-b]')!
   const aOut = root.querySelector('[data-a-out]')!
   const bOut = root.querySelector('[data-b-out]')!
-  const readout = root.querySelector('[data-readout]')!
+  const wholeOut = root.querySelector<HTMLElement>('[data-whole]')!
+  const piecesOut = root.querySelector<HTMLElement>('[data-pieces]')!
+  const verdict = root.querySelector<HTMLElement>('[data-verdict]')!
 
   let a = Number(aInput.value)
   let b = Number(bInput.value)
+  const side = () => a + b
 
   const board = JXG.JSXGraph.initBoard('area-model-board', {
-    boundingbox: [-0.6, 11.2, 11.2, -0.6],
+    boundingbox: [-1, 9.5, 9.5, -1],
     axis: false,
     showCopyright: false,
     showNavigation: false,
@@ -35,11 +55,13 @@
     zoom: { wheel: false, pinchHorizontal: false, pinchVertical: false },
   })
 
-  const RECT = { fillColor: '#2a9d8f', fillOpacity: 0.55, strokeColor: '#1d6f66', strokeWidth: 1.5 }
-  const CENTER = { fillColor: '#e9a23b', fillOpacity: 0.7, strokeColor: '#a86c12', strokeWidth: 1.5 }
+  const RECT = { fillColor: '#2a9d8f', fillOpacity: 0.55, strokeColor: '#1d6f66' }
+  const CENTER = { fillColor: '#e9a23b', fillOpacity: 0.7, strokeColor: '#a86c12' }
+  const TEXT = { fixed: true, highlight: false, strokeColor: '#ffffff', cssStyle: 'font-weight: 600' }
+  const EDGE = { fixed: true, highlight: false, strokeColor: '#9aa4b2', fontSize: 14 }
 
   /** rectangle [x0, x1] × [y0, y1] whose corners follow the current a and b */
-  function rect(corners: () => [number, number, number, number], style: object, label: () => string) {
+  function rect(corners: () => [number, number, number, number], style: typeof RECT, label: () => string) {
     const [p, q, r, s] = [0, 1, 2, 3].map((i) =>
       board.create('point', [
         () => (i === 0 || i === 3 ? corners()[0] : corners()[1]),
@@ -48,23 +70,34 @@
     board.create('polygon', [p, q, r, s], {
       ...style,
       vertices: { visible: false },
-      borders: { strokeColor: (style as { strokeColor: string }).strokeColor, strokeWidth: 1.5 },
+      borders: { strokeColor: style.strokeColor, strokeWidth: 1.5 },
       highlight: false,
       fixed: true,
     })
-    board.create('text', [
-      () => (corners()[0] + corners()[1]) / 2,
-      () => (corners()[2] + corners()[3]) / 2,
-      label,
-    ], { anchorX: 'middle', anchorY: 'middle', fontSize: 15, strokeColor: '#ffffff', cssStyle: 'font-weight: 600', fixed: true, highlight: false })
+    board.create('text', [() => (corners()[0] + corners()[1]) / 2, () => (corners()[2] + corners()[3]) / 2, label],
+      { ...TEXT, anchorX: 'middle', anchorY: 'middle', fontSize: 15 })
   }
 
-  const s = () => a + b
   rect(() => [0, a, 0, b], RECT, () => 'ab')
-  rect(() => [a, s(), 0, a], RECT, () => 'ab')
-  rect(() => [b, s(), a, s()], RECT, () => 'ab')
-  rect(() => [0, b, b, s()], RECT, () => 'ab')
+  rect(() => [a, side(), 0, a], RECT, () => 'ab')
+  rect(() => [b, side(), a, side()], RECT, () => 'ab')
+  rect(() => [0, b, b, side()], RECT, () => 'ab')
   rect(() => [b, a, b, a], CENTER, () => (a - b > 0.8 ? '(a−b)²' : ''))
+
+  // side lengths along the bottom and left edges, and across the small square
+  const gap = () => side() * 0.06
+  const edge = (x: () => number, y: () => number, text: string, anchorX = 'middle') =>
+    board.create('text', [x, y, text], { ...EDGE, anchorX, anchorY: 'middle' })
+  edge(() => a / 2, () => -gap(), 'a')
+  edge(() => a + b / 2, () => -gap(), 'b')
+  edge(() => -gap(), () => b / 2, 'b', 'right')
+  edge(() => -gap(), () => b + a / 2, 'a', 'right')
+  board.create('text', [() => (a + b) / 2, () => b + (a - b) * 0.18, () => (a - b > 1.4 ? 'side a − b' : '')],
+    { ...TEXT, anchorX: 'middle', anchorY: 'middle', fontSize: 12, cssStyle: 'font-weight: 400' })
+
+  const n = (x: number, digits = 1) => x.toFixed(digits)
+  const rows = (lines: string[]) =>
+    lines.map((line, i) => `<div><span class="eq">${i === 0 ? '' : '='}</span>${line}</div>`).join('')
 
   function update() {
     a = Number(aInput.value)
@@ -73,13 +106,30 @@
       b = Math.max(0.5, a - 0.1)
       bInput.value = String(b)
     }
-    aOut.textContent = a.toFixed(1)
-    bOut.textContent = b.toFixed(1)
+    aOut.textContent = n(a)
+    bOut.textContent = n(b)
+
     const whole = (a + b) ** 2
-    const parts = (a - b) ** 2 + 4 * a * b
-    readout.textContent =
-      `(a + b)² = ${(a + b).toFixed(1)}² = ${whole.toFixed(2)}    ·    ` +
-      `(a − b)² + 4ab = ${(a - b).toFixed(1)}² + 4·${a.toFixed(1)}·${b.toFixed(1)} = ${parts.toFixed(2)}`
+    const square = (a - b) ** 2
+    const rects = 4 * a * b
+    wholeOut.innerHTML = rows([
+      '(a + b)²',
+      `(${n(a)} + ${n(b)})²`,
+      `${n(a + b)}²`,
+      `<strong>${n(whole, 2)}</strong>`,
+    ])
+    piecesOut.innerHTML = rows([
+      '<span class="c-center">(a − b)²</span> + <span class="c-rect">4ab</span>',
+      `<span class="c-center">(${n(a)} − ${n(b)})²</span> + <span class="c-rect">4 · ${n(a)} · ${n(b)}</span>`,
+      `<span class="c-center">${n(a - b)}²</span> + <span class="c-rect">${n(rects, 2)}</span>`,
+      `<span class="c-center">${n(square, 2)}</span> + <span class="c-rect">${n(rects, 2)}</span>`,
+      `<strong>${n(square + rects, 2)}</strong>`,
+    ])
+    verdict.textContent = `Same area either way: ${n(whole, 2)} = ${n(square + rects, 2)} ✓`
+
+    // keep the square filling the picture, with room for the edge labels
+    const pad = side() * 0.14
+    board.setBoundingBox([-pad, side() + pad * 0.5, side() + pad * 0.5, -pad], false)
     board.update()
   }
 
